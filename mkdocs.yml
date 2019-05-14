@@ -1,0 +1,14 @@
+site_name: Go Up
+theme:
+  name: 'material'
+  palette: 
+    primary: black
+  logo:
+    icon: 'backup'
+  feature:
+    tabs: true
+markdown_extensions:
+  - codehilite
+repo_name: 'ballmouse/game'
+repo_url: 'https://bitbucket.org/ballmouse/game'
+edit_uri: ""
