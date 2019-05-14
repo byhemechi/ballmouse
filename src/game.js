@@ -1,5 +1,5 @@
 /**
- * @docs game.js // Game
+ * The main game class, a lot of logic happens here
  */
 class Game {
     el = document.createElement("canvas");

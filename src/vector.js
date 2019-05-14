@@ -1,6 +1,6 @@
 class Vector {
     /**
-     * A 2D Vector class. Very simple.
+     *  A 2D Vector class. Doesn't do much at all, pretty much just a helper.
      * @param {number} x 
      * @param {number} y 
      */

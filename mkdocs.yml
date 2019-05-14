@@ -2,7 +2,7 @@ site_name: Go Up
 theme:
   name: 'material'
   palette: 
-    primary: black
+    primary: white
   logo:
     icon: 'backup'
   feature:
