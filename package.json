@@ -5,6 +5,7 @@
   "devDependencies": {
     "eslint": "^5.16.0",
     "fs-extra": "^8.0.1",
+    "glob": "^7.1.4",
     "jsdoc": "^3.6.2",
     "jsdoc-to-markdown": "^5.0.0",
     "rimraf": "^2.6.3"
