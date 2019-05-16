@@ -12,7 +12,7 @@ glob("src/**/*.js", function(err, files) {
         const i = orig.replace(/^src\//, "");
         console.log("  " + orig + "\r");
         
-        rimraf("./docs/srouce", function(e) {
+        rimraf("./docs/source", function(e) {
             return e;
         })
         jsdoc2md.render({ files: orig }).then(md => {
