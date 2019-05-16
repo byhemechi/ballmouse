@@ -66,8 +66,7 @@ Rectangle Node
 | options | <code>Object</code> | Options for the node; See below |
 | options.position | <code>Vector</code> | Position vector, defaults to `(0,0)` |
 | options.rotation | <code>number</code> | (Clockwise) Rotation in radians, defaults to `0` |
-| options.width | <code>number</code> | How wide the rectangle should be, defaults to `0` (zero width; invisible) |
-| options.height | <code>number</code> | How tall the rectangle should be, defaults to `0` (zero height; invisible) |
+| options.size | <code>Vector</code> | How wide the rectangle should be, defaults to `(0,0)` (zero size; invisible)) |
 | options.fill | <code>string</code> | What the rectangle should be filled with, defaults to `#000` (solid black) |
 
 <a name="Node+render"></a>
@@ -102,6 +101,7 @@ Sprite node
 | options.position | <code>Vector</code> | Position vector, defaults to `(0,0)` |
 | options.rotation | <code>number</code> | (Clockwise) Rotation in radians, defaults to `0` |
 | options.image | <code>Image</code> | An image, either a `canvas`, `Image` or `<img>`. Size information will be discarded. |
+| options.size | <code>Vector</code> | Size Vector, defaults to whatever size the image source is |
 | [options.rect] | <code>Object</code> | The section of the image to draw |
 | [options.rect.begin] | <code>Vector</code> | Top left corner of the clipping region |
 | [options.rect.end] | <code>Vector</code> | Bottom right corner of the clipping region |
