@@ -2,13 +2,12 @@ site_name: Go Up
 theme:
   name: 'material'
   palette: 
-    primary: white
+    primary: light blue
   logo:
-    icon: 'backup'
+    icon: light blue
   feature:
     tabs: true
 markdown_extensions:
   - codehilite
-repo_name: ballmouse
-repo_url: 'https://bitbucket.org/ballmouse/game'
+repo_url: 'https://gitlab.com/byhemechi/ballmouse'
 edit_uri: ""
