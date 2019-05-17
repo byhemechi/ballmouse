@@ -9,6 +9,38 @@ export class Vector {
         this.y = y;
     }
 
+    add(...values) {
+        const self = new Vector(this.x, this.y);
+        values.forEach(i => {
+            self.x += i.x;
+            self.y += i.y;
+        });
+        return self;
+    }
+
+    subtract(...values) {
+        const self = new Vector(this.x, this.y);
+        values.forEach(i => {
+            self.x -= i.x;
+            self.y -= i.y;
+        });
+        return self;
+    }
+
+    multiply(value) {
+        const self = new Vector(this.x, this.y);
+        self.x *= value;
+        self.y *= value;
+        return self;
+    }
+
+    divide(value) {
+        const self = new Vector(this.x, this.y);
+        self.x /= value;
+        self.y /= value;
+        return self;
+    }
+
     toString() {
         return `Vector2(${this.x},${this.y})`
     }

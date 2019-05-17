@@ -1,4 +1,4 @@
-import Game from './game.js';
+import Game from './games/test.js';
 
 const el = document.querySelector("#game");
 const game = new Game;
