@@ -4,7 +4,7 @@ theme:
   palette: 
     primary: light blue
   logo:
-    icon: light blue
+    icon: 'backup'
   feature:
     tabs: true
 markdown_extensions:
