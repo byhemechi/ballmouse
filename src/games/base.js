@@ -18,10 +18,10 @@ class Game {
 
     constructor() {
         document.addEventListener("keydown", (e) => {
-            this.keys[e.key.toLowerCase()] = true;
+            this.keys[e.code] = true;
         })
         document.addEventListener("keyup", (e) => {
-            delete this.keys[e.key.toLowerCase()];
+            delete this.keys[e.code];
         })
     }
     tick(time) {
