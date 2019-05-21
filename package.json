@@ -2,6 +2,7 @@
   "scripts": {
     "docs": "node --experimental-modules docs.mjs"
   },
+  "main": "index.html",
   "devDependencies": {
     "eslint": "^5.16.0",
     "fs-extra": "^8.0.1",
