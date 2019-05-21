@@ -3,6 +3,8 @@ import Rect from "../../primitives/rect.js";
 import { Vector } from "../../types.js";
 
 export default class Pipe extends Node {
+    size = new Vector(50, 500);
+
     children = [new Rect({
         size: new Vector(50, 500),
         fill: "#0f0;"
