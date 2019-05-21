@@ -24,14 +24,13 @@ export default class Player extends Node {
     }
 
     tick(delta) {
-        console.log(this.game.keys.)
-        if (this.game.keys.space && !this.prevUp) {
+        if (this.game.keys.Space && !this.prevUp) {
             this.upJustPressed = true;
         }
         else {
             this.upJustPressed = false;
         }
-        this.prevUp = this.game.keys.space;
+        this.prevUp = this.game.keys.Space;
 
         this.t += delta;
 
