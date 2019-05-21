@@ -27,6 +27,7 @@ class Game {
     tick(time) {
         const fps = 1000 / (time - this.lt);
         const delta = (time - this.lt) / 1000;
+        this.delta = delta;
         this.fps = fps;
         this.lt = time;
         this.root.game = this;
