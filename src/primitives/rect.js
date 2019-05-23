@@ -10,13 +10,13 @@ import Node from './node.js'
  * @param {string} options.fill   What the rectangle should be filled with, defaults to `#000` (solid black)
  */
 class Rect extends Node {
-    fill = "#000";
     render(ctx) {
         const lf = ctx.fillStyle;
-        ctx.fillStyle = this.fill;
+        ctx.fillStyle = this.fill || "#000";
         ctx.fillRect(0, 0, this.size.x, this.size.y);
         ctx.fillStyle = lf;
         super.render(ctx);
+        
     }
 }
 
