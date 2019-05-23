@@ -1,8 +1,8 @@
-site_name: Go Up
+site_name: "Bob Katter: Dab of Destiny"
 theme:
   name: 'material'
   palette: 
-    primary: light blue
+    primary: white
   logo:
     icon: 'backup'
   feature:
