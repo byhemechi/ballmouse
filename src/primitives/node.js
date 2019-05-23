@@ -16,7 +16,9 @@ class Node {
      * @param {number} options.rotation (Clockwise) Rotation in radians, defaults to `0`
      */
     constructor(options) {
-        Object.assign(this, options)
+        for(let i in options) {
+            this[i] = options[i]
+        }
     }
 
     toString() {
