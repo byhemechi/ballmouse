@@ -2,7 +2,7 @@
 author: Joon Suh
 date: 2019/05/21
 ---
-# Flying Bird Day 1
+# Flying Guy Day 1
 On the first day of development, we created a basic prototype of the game.
 A large portion of the essential features were implemented, the player controller, pipe generation, and scoring was implemented.
 

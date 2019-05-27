@@ -1,4 +1,4 @@
-# 🇫🇱🇾🇮🇳🇬 🇧🇪🇷🇩 &reg;&copy;&trade;
+# Flying Guy
 As our first game, we decided to start with a simple game to get familiar with our engine.  The first game that we agreed to create was a game that you travelled to the right whilst dodging obstacles.  The game was directly inspired by the mobile game [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird). 
 ## Planning
 Before creating the game, we created a list of criteria that this game had to meet.  These were as following:
