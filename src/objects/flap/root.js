@@ -13,11 +13,11 @@ export default class Root extends Node {
     player = new Player;
     state = 0;   // Gamemode state
 
-    speed = 128; // Speed of pipes
-    maxSpeed = 666;
+    speed = 1280; // Speed of pipes
+    maxSpeed = 600;
 
     distanceBetweenPipes = 450;   // Distance between pipes in state 0
-    distanceBetweenPipes2 = 32;   // Distance between pipes in state 1
+    distanceBetweenPipes2 = 24;   // Distance between pipes in state 1
     distanceBetweenPortal = 4500; // Distance between each mode switch
 
     distanceSincePipe = 0;        // Distance since last pipe
@@ -118,7 +118,7 @@ export default class Root extends Node {
         
         // Ceiling + Ground collision
         const screenHeight = 480;
-        if (this.player.position.y < 0 || this.player.position.y > screenHeight - ) {
+        if (this.player.position.y < 0 || this.player.position.y > screenHeight - 60) {
             this.player.alive = false;
             this.speed = 0;
         }
@@ -147,7 +147,7 @@ export default class Root extends Node {
         // Change player state
         if (this.distanceSincePortal > this.distanceBetweenPortal) {
             this.player.state = (this.player.state + 1) % 2;
-            this.player.v.y = 0;
+            // this.player.v.y = 0;
             this.distanceSincePortal -= this.distanceBetweenPortal;
         }
         
@@ -155,8 +155,8 @@ export default class Root extends Node {
         if (this.state == 0) {
             if (this.distanceSincePipe > this.distanceBetweenPipes) {
                 var gap = 650;
-                var min = 160;
-                var range = 310;
+                var min = 140;
+                var range = 250;
 
                 var difficultyUp = this.speed / this.maxSpeed;
                 gap -= difficultyUp * 30;
@@ -168,7 +168,7 @@ export default class Root extends Node {
         else if (this.state == 1) {
             if (this.distanceSincePipe > this.distanceBetweenPipes2) {
 
-                this.createPipe(700, 225, 230, 24);
+                this.createPipe(700, 205, 230, 32);
                 this.distanceSincePipe -= this.distanceBetweenPipes2;
             }
         }

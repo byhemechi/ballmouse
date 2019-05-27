@@ -28,6 +28,7 @@ export default class Player extends Node {
         super(...args);
         this.position.x = 200;
         this.position.y = 200;
+        this.v.y = -600;
     }
 
     // Called every frame
