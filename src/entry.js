@@ -1,4 +1,4 @@
-import Game from './games/test.js';
+import Game from './games/flap.js';
 
 const el = document.querySelector("#game");
 const game = new Game;
