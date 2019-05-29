@@ -8,16 +8,15 @@ export default class Pipe extends Node {
     size = new Vector(64, 500); // Hitbox size
     free = false; // Flag if the current pipe is active or not
 
-    children = [new Sprite({
-        size: new Vector(64, 500),
-        src: "/assets/flap/pipe.png"
-        
-    })]
+    children = []
 
     // Called when Pipe is created
     constructor(...args) {
         super(...args);
         this.position.x = 720;
+        this.children.push(new Sprite({
+            src: "/assets/flap/pipe.png"
+        }))
     }
 
     // Called every frame

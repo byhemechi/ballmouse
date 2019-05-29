@@ -4,6 +4,7 @@ import Pipe from "./pipe.js";
 import Player from "./player.js";
 import Rect from "../../primitives/rect.js";
 import { Vector } from "../../types.js";
+import Label from "../../primitives/text.js";
 
 // Make it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random} = Math;
@@ -16,14 +17,17 @@ export default class Root extends Node {
     speed = 200; // Speed of pipes
     maxSpeed = 600;
 
+    started = false;
+
     distanceBetweenPipes = 450;   // Distance between pipes in state 0
-    distanceBetweenPipes2 = 24;   // Distance between pipes in state 1
-    distanceBetweenPortal = 4500; // Distance between each mode switch
+    distanceBetweenPipes2 = 45;   // Distance between pipes in state 1
+    distanceBetweenPortal = 4500;  // Distance between each mode switch
 
     distanceSincePipe = 0;        // Distance since last pipe
     distanceSincePortal = -540    // Distance since last portal (this changes player state)
-    distanceSincePoint = -540;    // Distance since last point giver
+    distanceSincePoint = -540;    // Distance since last point
     distanceSinceStateChange = 0; // Distance since last state change (this changes pipe spawning pattern) 
+
 
     constructor(...args) {
         super(...args);
@@ -31,14 +35,24 @@ export default class Root extends Node {
             position: new Vector(0, 440),
             size: new Vector(720, 40),
             fill: 'tan'
-        }), this.player]
+        }), this.player, new Label({
+            value: "Flappy Guy",
+            font: "32px sans-serif",
+            position: new Vector(360, 240),
+            baseline: "middle",
+            align: "center"
+        })]
     }
 
-    
+    prevJump = false; // Space state on last frame
+    jumpJustPressed = false;
 
     // Smooth random number generator 
     slidingRandom = [0.5,0.5,0.5,0.5];
 
+    /**
+     * Create a random value smoothed by previous outputs
+     */
     newSlidingAverage() {
         this.slidingRandom.push(random()); // Add a new random number to slidingRandom
         this.slidingRandom.shift();        // Remove the first value of slidingRandom
@@ -48,8 +62,16 @@ export default class Root extends Node {
         }
         return total / this.slidingRandom.length // Return average of slidingRandom
     }
-
-    createPipe(width, min, range, size=64) {
+    /**
+     * Creates a new pipe
+     * @param {Number} width The size of the gap between pipes
+     * @param {Number} min The minimum distance of bottom pipe from the top of the screen
+     * @param {Number} range The range where the pipes can move
+     * @param {Number} size Size of the hitbox for the pipe
+     * @param {String} sprite Path to the sprite used for the pipe
+     * @param {bool} useSlidingRandom Should the position be smoothed
+     */
+    createPipe(width, min, range, size, sprite, useSlidingRandom) {
         var bottomPipe;
         var topPipe;
         var bottomTop = true; // Flag for if we should create bottom or top pipe
@@ -60,11 +82,13 @@ export default class Root extends Node {
         this.children.forEach(i => {
             if (i.free) {
                 recycled = true;
-                // Generate bottom or top pipe
+                // Generate bottom and top pipe
                 if (bottomTop) {
-                    i.position = new Vector(720, min + this.newSlidingAverage() * range);
+                    if (useSlidingRandom) i.position = new Vector(720, min + this.newSlidingAverage() * range);
+                    else i.position = new Vector(720, min + random() * range);
                     i.size = new Vector(size, 500);
-                    i.children[0].size = new Vector(size, 500);
+                    //i.children[0].size = new Vector(size, 500);
+                    i.children[0].src = sprite;
                     i.free = false;
                     bottomPipePosition = i.position.y;
                     bottomTop = false;
@@ -72,7 +96,8 @@ export default class Root extends Node {
                 else {
                     i.position = new Vector(720, bottomPipePosition - width);
                     i.size = new Vector(size, 500);
-                    i.children[0].size = new Vector(size, 500);
+                    //i.children[0].size = new Vector(size, 500);
+                    i.children[0].src = sprite;
                     i.free = false;
 
                 }
@@ -84,101 +109,118 @@ export default class Root extends Node {
             topPipe = new Pipe;
 
             bottomPipe.size = new Vector(size, 500);
-            bottomPipe.children[0].size = new Vector(size, 500);
+            bottomPipe.children[0].src = sprite;
+
             topPipe.size = new Vector(size, 500);
-            topPipe.children[0].size = new Vector(size, 500);
-        
-            bottomPipe.position.y = min + this.newSlidingAverage() * range;
+            topPipe.children[0].src = sprite;
+            
+            if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingAverage() * range;
+            else bottomPipe.position.y = min + random() * range;
             topPipe.position.y = bottomPipe.position.y - width;
             this.children.unshift(bottomPipe, topPipe);
         }
     }
 
     // Called every frame
-    tick(delta) {        
-        // Do Collision
+    tick(delta) {
+        // Input if jump pressed this frame
+        if (this.game.keys.Space && !this.prevJump) {
+            this.jumpJustPressed = true;
+        }
+        else {
+            this.jumpJustPressed = false;
+        }
+        this.prevJump = this.game.keys.Space;
 
-        this.children.forEach(i => {
-            // Pipe collision
-            if (i.constructor == Pipe) {
-                // Minkowski Difference collision
-                const minX = this.player.position.x - (i.position.x + i.size.x);
-                const maxX = this.player.position.x + this.player.size.x - i.position.x;
-                const minY = this.player.position.y - (i.position.y + i.size.y);
-                const maxY = this.player.position.y + this.player.size.y - i.position.y;
-                
-                if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
-                    this.player.alive = false;
-                    this.speed = 0;
-                
-                
-               }
+        if (this.jumpJustPressed && !this.started) {
+            this.started = true;
+            this.children[length(this.children)-1]
+        }
+
+        if (this.started) {
+
+            // Do Collision
+
+            this.children.forEach(i => {
+                // Pipe collision
+                if (i.constructor == Pipe) {
+                    // Minkowski Difference collision
+                    const minX = this.player.position.x - (i.position.x + i.size.x);
+                    const maxX = this.player.position.x + this.player.size.x - i.position.x;
+                    const minY = this.player.position.y - (i.position.y + i.size.y);
+                    const maxY = this.player.position.y + this.player.size.y - i.position.y;
+                    
+                    if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
+                        this.player.alive = false;
+                        this.speed = 0;                    
+                }
+                }
+            });
+            
+            // Ceiling + Ground collision
+            const screenHeight = 480;
+            if (this.player.position.y < 0 || this.player.position.y > screenHeight - 60) {
+                this.player.alive = false;
+                this.speed = 0;
             }
-        });
         
-        // Ceiling + Ground collision
-        const screenHeight = 480;
-        if (this.player.position.y < 0 || this.player.position.y > screenHeight - 60) {
-            this.player.alive = false;
-            this.speed = 0;
-        }
-    
-        // Increase speed
-        if (this.speed < this.maxSpeed && this.player.alive) {
-            this.speed += delta * 6;
-        }
-        if (this.speed >= this.maxSpeed && this.player.alive) {
-            this.speed = this.maxSpeed;
-        }
-
-        // Increment counters
-        this.distanceSincePipe += this.speed * delta;
-        this.distanceSincePoint += this.speed * delta;
-        this.distanceSincePortal += this.speed * delta;
-        this.distanceSinceStateChange += this.speed * delta;
-
-        // Change State
-        if (this.distanceSinceStateChange > this.distanceBetweenPortal) {
-            this.state = (this.state + 1) % 2;
-            this.distanceSinceStateChange -= this.distanceBetweenPortal;
-            this.distanceSincePipe = 0;
-        }
-
-        // Change player state
-        if (this.distanceSincePortal > this.distanceBetweenPortal) {
-            this.player.state = (this.player.state + 1) % 2;
-            // this.player.v.y = 0;
-            this.distanceSincePortal -= this.distanceBetweenPortal;
-        }
-        
-        // Add Pipes
-        if (this.state == 0) {
-            if (this.distanceSincePipe > this.distanceBetweenPipes) {
-                var gap = 650;
-                var min = 140;
-                var range = 250;
-
-                var difficultyUp = this.speed / this.maxSpeed;
-                gap -= difficultyUp * 30;
-                min += difficultyUp * 30;
-                this.createPipe(gap, min, range);
-                this.distanceSincePipe -= this.distanceBetweenPipes;
-            };     
-        }
-        else if (this.state == 1) {
-            if (this.distanceSincePipe > this.distanceBetweenPipes2) {
-
-                this.createPipe(700, 205, 230, 32);
-                this.distanceSincePipe -= this.distanceBetweenPipes2;
+            // Increase speed
+            if (this.speed < this.maxSpeed && this.player.alive) {
+                this.speed += delta * 6;
             }
-        }
+            if (this.speed >= this.maxSpeed && this.player.alive) {
+                this.speed = this.maxSpeed;
+            }
 
-        // Score counter
-        if (this.distanceSincePoint > this.distanceBetweenPipes) {
-            this.game.score++;
-            this.distanceSincePoint -= this.distanceBetweenPipes;
+            // Increment counters
+            this.distanceSincePipe += this.speed * delta;
+            this.distanceSincePoint += this.speed * delta;
+            this.distanceSincePortal += this.speed * delta;
+            this.distanceSinceStateChange += this.speed * delta;
+
+            // Change State
+            if (this.distanceSinceStateChange > this.distanceBetweenPortal) {
+                this.state = (this.state + 1) % 2;
+                this.distanceSinceStateChange -= this.distanceBetweenPortal;
+                this.distanceSincePipe = 0;
+            }
+
+            // Change player state
+            if (this.distanceSincePortal > this.distanceBetweenPortal) {
+                this.player.state = (this.player.state + 1) % 2;
+                //this.player.v.y = 0;
+                this.distanceSincePortal -= this.distanceBetweenPortal;
+            }
+            
+            // Add Pipes
+            if (this.state == 0) {
+                if (this.distanceSincePipe > this.distanceBetweenPipes) {
+                    var gap = 650;
+                    var min = 140;
+                    var range = 250;
+
+                    var difficultyUp = this.speed / this.maxSpeed;
+                    gap -= difficultyUp * 30;
+                    min += difficultyUp * 30;
+                    this.createPipe(gap, min, range, 64, '/assets/flap/pipe.png', false);
+                    this.distanceSincePipe -= this.distanceBetweenPipes;
+                };     
+            }
+            else if (this.state == 1) {
+                if (this.distanceSincePipe > this.distanceBetweenPipes2) {
+
+                    this.createPipe(700, 205, 230, 32, '/assets/flap/minipipe.png', true);
+                    this.distanceSincePipe -= this.distanceBetweenPipes2;
+                }
+            }
+
+            // Score counter
+            if (this.distanceSincePoint > this.distanceBetweenPipes) {
+                this.game.score++;
+                this.distanceSincePoint -= this.distanceBetweenPipes;
+            }
+            // Engine stuff, you must have this in tick() function
+            super.tick(delta);
         }
-        // Engine stuff, you must have this in tick() function
-        super.tick(delta);
     }
 }
