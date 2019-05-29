@@ -13,7 +13,7 @@ export default class Root extends Node {
     player = new Player;
     state = 0;   // Gamemode state
 
-    speed = 1280; // Speed of pipes
+    speed = 200; // Speed of pipes
     maxSpeed = 600;
 
     distanceBetweenPipes = 450;   // Distance between pipes in state 0

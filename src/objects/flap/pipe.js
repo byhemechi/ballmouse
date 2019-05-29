@@ -2,14 +2,16 @@
 import Node from "../../primitives/node.js";
 import Rect from "../../primitives/rect.js";
 import { Vector } from "../../types.js";
+import Sprite from "../../primitives/sprite.js";
 
 export default class Pipe extends Node {
     size = new Vector(64, 500); // Hitbox size
     free = false; // Flag if the current pipe is active or not
 
-    children = [new Rect({
-        size: new Vector(64, 50),
-        fill: "#19c167"
+    children = [new Sprite({
+        size: new Vector(64, 500),
+        src: "/assets/flap/pipe.png"
+        
     })]
 
     // Called when Pipe is created
