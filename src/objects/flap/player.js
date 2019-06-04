@@ -6,9 +6,7 @@ import { Vector } from "../../types.js";
 const gravity = 1700;
 
 export default class Player extends Node {
-    v = new Vector(0, 0); // Velocity variable
-
-    
+    v = new Vector(0, 0); // Velocity variable   
 
     alive = true;
 
@@ -34,37 +32,36 @@ export default class Player extends Node {
         this.v.y = -600;
     }
 
-    restart() {
+    dead() {
         this.parent.started = false;
+        this.alive = false;
         // Do dead stuff
+    }
+
+    restart() {
+        this.position.x = 200;
+        this.position.y = 200;
+        this.alive = true;
     }
 
     // Called every frame
     tick(delta) {
-        
-        
 
         // Flappy Bird
         if (this.state == 0){
             this.v.y += gravity * delta;
-            // Set the correct frame
-            if(this.v.y < 0) this.children[0].region.begin.x = 128
-            else this.children[0].region.begin.x = 0
             if (this.parent.jumpJustPressed) {
                 this.v.y = -600;
             }
+            // Set the correct frame
+            if(this.v.y < 0) this.children[0].region.begin.x = 128
+            else this.children[0].region.begin.x = 0
+            
         }
         // Copter
         else if (this.state == 1) {
-            this.children[0].fill = "#ff3245"; // Change colour
-            if (this.game.keys.Space) {
-                this.v.y = -400;
-            }
-            else {
-                this.v.y = 400;
-                }
-            }
-        
+            this.v.y = this.game.keys.Space ? -400 : 400;
+        }
 
         // Clamp y velocity
         this.v.y = Math.min(Math.max(this.v.y, -800), 800);
@@ -74,11 +71,11 @@ export default class Player extends Node {
         if (this.alive && this.parent.started) {
             this.position = this.position.add(this.v.multiply(delta))
         }
+
         // If player is dead, when jump is pressed, reset game
         else if (!this.alive) {
-            if (this.parent.jumpJustPressed) {
-                this.restart();
-            }
+            this.dead();
+
         }
 
         // Engine stuff, you must have this in tick() function

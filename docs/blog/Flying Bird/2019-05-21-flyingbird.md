@@ -33,7 +33,7 @@ WHILE PLAYER.IS_ALIVE
                  RANDOM(0, SCREEN_BOTTOM))
     PIPES.ADD(NEW_PIPE)
     TIME = 0
-
+n
 END MAIN
 ``` 
 ```pascal

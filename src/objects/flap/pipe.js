@@ -29,6 +29,7 @@ export default class Pipe extends Node {
         // Flag as free if we are below x:-100
         if (this.position.x < -100) {
             this.free = true;
+            this.visible = false;
         }  
         
         // Engine stuff, you must have this in tick() function

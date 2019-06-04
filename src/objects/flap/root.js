@@ -6,7 +6,7 @@ import Rect from "../../primitives/rect.js";
 import { Vector } from "../../types.js";
 import Label from "../../primitives/text.js";
 
-// Make it so you dont need 'Math.' before math functions
+// Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random} = Math;
 
 export default class Root extends Node {
@@ -21,7 +21,7 @@ export default class Root extends Node {
 
     distanceBetweenPipes = 450;   // Distance between pipes in state 0
     distanceBetweenPipes2 = 45;   // Distance between pipes in state 1
-    distanceBetweenPortal = 4500;  // Distance between each mode switch
+    distanceBetweenPortal = 450*5;  // Distance between each mode switch
 
     distanceSincePipe = 0;        // Distance since last pipe
     distanceSincePortal = -540    // Distance since last portal (this changes player state)
@@ -53,7 +53,7 @@ export default class Root extends Node {
     /**
      * Create a random value smoothed by previous outputs
      */
-    newSlidingAverage() {
+    newSlidingRandom() {
         this.slidingRandom.push(random()); // Add a new random number to slidingRandom
         this.slidingRandom.shift();        // Remove the first value of slidingRandom
         var total = 0.0;
@@ -84,21 +84,22 @@ export default class Root extends Node {
                 recycled = true;
                 // Generate bottom and top pipe
                 if (bottomTop) {
-                    if (useSlidingRandom) i.position = new Vector(720, min + this.newSlidingAverage() * range);
+                    if (useSlidingRandom) i.position = new Vector(720, min + this.newSlidingRandom() * range);
                     else i.position = new Vector(720, min + random() * range);
                     i.size = new Vector(size, 500);
                     //i.children[0].size = new Vector(size, 500);
-                    i.children[0].src = sprite;
+                    i.children[0].img.src = sprite;
                     i.free = false;
+                    i.visible = true;
                     bottomPipePosition = i.position.y;
                     bottomTop = false;
                 }
                 else {
                     i.position = new Vector(720, bottomPipePosition - width);
                     i.size = new Vector(size, 500);
-                    //i.children[0].size = new Vector(size, 500);
-                    i.children[0].src = sprite;
+                    i.children[0].img.src = sprite;
                     i.free = false;
+                    i.visible = true;
 
                 }
             }
@@ -109,12 +110,12 @@ export default class Root extends Node {
             topPipe = new Pipe;
 
             bottomPipe.size = new Vector(size, 500);
-            bottomPipe.children[0].src = sprite;
+            bottomPipe.children[0].img.src = sprite;
 
             topPipe.size = new Vector(size, 500);
-            topPipe.children[0].src = sprite;
+            topPipe.children[0].img.src = sprite;
             
-            if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingAverage() * range;
+            if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingRandom() * range;
             else bottomPipe.position.y = min + random() * range;
             topPipe.position.y = bottomPipe.position.y - width;
             this.children.unshift(bottomPipe, topPipe);
@@ -133,12 +134,31 @@ export default class Root extends Node {
         this.prevJump = this.game.keys.Space;
 
         if (this.jumpJustPressed && !this.started) {
+            this.children[(this.children).length-1].visible = false;
+            this.player.restart()
             this.started = true;
-            this.children[length(this.children)-1]
+            this.speed = 200;
+            this.game.score = 0;
+
+            this.distanceSincePipe = 0;
+            this.distanceSincePortal = -540;
+            this.distanceSincePoint = -540;
+            this.distanceSinceStateChange = 0;
+            this.state = 0;
+            this.player.state = 0;
+
+
+            // Disable all pipes
+            this.children.forEach(i => {
+                if (i.constructor == Pipe) {
+                    i.free = true;
+                    i.visible = false;
+                    i.position.x = -50;
+                }
+            })
         }
 
         if (this.started) {
-
             // Do Collision
 
             this.children.forEach(i => {
@@ -221,6 +241,11 @@ export default class Root extends Node {
             }
             // Engine stuff, you must have this in tick() function
             super.tick(delta);
+        }
+
+        // When we game over
+        else {
+            this.children[(this.children).length-1].visible = true;
         }
     }
 }
