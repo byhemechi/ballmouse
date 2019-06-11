@@ -1,10 +1,10 @@
 // Import classes
-import Node from "../../primitives/node.js";
+import Entity from "../../primitives/entity.js";
 import Rect from "../../primitives/rect.js";
 import { Vector } from "../../types.js";
 import Sprite from "../../primitives/sprite.js";
 
-export default class Pipe extends Node {
+export default class Pipe extends Entity {
     size = new Vector(64, 500); // Hitbox size
     free = false; // Flag if the current pipe is active or not
 

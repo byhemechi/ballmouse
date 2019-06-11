@@ -1,5 +1,5 @@
 // Import classes
-import Node from "../../primitives/node.js";
+import Entity from "../../primitives/entity.js";
 import Sprite from "../../primitives/sprite.js";
 import { Vector } from "../../types.js";
 import Bullet, {PlayerBullet} from './bullet'
@@ -7,7 +7,7 @@ import Bullet, {PlayerBullet} from './bullet'
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
-export default class Player extends Node {
+export default class Player extends Entity {
     
     unfocusedSpeed = 250;
     focusSpeed = 125;

@@ -1,9 +1,9 @@
 import {Vector} from '../types.js'
-import Node from "../primitives/node.js"
+import Entity from "../primitives/entity.js"
 /**
- * Sprite node
- * @extends Node
- * @param {Object}  options              Options for the node; See below
+ * Sprite Entity
+ * @extends Entity
+ * @param {Object}  options              Options for the Entity; See below
  * @param {Vector}  options.position     Position vector, defaults to `(0,0)`
  * @param {number}  options.rotation     (Clockwise) Rotation in radians, defaults to `0`
  * @param {String}  options.src          Path or image to draw; size will be discarded.
@@ -12,7 +12,7 @@ import Node from "../primitives/node.js"
  * @param {Vector=} options.region.begin Top left corner of the clipping region
  * @param {Vector=} options.region.size  Size of the clipping region
  */
-class   Sprite extends Node {
+class   Sprite extends Entity {
     constructor(options) {
         super(options)
         this.size = this.size || new Vector

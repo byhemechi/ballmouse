@@ -1,7 +1,7 @@
 import PlayerBullet from './bullet/playerbullet';
-import Node from '../../primitives/node'
+import Entity from '../../primitives/Entity'
 
 export {PlayerBullet};
-export default class EnemyBullet extends Node {
+export default class EnemyBullet extends Entity {
     
 }

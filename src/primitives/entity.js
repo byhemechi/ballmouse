@@ -1,10 +1,10 @@
 import {Vector} from '../types.js'
 
 /**
- * Base node class, everything rendered most likely extends this.
+ * Base Entity class, everything rendered most likely extends this.
  * Note: If you extend this and have a render function, you *MUST* call `super.render(ctx)`, else children will not render.
  */
-class Node {
+class Entity {
     position = new Vector;
     rotation = 0;
     children = [];
@@ -12,10 +12,10 @@ class Node {
     name = this.constructor.name
 
     /**
-     * @param {Object} options Options for the node. These vary based on what node is being created, but generally will have position, rotation and children.
+     * @param {Object} options Options for the Entity. These vary based on what Entity is being created, but generally will have position, rotation and children.
      * @param {Vector} options.position Position vector, defaults to `(0,0)`
      * @param {number} options.rotation (Clockwise) Rotation in radians, defaults to `0`
-     * @param {bool}   options.visible Should the node (and its children) render
+     * @param {bool}   options.visible Should the Entity (and its children) render
      */
     constructor(options) {
         for(let i in options) {
@@ -53,4 +53,4 @@ class Node {
 }
 
 
-export default Node;
+export default Entity;

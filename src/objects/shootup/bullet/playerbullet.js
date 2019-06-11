@@ -1,10 +1,10 @@
-import Node from '../../../primitives/node';
+import Entity from '../../../primitives/Entity';
 import Rect from '../../../primitives/rect';
 import { Vector } from '../../../types';
 
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
-export default class PlayerBullet extends Node {
+export default class PlayerBullet extends Entity {
     speed = 600;
     direction = PI;
     children = [new Rect({
