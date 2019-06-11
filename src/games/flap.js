@@ -10,7 +10,6 @@ export default class flap extends Game {
         this.el.width  = 720;
         this.el.height = 480;
         this.el.style.backgroundColor = "skyblue";
-        this.ctx.imageSmoothingEnabled = false
     }
     render() {
         const ctx = this.ctx;
