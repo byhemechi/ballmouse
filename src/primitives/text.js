@@ -1,7 +1,7 @@
 import {Vector} from '../types.js'
-import Node from './node.js'
+import Entity from './entity.js'
 
-class Label extends Node {
+class Label extends Entity {
     render(ctx) {
         //  console.log(this.currentTransform   )
         ctx.font = this.font || ctx.font;

@@ -1,11 +1,11 @@
 // Import classes
-import Node from "../../primitives/node.js";
+import Entity from "../../primitives/entity.js";
 import Sprite from "../../primitives/sprite.js";
 import { Vector } from "../../types.js";
 
 const gravity = 1700;
 
-export default class Player extends Node {
+export default class Player extends Entity {
     v = new Vector(0, 0); // Velocity variable   
 
     alive = true;

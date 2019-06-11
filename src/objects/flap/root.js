@@ -1,5 +1,5 @@
 // Import classes
-import Node from "../../primitives/node.js";
+import Entity from "../../primitives/entity.js";
 import Pipe from "./pipe.js";
 import Player from "./player.js";
 import Rect from "../../primitives/rect.js";
@@ -9,7 +9,7 @@ import Label from "../../primitives/text.js";
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random} = Math;
 
-export default class Root extends Node {
+export default class Root extends Entity {
 
     player = new Player;
     state = 0;   // Gamemode state
