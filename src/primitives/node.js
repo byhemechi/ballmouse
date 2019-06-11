@@ -37,8 +37,8 @@ class Node {
                 ctx.translate(Math.round(i.position.x), Math.round(i.position.y));
                 ctx.rotate(i.rotation);
                 i.render(ctx);
-                ctx.translate(-Math.round(i.position.x), -Math.round(i.position.y));
                 ctx.rotate(-i.rotation);
+                ctx.translate(-Math.round(i.position.x), -Math.round(i.position.y));
             }
         });
     }
