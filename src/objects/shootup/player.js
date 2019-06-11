@@ -2,6 +2,7 @@
 import Node from "../../primitives/node.js";
 import Sprite from "../../primitives/sprite.js";
 import { Vector } from "../../types.js";
+import Bullet, {PlayerBullet} from './bullet'
 
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
@@ -44,7 +45,6 @@ export default class Player extends Node {
         }
 
         const angle = atan2(move.y, move.x);
-        this.rotation = angle;
         const isMoving = abs(move.x) || abs(move.y);
         move.x = isMoving ? cos(angle) : 0;
         move.y = isMoving ? sin(angle) : 0;
@@ -55,6 +55,12 @@ export default class Player extends Node {
         // Clamp position
         this.position.x = min(max(this.position.x, 0), 420);
         this.position.y = min(max(this.position.y, 0), 666);
+
+        if (this.game.keys.KeyZ) {
+            const bullet = new PlayerBullet;
+            bullet.position = this.position;
+            this.children.push(bullet);
+        }
 
         super.tick(delta);
         

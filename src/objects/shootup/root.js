@@ -4,6 +4,7 @@ import Rect from "../../primitives/rect.js";
 import { Vector } from "../../types.js";
 import Sprite from "../../primitives/sprite";
 import Player from "../shootup/player.js"
+import Bullet, {PlayerBullet} from './bullet'
 
 
 // Makes it so you dont need 'Math.' before math functions
