@@ -2,7 +2,8 @@
 import Entity from "../../primitives/entity.js";
 import Sprite from "../../primitives/sprite.js";
 import { Vector } from "../../types.js";
-import Bullet, {PlayerBullet} from './bullet'
+import Bullet from './bullet'
+import PlayerBullet from "./bullet/playerbullet.js";
 
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
@@ -26,23 +27,7 @@ export default class Player extends Entity {
         var speed = this.unfocusedSpeed;
         var move = new Vector;
 
-        if (this.game.keys.KeyI) {
-            move.y -= 1;
-        };
-        if (this.game.keys.KeyK) {
-            move.y += 1;
-        };
-        if (this.game.keys.KeyJ) {
-            move.x -= 1;
-        };
-        if (this.game.keys.KeyL) {
-            move.x += 1;
-        };
-
-
-        if (this.game.keys.ShiftLeft) {
-            speed = this.focusSpeed;
-        }
+        speed = this.keyboardMove(move, speed);
 
         const angle = atan2(move.y, move.x);
         const isMoving = abs(move.x) || abs(move.y);
@@ -53,16 +38,46 @@ export default class Player extends Entity {
         this.position = this.position.add(move.multiply(speed * delta));
 
         // Clamp position
-        this.position.x = min(max(this.position.x, 0), 420);
-        this.position.y = min(max(this.position.y, 0), 666);
+        this.clampPosition();
 
         if (this.game.keys.KeyZ) {
-            const bullet = new PlayerBullet;
-            bullet.position = this.position;
-            this.children.push(bullet);
+            this.shoot();
         }
 
         super.tick(delta);
         
+    }
+
+    keyboardMove(move, speed) {
+        if (this.game.keys.KeyI) {
+            move.y -= 1;
+        }
+        ;
+        if (this.game.keys.KeyK) {
+            move.y += 1;
+        }
+        ;
+        if (this.game.keys.KeyJ) {
+            move.x -= 1;
+        }
+        ;
+        if (this.game.keys.KeyL) {
+            move.x += 1;
+        }
+        ;
+        if (this.game.keys.ShiftLeft) {
+            speed = this.focusSpeed;
+        }
+        return speed;
+    }
+
+    clampPosition() {
+        this.position.x = min(max(this.position.x, 0), 420);
+        this.position.y = min(max(this.position.y, 0), 666);
+    }
+
+    shoot() {
+        const bullet = new PlayerBullet;
+        this.children.push(bullet);
     }
 }

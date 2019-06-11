@@ -1,7 +1,5 @@
-import PlayerBullet from './bullet/playerbullet';
-import Entity from '../../primitives/Entity'
+import Entity from '../../primitives/entity.js'
 
-export {PlayerBullet};
 export default class EnemyBullet extends Entity {
     
 }

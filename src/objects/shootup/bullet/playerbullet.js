@@ -1,4 +1,4 @@
-import Entity from '../../../primitives/Entity';
+import Entity from '../../../primitives/entity.js';
 import Rect from '../../../primitives/rect';
 import { Vector } from '../../../types';
 
