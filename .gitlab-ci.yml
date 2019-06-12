@@ -8,6 +8,8 @@ pages:
   script:
   - mkdocs build
   - mv site public
+  - mv index.html public
+  - mv dist public
   artifacts:
     paths:
     - public
