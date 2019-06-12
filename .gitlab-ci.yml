@@ -12,6 +12,8 @@ pages:
   - yarn build
   - mkdocs build
   - mv site public
+  - mv index.html public/game.html
+  - mv dist public/dist
   artifacts:
     paths:
     - public
