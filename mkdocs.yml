@@ -11,3 +11,8 @@ markdown_extensions:
   - codehilite
 repo_url: 'https://gitlab.com/byhemechi/ballmouse'
 edit_uri: ""
+
+plugins:
+    - markdownmermaid
+extra_javascript:
+    - https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js
