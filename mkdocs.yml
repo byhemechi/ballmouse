@@ -7,10 +7,11 @@ theme:
     icon: 'backup'
   feature:
     tabs: true
-markdown_extensions:
-  - codehilite
 repo_url: 'https://gitlab.com/byhemechi/ballmouse'
 edit_uri: ""
+
+extra_css:
+  - //cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css
 
 extra_javascript:
     - https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js
