@@ -42,6 +42,16 @@ export default class Bullet extends Entity {
                 sin(this.angle)
             ).multiply(this.speed * delta)
         )
+
+        this.checkIfOffscreen();
     }
-    
+
+    checkIfOffscreen() {
+        if (this.position.x > this.game.el.width ||
+            this.position.x < 0 ||
+            this.position.y > this.game.el.height ||
+            this.position.y < 0) {
+            // Recycle
+        }
+    }
 }
