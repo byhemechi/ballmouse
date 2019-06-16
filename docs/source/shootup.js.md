@@ -1,4 +1,4 @@
-# entry.js
+# shootup.js
 <a name="render"></a>
 
 ## render(time)

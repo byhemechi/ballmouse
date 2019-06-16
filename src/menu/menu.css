@@ -1,0 +1,39 @@
+#menu {
+    width: 720px;
+    min-height: 480px;
+    background: #fff;
+    margin: 50px auto;
+    box-sizing: border-box;
+    padding: 100px 50px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px #0003;
+}
+
+#menu h1 {
+    font-weight: normal;
+}
+
+#menu button {
+    padding: 10px 15px;
+    font-size: inherit;
+    background: #00aac4;
+    border: 0;
+    color: #fff;
+    border-radius: 99999px;
+    font-weight: bold;
+    display: block;
+    box-sizing: border-box;
+    width: 200px;
+    margin: 20px auto;
+    box-shadow: 0 7px #008599;
+}
+
+#menu button.back {
+    filter: hue-rotate(-190deg)
+}
+
+#menu button:active {
+    transform: translateY(4px);
+    box-shadow: 0 3px #008599;
+}

@@ -27,20 +27,21 @@ export default class Player extends Entity {
     // Called when Player is created
     constructor(...args) {
         super(...args);
+        this.reset();
+    }
+
+    kill() {
+        this.parent.started = false;
+        this.alive = false;
+    }
+
+    /**
+     * (Re)sets the player to the starting state
+     */
+    reset() {
         this.position.x = 200;
         this.position.y = 200;
         this.v.y = -600;
-    }
-
-    dead() {
-        this.parent.started = false;
-        this.alive = false;
-        // Do dead stuff
-    }
-
-    restart() {
-        this.position.x = 200;
-        this.position.y = 200;
         this.alive = true;
     }
 
@@ -74,7 +75,7 @@ export default class Player extends Entity {
 
         // If player is dead, when jump is pressed, reset game
         else if (!this.alive) {
-            this.dead();
+            this.kill();
 
         }
 
