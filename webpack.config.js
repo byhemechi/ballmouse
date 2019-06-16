@@ -7,6 +7,7 @@ module.exports = {
     flap: './src/flap.js',
     shootup: './src/shootup.js',
     stopboat: './src/stopboat.js',
+    menu: "./src/menu/entry.js"
   },
   output: {
     filename: '[name].bundle.js',
@@ -21,7 +22,6 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
             plugins: ['@babel/plugin-proposal-class-properties']
           }
         }
