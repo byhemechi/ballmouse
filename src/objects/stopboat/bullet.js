@@ -20,6 +20,7 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
  * @param {number}  options.speed   Speed of the bullet
  * @param {number}  options.angle   Angle that the bullet travels in radians clockwise
  */
+
 export default class Bullet extends Entity {
 
     constructor(options) {
@@ -44,8 +45,12 @@ export default class Bullet extends Entity {
         )
 
         this.checkIfOffscreen();
-    }
 
+        super.tick(delta);
+    }
+    /**
+     * Check if this bullet is offscreen
+     */
     checkIfOffscreen() {
         if (this.position.x > this.game.el.width ||
             this.position.x < 0 ||

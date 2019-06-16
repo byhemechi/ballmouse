@@ -11,6 +11,8 @@ const {sin, cos, tan, PI, random} = Math;
 export default class Root extends Entity {
     children = [new Player];
     
-    
+    tick(delta) {
+        super.tick(delta);
+    }
 }
 

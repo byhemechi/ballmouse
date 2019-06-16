@@ -10,9 +10,12 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
+    // Position and speed of player
     position = new Vector(48,324);
     speed = 420;
+
     currentWeapon = 0;
+    // Array of weapons we currently possess
     weapons = [
         new Weapon({
             speed: 1000,
@@ -87,7 +90,7 @@ export default class Player extends Entity {
     }
 
     /**
-     * Shoot bullets if we can
+     * Shoot bullets if we are able to 
      */
     shoot() {
         // If we just pressed shoot and we are ready to shoot, 
@@ -124,7 +127,6 @@ export default class Player extends Entity {
         return spread;
     }
 
-
     prevShoot = false
     /**
      * Determine if we pressed shoot on this frame
@@ -140,5 +142,4 @@ export default class Player extends Entity {
         this.prevShoot = this.game.keys.KeyZ;
         return didShoot;
     }
-
 }

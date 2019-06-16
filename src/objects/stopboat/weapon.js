@@ -3,6 +3,7 @@ import { Vector } from "../../types"
 /**
  * Weapon class
  * @param {Object}  options                 Options for the class; see below
+ * @param {number}  options.damage          How much damage the bullets do
  * @param {number}  options.speed           Speed of bullets
  * @param {number}  options.spread          Spread of bullets in radians
  * @param {bool}    options.canFire         Flag if we can fire
