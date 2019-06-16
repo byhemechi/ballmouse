@@ -5,5 +5,11 @@
         "title": "Flappy Guy",
         "icon": "/assets/flap/flap.png",
         "background": "skyblue"
+    },
+    {
+        "entry": "/dist/stopboat.bundle.js",
+        "title": "Stop the Soviets",
+        "icon": "/assets/flap/flap.png",
+        "background": "skyblue"
     }]
 }
