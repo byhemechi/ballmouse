@@ -7,6 +7,10 @@ import { Vector } from "../../types";
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 /**
+ * Basic Bullet class. Most projectiles will be using this class.
+ */
+
+/**
  * Bullet Class
  * @extends Entity
  * @param {Object}  options         Options for the Entity; See below

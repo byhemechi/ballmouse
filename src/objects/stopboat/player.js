@@ -15,7 +15,7 @@ export default class Player extends Entity {
     speed = 420;
 
     weapons = [
-        new Weapon
+        
     ]
 
     children = [new Sprite({
