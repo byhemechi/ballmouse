@@ -25,6 +25,7 @@ class   Sprite extends Entity {
         } else {
             ctx.drawImage(this.img, this.region.begin.x, this.region.begin.y, this.region.size.x, this.region.size.y, 0, 0, this.size.x || this.region.size.x, this.size.y || this.region.size.y);
         }
+        super.render(ctx);
     }
 }
 
