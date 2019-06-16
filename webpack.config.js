@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     flap: './src/flap.js',
     shootup: './src/shootup.js',
+    stopboat: './src/stopboat.js',
   },
   output: {
     filename: '[name].bundle.js',
