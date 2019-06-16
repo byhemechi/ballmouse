@@ -1,5 +1,5 @@
 {
-    "title": "ballmouse",
+    "title": "Ballmouse",
     "games": [{
         "entry": "/dist/flap.bundle.js",
         "title": "Flappy Guy",
@@ -9,7 +9,7 @@
     {
         "entry": "/dist/stopboat.bundle.js",
         "title": "Stop the Soviets",
-        "icon": "/assets/flap/flap.png",
-        "background": "skyblue"
+        "icon": "/assets/stopboat/title.png",
+        "background": "#690000"
     }]
 }
