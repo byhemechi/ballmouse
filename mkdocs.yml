@@ -1,10 +1,12 @@
-site_name: "Bob Katter: Dab of Destiny"
+site_name: ballmouse docs
 theme:
   name: 'material'
   palette: 
     primary: white
   logo:
-    icon: 'backup'
+    icon: 'gamepad'
+
+  favicon: /coolguy.png
   feature:
     tabs: true
 repo_url: 'https://gitlab.com/byhemechi/ballmouse'
@@ -17,8 +19,7 @@ extra_javascript:
 markdown_extensions:
   - toc:
       permalink: 🔗
-  - codehilite:
-      linenums: true
+  - codehilite
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.caret
