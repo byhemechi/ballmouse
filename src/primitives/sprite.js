@@ -23,8 +23,9 @@ class   Sprite extends Entity {
         if(!this.region) {
             ctx.drawImage(this.img, 0, 0, this.size.x || this.img.naturalWidth, this.size.y || this.img.naturalHeight);
         } else {
-            ctx.drawImage(this.img, this.region.begin.x, this.region.begin.y, this.region.size.y, this.region.size.y, 0, 0, this.size.x || this.region.size.x, this.size.y || this.region.size.y);
+            ctx.drawImage(this.img, this.region.begin.x, this.region.begin.y, this.region.size.x, this.region.size.y, 0, 0, this.size.x || this.region.size.x, this.size.y || this.region.size.y);
         }
+        super.render(ctx);
     }
 }
 
