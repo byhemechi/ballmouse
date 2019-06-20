@@ -3,7 +3,7 @@ import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
 import Bullet from "../stopboat/bullet";
-import Weapon from "../stopboat/weapon";
+import Weapon from "./weapon";
 
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
