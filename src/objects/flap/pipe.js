@@ -6,7 +6,7 @@ import Sprite from "../../primitives/sprite.js";
 
 export default class Pipe extends Entity {
     size = new Vector(64, 500); // Hitbox size
-    free = false; // Flag if the current pipe is active or not
+    isFree = false; // Flag if the current pipe is active or not
 
     children = []
 
