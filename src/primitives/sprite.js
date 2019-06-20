@@ -12,7 +12,7 @@ import Entity from "../primitives/entity"
  * @param {Vector=} options.region.begin Top left corner of the clipping region
  * @param {Vector=} options.region.size  Size of the clipping region
  */
-class   Sprite extends Entity {
+class Sprite extends Entity {
     constructor(options) {
         super(options)
         this.size = this.size || new Vector
