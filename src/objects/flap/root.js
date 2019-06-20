@@ -19,7 +19,7 @@ export default class Root extends Entity {
 
     distanceBetweenPipes = 450;
     distanceBetweenPipes2 = 45;
-    distanceBetweenPortal = 450 * 5;
+    distanceBetweenPortal = 450 * 2;
     
 
     constructor(...args) {
