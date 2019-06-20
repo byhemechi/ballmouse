@@ -19,17 +19,19 @@ import { Vector } from "../../types"
  */
 
 export default class Weapon {
-    constructor(options) {
-        this.speed = options.speed;
-        this.spread = options.spread;
-        this.canFire = true;
-        this.queue = 0;
-        this.firerate = options.firerate;
-        this.timer = 0;
-        this.magsize = options.magsize;
-        this.reloadtime = options.reloadtime;
-        this.burstcount = options.burstcount || 1;
-        this.burstfirerate = options.burstfirerate || 0;
-        this.bursttimer = 0
+    speed: number;
+    spread: number;
+    canFire: boolean = true;
+    queue: number = 0;
+    firerate: number;
+    timer: number = 0;
+    magsize: number;
+    reloadtime: number;
+    burstcount: number = 1;
+    burstfirerate: number = 0;
+    bursttimer: number = 0;
+
+    constructor(options: Object = {}) {
+        Object.assign(this, options);
     }
 }
