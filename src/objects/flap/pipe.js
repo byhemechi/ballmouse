@@ -22,13 +22,13 @@ export default class Pipe extends Entity {
     // Called every frame
     tick(delta) {
         // Move pipe
-        if (!this.free) {
+        if (!this.isFree) {
             this.position.x -= this.parent.speed * delta;
         }
 
         // Flag as free if we are below x:-100
         if (this.position.x < -100) {
-            this.free = true;
+            this.isFree = true;
             this.visible = false;
         }  
         
