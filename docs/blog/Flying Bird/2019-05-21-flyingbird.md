@@ -45,24 +45,31 @@ WHILE PLAYER.IS_ALIVE
 
 END MAIN
 ``` 
-![main.svg](main.svg)
+
+
+    mermaid graph TD
+      A(START MAIN) --> B[Player Movement]
+      B-->C[Increment 'time' variable]
+      C-->D[Increment 'speed' variable]
+      D-->E[Move pipes left by speed * delta]
+      E-->F[Handle collision]
+      F-->G{is 'time' equal to<br> 'time between pipes'}
+      G-->|No|B
+      G--> |Yes| H[Create new pipe]
+      H-->B
 
 ### Player
-```pascal
-START PLAYER
-POSITION = 0
-GRAVITY = 10
-VELOCITY = 0
+```
+(Player class)
+set position to 0
+set gravity to 9.8
+set velocity to Vector(0, 0)
 
-WHILE IS_ALIVE
-  VELOCITY -= GRAVITY
-  
-  IF BUTTON_PRESSED('Space')
-    VELOCITY = 10
+while the player is alive: 
+  subtract gravity from the vertical velocity
+  if Space is pressed and touching the ground, set the vertical velocity to 10
+  Add the velocity to the current position
 
-  POSITION += VELOCITY
-
-END PLAYER
 ```
 ![player.svg](player.svg)
 ### Collision

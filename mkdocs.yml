@@ -1,4 +1,10 @@
 site_name: ballmouse docs
+site_description: The docs for a collection of Games
+site_author: George Fischer and Joon Suh
+site_url: https://splorge.space/
+
+copyright: 'If you ever feel that you need to use content from this site elsewhere you might have some problems other than copyright'
+
 theme:
   name: 'material'
   palette: 
@@ -10,6 +16,7 @@ theme:
   feature:
     tabs: true
 repo_url: 'https://gitlab.com/byhemechi/ballmouse'
+repo_name: byhemechi/ballmouse
 edit_uri: ""
 
 extra_javascript:
