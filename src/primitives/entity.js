@@ -45,7 +45,7 @@ class Entity {
     }
 
     free() {
-        this.parent.children.splice(this.parent.children.indexOf(this));
+        this.parent.children.splice(this.parent.children.indexOf(this), 1);
     }
 
     tick(delta) {
