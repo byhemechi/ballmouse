@@ -1,16 +1,12 @@
 {
   "scripts": {
-    "docs": "node --experimental-modules docs.mjs",
+    "docs": "rimraf docs/ts && typedoc --module system --out docs/ts",
     "dev": "webpack-dev-server",
     "build": "NODE_ENV=production webpack",
     "clean": "rimraf dist"
   },
   "main": "index.html",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "babel-loader": "^8.0.6",
     "eslint": "^5.16.0",
     "fs-extra": "^8.0.1",
     "glob": "^7.1.4",
@@ -19,6 +15,8 @@
     "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
     "ts-loader": "^6.0.3",
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-markdown": "^2.0.4",
     "typescript": "^3.5.2",
     "webpack-cli": "^3.3.3",
     "webpack-dev-server": "^3.7.1"

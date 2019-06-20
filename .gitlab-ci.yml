@@ -13,6 +13,8 @@ pages:
   - mkdocs build
   - mv site public
   - mv index.html public/game.html
+  - rm -rf public/source
+  - mv docs/ts public/source
   - mv dist public/dist
   - mv assets public/assets
   artifacts:
