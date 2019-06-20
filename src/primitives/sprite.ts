@@ -12,7 +12,19 @@ import Entity from "../primitives/entity"
  * @param {Vector=} options.region.begin Top left corner of the clipping region
  * @param {Vector=} options.region.size  Size of the clipping region
  */
+
+interface CropRegion {
+    begin: Vector;
+    size: Vector;
+}
+
 class Sprite extends Entity {
+
+    size: Vector;
+    img: HTMLImageElement;
+
+    region: CropRegion;
+
     constructor(options) {
         super(options)
         this.size = this.size || new Vector

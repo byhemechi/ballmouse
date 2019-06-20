@@ -10,6 +10,10 @@ import Entity from './entity'
  * @param {string} options.fill   What the rectangle should be filled with, defaults to `#000` (solid black)
  */
 class Rect extends Entity {
+
+    fill: string;
+    size: Vector;
+
     render(ctx) {
         const lf = ctx.fillStyle;
         ctx.fillStyle = this.fill || "#000";
