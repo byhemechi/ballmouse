@@ -21,6 +21,7 @@ class Entity {
         for(let i in options) {
             this[i] = options[i]
         }
+        this.uid = btoa(Number(crypto.getRandomValues(new Uint8Array(4)).join("")));
     }
 
     toString() {
@@ -41,6 +42,10 @@ class Entity {
                 ctx.translate(-Math.round(i.position.x), -Math.round(i.position.y));
             }
         });
+    }
+
+    free() {
+        this.parent.children.splice(this.parent.children.indexOf(this));
     }
 
     tick(delta) {
