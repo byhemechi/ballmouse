@@ -7,8 +7,8 @@ export default class Shootup extends Game {
     constructor() {
         super();
         this.root.children = [new Root];
-        this.el.width  = 1152;
-        this.el.height = 648;
+        this.el.width  = 1024;
+        this.el.height = 576;
         this.el.style.backgroundColor = "black";
     }
     render() {

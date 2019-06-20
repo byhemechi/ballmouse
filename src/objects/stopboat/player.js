@@ -11,8 +11,9 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 export default class Player extends Entity {
 
     // Position and speed of player
-    position = new Vector(48,324);
+    position = new Vector(64,576/2);
     speed = 420;
+    rotation = PI/2;
 
     currentWeapon = 0;
     // Array of weapons we currently possess
@@ -20,20 +21,16 @@ export default class Player extends Entity {
         new Weapon({
             speed: 1000,
             spread: 0.1,
-            firerate: 0.02,
+            firerate: 0.01,
             magsize: 30,
             reloadtime: 3
         })
     ]
 
     children = [new Sprite({
-        src: "/assets/flap/flap.png",
-        size: new Vector(64, 64),
-        position: new Vector(-32, -32),
-        region: {
-            begin: new Vector,
-            size: new Vector(128, 128)
-        }
+        src: "/assets/stopboat/turret.png",
+        size: new Vector(64, 128),
+        position: new Vector(-32, -64),
     })]
 
     tick(delta) {

@@ -1,7 +1,7 @@
 import { Vector } from "../../types"
 
 /**
- * Weapon class
+ * A container class that stores weapon data.
  * @param {Object}  options                 Options for the class; see below
  * @param {number}  options.damage          How much damage the bullets do
  * @param {number}  options.speed           Speed of bullets

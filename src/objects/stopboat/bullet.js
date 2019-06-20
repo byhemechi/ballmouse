@@ -44,19 +44,17 @@ export default class Bullet extends Entity {
             ).multiply(this.speed * delta)
         )
 
-        this.checkIfOffscreen();
-
         super.tick(delta);
     }
     /**
      * Check if this bullet is offscreen
      */
-    checkIfOffscreen() {
+    isOffscreen() {
         if (this.position.x > this.game.el.width ||
             this.position.x < 0 ||
             this.position.y > this.game.el.height ||
             this.position.y < 0) {
-            // Recycle
+            return true
         }
     }
 }
