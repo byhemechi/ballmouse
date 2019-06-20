@@ -6,7 +6,7 @@ module.exports = {
   entry: {
     flap: './src/flap.js',
     shootup: './src/shootup.js',
-    stopboat: './src/stopboat.js',
+    stopboat: './src/stopboat.ts',
     menu: "./src/menu/entry.js"
   },
   output: {
@@ -17,13 +17,10 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.[jt]sx?$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            plugins: ['@babel/plugin-proposal-class-properties']
-          }
+          loader: 'ts-loader'
         }
       }
     ]

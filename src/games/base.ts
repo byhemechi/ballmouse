@@ -5,12 +5,12 @@ import Entity from '../primitives/entity.js';
  */
 
 class Game {
-    el = document.createElement("canvas");
-    ctx = this.el.getContext('2d');
+    el: HTMLCanvasElement = document.createElement("canvas");
+    ctx: CanvasRenderingContext2D = this.el.getContext('2d');
     lt = 0;
     keys = {};
 
-    root = new Entity;
+    root: Entity = new Entity({});
     /**
      * The main tick function, called every frame.
      * @param {Number} time Time in ms from the first run (not really but close enough)

@@ -5,11 +5,11 @@ import {Vector} from '../types.js'
  * Note: If you extend this and have a render function, you *MUST* call `super.render(ctx)`, else children will not render.
  */
 class Entity {
-    position = new Vector;
-    rotation = 0;
-    children = [];
-    visible = true;
-    name = this.constructor.name
+    position: Vector = new Vector;
+    rotation: number = 0;
+    children: Array<Entity> = [];
+    visible: boolean = true;
+    name: string = this.constructor.name
 
     /**
      * @param {Object} options Options for the Entity. These vary based on what Entity is being created, but generally will have position, rotation and children.
@@ -17,7 +17,7 @@ class Entity {
      * @param {number} options.rotation (Clockwise) Rotation in radians, defaults to `0`
      * @param {bool}   options.visible Should the Entity (and its children) render
      */
-    constructor(options) {
+    constructor(options: Object) {
         for(let i in options) {
             this[i] = options[i]
         }

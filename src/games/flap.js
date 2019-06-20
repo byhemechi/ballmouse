@@ -1,4 +1,4 @@
-import Game from "./base.js";
+import Game from "./base.ts";
 import Root from "../objects/flap/root.js";
 
 

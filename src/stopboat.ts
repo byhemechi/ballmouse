@@ -1,4 +1,4 @@
-import Game from './games/stopboat.js';
+import Game from './games/stopboat';
 
 const el = document.querySelector("#game");
 const game = new Game;
