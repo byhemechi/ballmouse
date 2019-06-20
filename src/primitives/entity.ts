@@ -1,4 +1,5 @@
 import {Vector} from '../types.js'
+import Game from '../games/base.js';
 
 /**
  * Base Entity class, everything rendered most likely extends this.
@@ -9,7 +10,10 @@ class Entity {
     rotation: number = 0;
     children: Array<Entity> = [];
     visible: boolean = true;
-    name: string = this.constructor.name
+    name: string = this.constructor.name;
+    game: Game;
+    parent: Entity;
+    uid: string
 
     /**
      * @param {Object} options Options for the Entity. These vary based on what Entity is being created, but generally will have position, rotation and children.
@@ -21,7 +25,7 @@ class Entity {
         for(let i in options) {
             this[i] = options[i]
         }
-        this.uid = btoa(Number(crypto.getRandomValues(new Uint8Array(4)).join("")));
+        this.uid = btoa(crypto.getRandomValues(new Uint8Array(4)).join(""));
     }
 
     toString() {

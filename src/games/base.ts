@@ -9,6 +9,8 @@ class Game {
     ctx: CanvasRenderingContext2D = this.el.getContext('2d');
     lt = 0;
     keys = {};
+    delta: number;
+    fps: number;
 
     root: Entity = new Entity({});
     /**
