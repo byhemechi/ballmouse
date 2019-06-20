@@ -74,7 +74,7 @@ export default class Root extends Entity {
 
         // Attempt to recycle
         this.children.forEach(i => {
-            if (i.free) {
+            if (i.isFree) {
                 recycled = true;
                 // Generate bottom and top pipe
                 if (bottomTop) {
