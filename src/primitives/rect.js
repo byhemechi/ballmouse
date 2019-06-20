@@ -1,5 +1,5 @@
-import {Vector} from '../types.js'
-import Entity from './entity.js'
+import {Vector} from '../types'
+import Entity from './entity'
 /**
  * Rectangle Entity
  * @extends Entity

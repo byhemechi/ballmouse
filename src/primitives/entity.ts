@@ -1,5 +1,5 @@
-import {Vector} from '../types.js'
-import Game from '../games/base.js';
+import {Vector} from '../types'
+import Game from '../games/base';
 
 /**
  * Base Entity class, everything rendered most likely extends this.
@@ -11,9 +11,10 @@ class Entity {
     children: Array<Entity> = [];
     visible: boolean = true;
     name: string = this.constructor.name;
-    game: Game;
-    parent: Entity;
+    game: any;
+    parent: any;
     uid: string
+    root: any
 
     /**
      * @param {Object} options Options for the Entity. These vary based on what Entity is being created, but generally will have position, rotation and children.
@@ -21,7 +22,7 @@ class Entity {
      * @param {number} options.rotation (Clockwise) Rotation in radians, defaults to `0`
      * @param {bool}   options.visible Should the Entity (and its children) render
      */
-    constructor(options: Object) {
+    constructor(options: Object = {}) {
         for(let i in options) {
             this[i] = options[i]
         }
@@ -56,6 +57,7 @@ class Entity {
         this.children.forEach(i => {
             i.game = this.game;
             i.parent = this;
+            i.root = this.game.root;
             i.tick(delta);
         })
     }

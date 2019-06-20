@@ -1,5 +1,5 @@
-import {Vector} from '../types.js'
-import Entity from "../primitives/entity.js"
+import {Vector} from '../types'
+import Entity from "../primitives/entity"
 /**
  * Sprite Entity
  * @extends Entity

@@ -1,14 +1,18 @@
-import Entity from '../primitives/entity.js';
+import Entity from '../primitives/entity';
 
 /**
  * The main game class, a lot of logic will happen here
  */
 
+interface KeySet {
+    [key: string]: boolean;
+}
+
 class Game {
     el: HTMLCanvasElement = document.createElement("canvas");
     ctx: CanvasRenderingContext2D = this.el.getContext('2d');
     lt = 0;
-    keys = {};
+    keys: KeySet = {};
     delta: number;
     fps: number;
 

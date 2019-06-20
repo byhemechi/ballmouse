@@ -1,13 +1,18 @@
-import loadGame from "./loadgame";
+function loadGame(game) {
+    const nscript = document.createElement("script");
+    nscript.src = game.entry;
+    document.title = game.title
+    document.body.appendChild(nscript);
+}
 
-const container = document.querySelector("#menu");
+const container:HTMLDivElement = document.querySelector("#menu");
 async function generateMenu() {
     const menufetch = fetch("/menu.json");
     const menu = await menufetch;
     const data = await menu.json();
     
     container.innerHTML = "";
-    container.style = {}
+    container.setAttribute("style", "");
 
     const menuHeader = document.createElement("h1");
     menuHeader.textContent = data.title;

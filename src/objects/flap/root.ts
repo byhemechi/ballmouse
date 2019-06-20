@@ -1,13 +1,17 @@
 // Import classes
-import Entity from "../../primitives/entity.js";
-import Pipe from "./pipe.js";
-import Player from "./player.js";
-import Rect from "../../primitives/rect.js";
-import { Vector } from "../../types.js";
-import Label from "../../primitives/text.js";
+import Entity from "../../primitives/entity";
+import Pipe from "./pipe";
+import Player from "./player";
+import Rect from "../../primitives/rect";
+import { Vector } from "../../types";
+import Label from "../../primitives/text";
 
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random} = Math;
+
+class PipeSet extends Entity {
+    children: Array<Pipe>
+}
 
 export default class Root extends Entity {
 
@@ -15,12 +19,22 @@ export default class Root extends Entity {
 
     maxSpeed = 600;
 
+    pipeSet: PipeSet = new PipeSet
+
     started = false;
+
+    speed: number;
+
+    state: number;
 
     distanceBetweenPipes = 450;
     distanceBetweenPipes2 = 45;
     distanceBetweenPortal = 450 * 2;
-    
+    distanceSincePoint: number;
+    distanceSincePipe: number;
+    distanceSinceStateChange: number;
+    distanceSincePortal: number
+
 
     constructor(...args) {
         super(...args);
@@ -73,8 +87,8 @@ export default class Root extends Entity {
         var bottomPipePosition = 0; // Position of bottom pipe
 
         // Attempt to recycle
-        this.children.forEach(i => {
-            if (i.isFree) {
+        this.pipeSet.children.forEach(i => {
+            if (i.constructor == Pipe && i.isFree) {
                 recycled = true;
                 // Generate bottom and top pipe
                 if (bottomTop) {
@@ -83,7 +97,7 @@ export default class Root extends Entity {
                     i.size = new Vector(size, 500);
                     //i.children[0].size = new Vector(size, 500);
                     i.children[0].img.src = sprite;
-                    i.free = false;
+                    i.isFree = false;
                     i.visible = true;
                     bottomPipePosition = i.position.y;
                     bottomTop = false;
@@ -92,7 +106,7 @@ export default class Root extends Entity {
                     i.position = new Vector(720, bottomPipePosition - width);
                     i.size = new Vector(size, 500);
                     i.children[0].img.src = sprite;
-                    i.free = false;
+                    i.isFree = false;
                     i.visible = true;
 
                 }
@@ -121,7 +135,8 @@ export default class Root extends Entity {
         
         // Input if jump pressed this frame
         this.jumpJustPressed = this.isInitialJump();
-        
+        this.player.jumpJustPressed = this.jumpJustPressed;
+
         // Start the game when we press jump
         if (this.jumpJustPressed && !this.started) {
             this.reset();
@@ -166,7 +181,7 @@ export default class Root extends Entity {
     }
 
     /**
-     * Check if this is the first framw where jump is pressed
+     * Check if this is the first frame where jump is pressed
      */
     isInitialJump() {
         var didJump
@@ -256,7 +271,7 @@ export default class Root extends Entity {
      * Check if the player is colliding with the pipes
      */
     pipeCollision() {
-        this.children.forEach(i => {
+        this.pipeSet.children.forEach(i => {
             // Pipe collision
             if (i.constructor == Pipe) {
                 // Minkowski Difference collision
@@ -290,9 +305,9 @@ export default class Root extends Entity {
             this.player.state = 0;
 
             // Disable all pipes
-            this.children.forEach(i => {
+            this.pipeSet.children.forEach(i => {
                 if (i.constructor == Pipe) {
-                    i.free = true;
+                    i.isFree = true;
                     i.visible = false;
                     i.position.x = -50;
                 }

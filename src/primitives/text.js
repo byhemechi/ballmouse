@@ -1,9 +1,8 @@
-import {Vector} from '../types.js'
-import Entity from './entity.js'
+import {Vector} from '../types'
+import Entity from './entity'
 
 class Label extends Entity {
     render(ctx) {
-        //  console.log(this.currentTransform   )
         ctx.font = this.font || ctx.font;
         ctx.textBaseline = this.baseline || "top";
         ctx.textAlign = this.align || "left";

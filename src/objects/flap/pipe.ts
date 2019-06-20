@@ -1,8 +1,8 @@
 // Import classes
-import Entity from "../../primitives/entity.js";
-import Rect from "../../primitives/rect.js";
-import { Vector } from "../../types.js";
-import Sprite from "../../primitives/sprite.js";
+import Entity from "../../primitives/entity";
+import Rect from "../../primitives/rect";
+import { Vector } from "../../types";
+import Sprite from "../../primitives/sprite";
 
 export default class Pipe extends Entity {
     size = new Vector(64, 500); // Hitbox size

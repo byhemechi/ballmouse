@@ -1,7 +1,7 @@
 // Import classes
-import Entity from "../../primitives/entity.js";
-import Sprite from "../../primitives/sprite.js";
-import { Vector } from "../../types.js";
+import Entity from "../../primitives/entity";
+import Sprite from "../../primitives/sprite";
+import { Vector } from "../../types";
 
 const gravity = 1700;
 
@@ -9,6 +9,8 @@ export default class Player extends Entity {
     v = new Vector(0, 0); // Velocity variable   
 
     alive = true;
+    
+    jumpJustPressed: boolean = false;
 
     player = new Sprite({
         src: "/assets/flap/flap.png",
@@ -65,7 +67,7 @@ export default class Player extends Entity {
     }
 
     kill() {
-        this.parent.started = false;
+        this.root.started = false;
         this.alive = false;
     }
 
@@ -81,14 +83,13 @@ export default class Player extends Entity {
 
     // Called every frame
     tick(delta) {
-
         // Flappy Bird
         if (this.state == 0){
             this.children[0].visible = true;
             this.hoverboardSprites.visible = false;
 
             this.v.y += gravity * delta;
-            if (this.parent.jumpJustPressed) {
+            if (this.jumpJustPressed) {
                 this.v.y = -600;
             }
             // Set the correct frame

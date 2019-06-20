@@ -1,9 +1,10 @@
-import Game from "./base.ts";
-import Root from "../objects/flap/root.js";
+import Game from "./base";
+import Root from "../objects/flap/root";
 
 
 export default class flap extends Game {
-    score = 0;
+    root: Root;
+    score: number = 0;
     constructor() {
         super();
         this.root.children = [new Root];
@@ -15,6 +16,9 @@ export default class flap extends Game {
         const ctx = this.ctx;
         super.render();
         ctx.font = "32px sans-serif"
-        ctx.fillText(this.score, 100, 100);
+        ctx.fillText(this.score.toString(), 100, 100);
+    }
+    tick(time) {
+        super.tick(time);
     }
 }

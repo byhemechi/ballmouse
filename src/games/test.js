@@ -1,5 +1,5 @@
-import Game from "./base.js";
-import Player from "../objects/player.js";
+import Game from "./base";
+import Player from "../objects/player";
 
 export default class test extends Game {
     constructor() {

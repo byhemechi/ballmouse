@@ -1,13 +1,15 @@
 const path = require('path');
 
 module.exports = {
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
   mode: process.env.NODE_ENV,
   devtool: "sourcemap",
   entry: {
-    flap: './src/flap.js',
-    shootup: './src/shootup.js',
+    flap: './src/flap.ts',
     stopboat: './src/stopboat.ts',
-    menu: "./src/menu/entry.js"
+    menu: "./src/menu/entry.ts"
   },
   output: {
     filename: '[name].bundle.js',
@@ -17,7 +19,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.[jt]sx?$/,
+        test: /\.tsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'ts-loader'
