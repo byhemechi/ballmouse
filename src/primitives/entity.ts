@@ -6,6 +6,7 @@ import Game from '../games/base';
  * Note: If you extend this and have a render function, you *MUST* call `super.render(ctx)`, else children will not render.
  */
 class Entity {
+    [x: string]: any;
     position: Vector = new Vector;
     rotation: number = 0;
     children: Array<Entity> = [];
