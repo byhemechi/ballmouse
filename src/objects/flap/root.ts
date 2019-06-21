@@ -79,7 +79,7 @@ export default class Root extends Entity {
      * @param {String} sprite Path to the sprite used for the pipe
      * @param {bool} useSlidingRandom Should the position be smoothed
      */
-    createPipe(width, min, range, size, sprite, useSlidingRandom) {
+    createPipe(width, min, range, size, sprite, xOffset, useSlidingRandom) {
         var bottomPipe;
         var topPipe;
         var bottomTop = true; // Flag for if we should create bottom or top pipe
@@ -92,8 +92,8 @@ export default class Root extends Entity {
                 recycled = true;
                 // Generate bottom and top pipe
                 if (bottomTop) {
-                    if (useSlidingRandom) i.position = new Vector(720, min + this.newSlidingRandom() * range);
-                    else i.position = new Vector(720, min + random() * range);
+                    if (useSlidingRandom) i.position = new Vector(720 - xOffset, min + this.newSlidingRandom() * range);
+                    else i.position = new Vector(720 - xOffset, min + random() * range);
                     i.size = new Vector(size, 500);
                     //i.children[0].size = new Vector(size, 500);
                     i.children[0].img.src = sprite;
@@ -103,7 +103,7 @@ export default class Root extends Entity {
                     bottomTop = false;
                 }
                 else {
-                    i.position = new Vector(720, bottomPipePosition - width);
+                    i.position = new Vector(720 - xOffset, bottomPipePosition - width);
                     i.size = new Vector(size, 500);
                     i.children[0].img.src = sprite;
                     i.isFree = false;
@@ -123,9 +123,10 @@ export default class Root extends Entity {
             topPipe.size = new Vector(size, 500);
             topPipe.children[0].img.src = sprite;
 
+            bottomPipe.position.x = 720 - xOffset;
             if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingRandom() * range;
             else bottomPipe.position.y = min + random() * range;
-            topPipe.position.y = bottomPipe.position.y - width;
+            topPipe.position = new Vector(720 - xOffset, bottomPipe.position.y - width);
             this.pipeSet.children.unshift(bottomPipe, topPipe);
         }
     }
@@ -210,21 +211,21 @@ export default class Root extends Entity {
     addPipes() {
         if (this.state == 0) {
             if (this.distanceSincePipe > this.distanceBetweenPipes) {
+                this.distanceSincePipe -= this.distanceBetweenPipes;
                 var gap = 650;
                 var min = 140;
                 var range = 250;
                 var difficultyUp = this.speed / this.maxSpeed;
                 gap -= difficultyUp * 30;
                 min += difficultyUp * 30;
-                this.createPipe(gap, min, range, 64, '/assets/flap/pipe.png', false);
-                this.distanceSincePipe -= this.distanceBetweenPipes;
+                this.createPipe(gap, min, range, 64, '/assets/flap/pipe.png', this.distanceSincePipe, false);
             }
             ;
         }
         else if (this.state == 1) {
             if (this.distanceSincePipe > this.distanceBetweenPipes2) {
-                this.createPipe(700, 205, 230, 32, '/assets/flap/minipipe.png', true);
                 this.distanceSincePipe -= this.distanceBetweenPipes2;
+                this.createPipe(700, 205, 230, 32, '/assets/flap/minipipe.png', this.distanceSincePipe, true);
             }
         }
     }
@@ -241,8 +242,8 @@ export default class Root extends Entity {
         // Change player state
         if (this.distanceSincePortal > this.distanceBetweenPortal) {
             this.player.state = (this.player.state + 1) % 2;
-            // Set player velocity to 0 when entering copter mode
-            if (this.state == 1) this.player.velocity = 0;
+            // Clamp player velocity when entering copter mode
+            if (this.state == 1) this.player.velocity = Math.min(Math.max(this.player.velocity, -200), 200);;
             this.distanceSincePortal -= this.distanceBetweenPortal;
         }
     }
