@@ -169,13 +169,14 @@ export default class Root extends Entity {
             // Score counter
             this.updateScore();
             // Engine stuff, you must have this in tick() function
-            super.tick(delta);
+            
         }
-
         // When we game over
         else {
             this.children[(this.children).length - 1].visible = true;
         }
+
+        super.tick(delta);
     }
 
     /**
@@ -240,7 +241,8 @@ export default class Root extends Entity {
         // Change player state
         if (this.distanceSincePortal > this.distanceBetweenPortal) {
             this.player.state = (this.player.state + 1) % 2;
-            //this.player.v.y = 0;
+            // Set player velocity to 0 when entering copter mode
+            if (this.state == 1) this.player.velocity = 0;
             this.distanceSincePortal -= this.distanceBetweenPortal;
         }
     }
@@ -261,7 +263,7 @@ export default class Root extends Entity {
     ceiling_groundCollision() {
         const screenHeight = 480;
         if (this.player.position.y < 0 || this.player.position.y > screenHeight - 60) {
-            this.player.alive = false;
+            this.player.kill()
             this.speed = 0;
             this.started = false;
         }
@@ -271,8 +273,8 @@ export default class Root extends Entity {
      * Check if the player is colliding with the pipes
      */
     pipeCollision() {
-        this.pipeSet.children.forEach(i => {
         // Pipe collision
+        this.pipeSet.children.forEach(i => {
             // Minkowski Difference collision
     
             const minX = this.player.position.x - (i.position.x + i.size.x);
@@ -280,7 +282,7 @@ export default class Root extends Entity {
             const minY = this.player.position.y - (i.position.y + i.size.y);
             const maxY = this.player.position.y + this.player.size.y - i.position.y;
             if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
-                this.player.alive = false;
+                this.player.kill()
                 this.speed = 0;
                 this.started = false;
             }
@@ -302,7 +304,6 @@ export default class Root extends Entity {
             this.distanceSincePoint = -540 + 450;
             this.distanceSinceStateChange = 0;
             this.state = 0;
-            this.player.state = 0;
 
             // Disable all pipes
             this.pipeSet.children.forEach(i => {

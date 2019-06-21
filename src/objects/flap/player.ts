@@ -4,10 +4,12 @@ import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
 import { getSound, playSound } from "../../sound";
 
-const gravity = 1700;
-
 export default class Player extends Entity {
-    v = new Vector(0, 0); // Velocity variable   
+    velocity = 0;
+
+    gravity = 1700;
+    copterSpeed = 1700;
+    copterGravity = 1500;
 
     alive = true;
 
@@ -62,7 +64,7 @@ export default class Player extends Entity {
 
     size = new Vector(0, 0); // Hitbox size
 
-    state = 0;    // Player state, 0: Flappy Bird, 1: Copter
+    state: number = 0;    // Player state, 0: Flappy Bird, 1: Copter
 
     // Called when Player is created
     constructor(...args) {
@@ -74,9 +76,14 @@ export default class Player extends Entity {
     }
 
     kill() {
-        this.root.started = false;
-        this.alive = false;
-        playSound("death");
+        if (this.alive) {
+            this.alive = false;
+            playSound("death");
+            this.velocity = -600;
+            this.hoverboardSprites.visible = false;
+            this.player.visible = true;
+            this.player.region.begin.x = 256;
+        }
     }
 
     /**
@@ -85,51 +92,83 @@ export default class Player extends Entity {
     reset() {
         this.position.x = 200;
         this.position.y = 200;
-        this.v.y = -600;
+        this.velocity = -600;
+        this.rotation = 0;
         this.alive = true;
+        this.state = 0;
     }
 
     // Called every frame
     tick(delta) {
-        // Flappy Bird
-        if (this.state == 0) {
-            this.children[0].visible = true;
+
+        if (this.alive && this.parent.started) {
+            if (this.state == 0) this.flapMode(delta);
+            else if (this.state == 1) this.copterMode(delta);
+            
+            // Clamp y velocity
+            this.velocity = Math.min(Math.max(this.velocity, -600), 600);
+        }
+
+        else if (!this.alive){
+            this.deadMode(delta);
+        }
+        super.tick(delta);
+    }
+
+    updateCopterVelocity(delta) {
+        if (this.game.keys.Space) {
+            if (this.velocity > 0) {
+                this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
+            }
+            else {
+                this.velocity -= 0.5 * this.copterSpeed * delta;
+            }
+        }
+        else {
+            if (this.velocity < 0) {
+                this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
+            }
+            else {
+                this.velocity += 0.5 * this.copterGravity * delta;
+            }
+        }
+    }
+
+    flapMode(delta) {
+        this.player.visible = true;
             this.hoverboardSprites.visible = false;
 
-            this.v.y += gravity * delta;
+            this.velocity += 0.5 * this.gravity * delta;
+
             if (this.jumpJustPressed) {
-                this.v.y = -600;
+                this.velocity = -600;
                 playSound("flap");
             }
+
+            this.position.y += this.velocity * delta;
+
+            this.velocity += 0.5 * this.gravity * delta;
+
             // Set the correct frame
-            if (this.v.y < 0) this.children[0].region.begin.x = 128
-            else this.children[0].region.begin.x = 0
+            if (this.velocity < 0) this.player.region.begin.x = 128
+            else this.player.region.begin.x = 0
+    }
 
-        }
-        // Copter
-        else if (this.state == 1) {
-            this.children[0].visible = false;
+    copterMode(delta) {
+        this.player.visible = false;
             this.hoverboardSprites.visible = true;
-            this.v.y = this.game.keys.Space ? -400 : 400;
             this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
-        }
 
-        // Clamp y velocity
-        this.v.y = Math.min(Math.max(this.v.y, -800), 800);
+            this.updateCopterVelocity(delta);
+            this.position.y += this.velocity * delta;
+            this.updateCopterVelocity(delta);
+    }
 
+    deadMode(delta) {
+        this.velocity += 0.5 * this.gravity * delta;
+            this.position.y += this.velocity * delta;
+            this.velocity += 0.5 * this.gravity * delta;
 
-        // If player is alive, move the player
-        if (this.alive && this.parent.started) {
-            this.position = this.position.add(this.v.multiply(delta))
-        }
-
-        // If player is dead, when jump is pressed, reset game
-        else if (!this.alive) {
-            this.kill();
-
-        }
-
-        // Engine stuff, you must have this in tick() function
-        super.tick(delta);
+            this.rotation += delta * 4;
     }
 }
