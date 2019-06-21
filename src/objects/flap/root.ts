@@ -5,13 +5,11 @@ import Player from "./player";
 import Rect from "../../primitives/rect";
 import { Vector } from "../../types";
 import Label from "../../primitives/text";
+import { playSound } from "../../sound";
 
 // Makes it so you dont need 'Math.' before math functions
-const {sin, cos, tan, PI, random} = Math;
+const { sin, cos, tan, PI, random } = Math;
 
-class PipeSet extends Entity {
-    children: Array<Pipe>
-}
 
 export default class Root extends Entity {
 
@@ -19,7 +17,7 @@ export default class Root extends Entity {
 
     maxSpeed = 600;
 
-    pipeSet: PipeSet = new PipeSet
+    pipeSet = new Entity;
 
     started = false;
 
@@ -39,7 +37,9 @@ export default class Root extends Entity {
     constructor(...args) {
         super(...args);
         this.reset();
-        this.children = [new Rect({
+        this.children = [
+            this.pipeSet,
+            new Rect({
             position: new Vector(0, 440),
             size: new Vector(720, 40),
             fill: 'tan'
@@ -56,7 +56,7 @@ export default class Root extends Entity {
     jumpJustPressed = false;
 
     // Smooth random number generator 
-    slidingRandom = [0.5,0.5,0.5,0.5];
+    slidingRandom = [0.5, 0.5, 0.5, 0.5];
 
     /**
      * Create a random value smoothed by previous outputs
@@ -88,7 +88,7 @@ export default class Root extends Entity {
 
         // Attempt to recycle
         this.pipeSet.children.forEach(i => {
-            if (i.constructor == Pipe && i.isFree) {
+            if (i.isFree) {
                 recycled = true;
                 // Generate bottom and top pipe
                 if (bottomTop) {
@@ -113,7 +113,7 @@ export default class Root extends Entity {
             }
         });
         // Create new pipes if no free pipes are available
-        if (!recycled){
+        if (!recycled) {
             bottomPipe = new Pipe;
             topPipe = new Pipe;
 
@@ -122,17 +122,17 @@ export default class Root extends Entity {
 
             topPipe.size = new Vector(size, 500);
             topPipe.children[0].img.src = sprite;
-            
+
             if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingRandom() * range;
             else bottomPipe.position.y = min + random() * range;
             topPipe.position.y = bottomPipe.position.y - width;
-            this.children.unshift(bottomPipe, topPipe);
+            this.pipeSet.children.unshift(bottomPipe, topPipe);
         }
     }
 
     // Called every frame
     tick(delta) {
-        
+
         // Input if jump pressed this frame
         this.jumpJustPressed = this.isInitialJump();
         this.player.jumpJustPressed = this.jumpJustPressed;
@@ -144,13 +144,11 @@ export default class Root extends Entity {
 
         if (this.started) {
             // Do Collision
-
-
             this.pipeCollision();
-            
+
             // Ceiling + Ground collision
             this.ceiling_groundCollision();
-        
+
             // Increase speed
             if (this.speed < this.maxSpeed && this.player.alive) {
                 this.speed += delta * 6;
@@ -164,7 +162,7 @@ export default class Root extends Entity {
 
             // Change State
             this.setState();
-            
+
             // Add Pipes
             this.addPipes();
 
@@ -176,7 +174,7 @@ export default class Root extends Entity {
 
         // When we game over
         else {
-            this.children[(this.children).length-1].visible = true;
+            this.children[(this.children).length - 1].visible = true;
         }
     }
 
@@ -200,6 +198,7 @@ export default class Root extends Entity {
      */
     updateScore() {
         if (this.distanceSincePoint > this.distanceBetweenPipes) {
+            playSound("point")
             this.game.score++;
             this.distanceSincePoint -= this.distanceBetweenPipes;
         }
@@ -264,6 +263,7 @@ export default class Root extends Entity {
         if (this.player.position.y < 0 || this.player.position.y > screenHeight - 60) {
             this.player.alive = false;
             this.speed = 0;
+            this.started = false;
         }
     }
 
@@ -272,17 +272,17 @@ export default class Root extends Entity {
      */
     pipeCollision() {
         this.pipeSet.children.forEach(i => {
-            // Pipe collision
-            if (i.constructor == Pipe) {
-                // Minkowski Difference collision
-                const minX = this.player.position.x - (i.position.x + i.size.x);
-                const maxX = this.player.position.x + this.player.size.x - i.position.x;
-                const minY = this.player.position.y - (i.position.y + i.size.y);
-                const maxY = this.player.position.y + this.player.size.y - i.position.y;
-                if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
-                    this.player.alive = false;
-                    this.speed = 0;
-                }
+        // Pipe collision
+            // Minkowski Difference collision
+    
+            const minX = this.player.position.x - (i.position.x + i.size.x);
+            const maxX = this.player.position.x + this.player.size.x - i.position.x;
+            const minY = this.player.position.y - (i.position.y + i.size.y);
+            const maxY = this.player.position.y + this.player.size.y - i.position.y;
+            if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
+                this.player.alive = false;
+                this.speed = 0;
+                this.started = false;
             }
         });
     }
@@ -299,18 +299,16 @@ export default class Root extends Entity {
             this.game.score = 0;
             this.distanceSincePipe = 450;
             this.distanceSincePortal = -540;
-            this.distanceSincePoint = -540+450;
+            this.distanceSincePoint = -540 + 450;
             this.distanceSinceStateChange = 0;
             this.state = 0;
             this.player.state = 0;
 
             // Disable all pipes
             this.pipeSet.children.forEach(i => {
-                if (i.constructor == Pipe) {
-                    i.isFree = true;
-                    i.visible = false;
-                    i.position.x = -50;
-                }
+                i.isFree = true;
+                i.visible = false;
+                i.position.x = -50;
             });
         }
     }

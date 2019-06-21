@@ -2,6 +2,7 @@
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
+import { getSound, playSound } from "../../sound";
 
 const gravity = 1700;
 
@@ -9,7 +10,11 @@ export default class Player extends Entity {
     v = new Vector(0, 0); // Velocity variable   
 
     alive = true;
-    
+
+    sounds: Object = {};
+
+    flapSound: ArrayBuffer;
+
     jumpJustPressed: boolean = false;
 
     player = new Sprite({
@@ -46,8 +51,8 @@ export default class Player extends Entity {
                 }),
                 new Sprite({
                     src: "/assets/hoverbored/hoverboard.png",
-                    position: new Vector(-58.75/2, 24),
-                    size: new Vector(47*1.25, 16),
+                    position: new Vector(-58.75 / 2, 24),
+                    size: new Vector(47 * 1.25, 16),
                 })
             ]
         })]
@@ -56,7 +61,6 @@ export default class Player extends Entity {
     children = [this.player, this.hoverboardSprites]
 
     size = new Vector(0, 0); // Hitbox size
-    const 
 
     state = 0;    // Player state, 0: Flappy Bird, 1: Copter
 
@@ -64,11 +68,15 @@ export default class Player extends Entity {
     constructor(...args) {
         super(...args);
         this.reset();
+        getSound("point", "/assets/flap/point.wav");
+        getSound("flap", "/assets/flap/flap.wav");
+        getSound("death", "/assets/flap/death.wav");
     }
 
     kill() {
         this.root.started = false;
         this.alive = false;
+        playSound("death");
     }
 
     /**
@@ -84,18 +92,19 @@ export default class Player extends Entity {
     // Called every frame
     tick(delta) {
         // Flappy Bird
-        if (this.state == 0){
+        if (this.state == 0) {
             this.children[0].visible = true;
             this.hoverboardSprites.visible = false;
 
             this.v.y += gravity * delta;
             if (this.jumpJustPressed) {
                 this.v.y = -600;
+                playSound("flap");
             }
             // Set the correct frame
-            if(this.v.y < 0) this.children[0].region.begin.x = 128
+            if (this.v.y < 0) this.children[0].region.begin.x = 128
             else this.children[0].region.begin.x = 0
-            
+
         }
         // Copter
         else if (this.state == 1) {
@@ -108,7 +117,7 @@ export default class Player extends Entity {
         // Clamp y velocity
         this.v.y = Math.min(Math.max(this.v.y, -800), 800);
 
-       
+
         // If player is alive, move the player
         if (this.alive && this.parent.started) {
             this.position = this.position.add(this.v.multiply(delta))
