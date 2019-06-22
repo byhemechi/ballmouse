@@ -9,23 +9,24 @@ export default class Pipe extends Entity {
     isFree = false; // Flag if the current pipe is active or not
 
     children = [
-        new Sprite({
-            src: '/assets/flap/pipe.png',
-            size: new Vector(64,500)
-        }),
-        new Sprite({
-            src: '/assets/flap/minipipe.png',
-            size: new Vector(32,500)
-        })
+        new Entity({
+            children: [
+                new Sprite({
+                    src: '/assets/flap/pipe.png',
+                    position: new Vector(-6, 0)
+        })]}),
+        new Entity({
+            children: [
+                new Sprite({
+                    src: '/assets/flap/minipipe.png',
+                    position: new Vector(-3, 0)
+        })]})
     ]
 
     // Called when Pipe is created
     constructor(...args) {
         super(...args);
         this.position.x = 720;
-        this.children.push(new Sprite({
-            src: "/assets/flap/pipe.png"
-        }))
     }
 
     // Called every frame
