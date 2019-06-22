@@ -64,7 +64,7 @@ export default class Player extends Entity {
 
     size = new Vector(0, 0); // Hitbox size
 
-    state: number = 0;    // Player state, 0: Flappy Bird, 1: Copter
+    state: number = 0; // Player state, 0: Flappy Bird, 1: Copter
 
     // Called when Player is created
     constructor(...args) {
@@ -75,6 +75,7 @@ export default class Player extends Entity {
         getSound("death", "/assets/flap/death.wav");
     }
 
+    /** Sets player into death state */
     kill() {
         if (this.alive) {
             this.alive = false;
@@ -102,69 +103,80 @@ export default class Player extends Entity {
     tick(delta) {
 
         if (this.alive && this.parent.started) {
+            // Do proper gamemode logic
             if (this.state == 0) this.flapMode(delta);
             else if (this.state == 1) this.copterMode(delta);
-            
+
             // Clamp y velocity
             this.velocity = Math.min(Math.max(this.velocity, -600), 600);
-        }
+        } else if (!this.alive) this.deadMode(delta);
 
-        else if (!this.alive){
-            this.deadMode(delta);
-        }
         super.tick(delta);
     }
 
+    /**
+     * Updates our velocity in copter mode
+     * @param {number} delta 
+     */
     updateCopterVelocity(delta) {
         if (this.game.keys.Space) {
-            if (this.velocity > 0) {
-                this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
-            }
-            else {
-                this.velocity -= 0.5 * this.copterSpeed * delta;
-            }
-        }
-        else {
-            if (this.velocity < 0) {
-                this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
-            }
-            else {
-                this.velocity += 0.5 * this.copterGravity * delta;
-            }
+            // If we are going down, go up faster
+            if (this.velocity > 0) this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
+
+            // Otherwise, go up at normal speed
+            else this.velocity -= 0.5 * this.copterSpeed * delta;
+        } else {
+            // If we are going up, fall faster
+            if (this.velocity < 0) this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
+
+            // Otherwise, fall at normal speed
+            else this.velocity += 0.5 * this.copterGravity * delta;
         }
     }
 
+    /**
+     * Does flap mode logic.
+     * @param {number} delta 
+     */
     flapMode(delta) {
         this.player.visible = true;
-            this.hoverboardSprites.visible = false;
+        this.hoverboardSprites.visible = false;
 
-            this.velocity += 0.5 * this.gravity * delta;
+        this.velocity += 0.5 * this.gravity * delta;
 
-            if (this.jumpJustPressed) {
-                this.velocity = -600;
-                playSound("flap");
-            }
+        if (this.jumpJustPressed) {
+            this.velocity = -600;
+            playSound("flap");
+        }
 
-            this.position.y += this.velocity * delta;
+        this.position.y += this.velocity * delta;
 
-            this.velocity += 0.5 * this.gravity * delta;
+        this.velocity += 0.5 * this.gravity * delta;
 
-            // Set the correct frame
-            if (this.velocity < 0) this.player.region.begin.x = 128
-            else this.player.region.begin.x = 0
-            
+        // Set the correct frame
+        if (this.velocity < 0) this.player.region.begin.x = 128
+        else this.player.region.begin.x = 0
+
     }
 
+    /**
+     * Does copter mode logic
+     * @param {number} delta 
+     */
     copterMode(delta) {
         this.player.visible = false;
-            this.hoverboardSprites.visible = true;
-            this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
+        this.hoverboardSprites.visible = true;
+        this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
 
-            this.updateCopterVelocity(delta);
-            this.position.y += this.velocity * delta;
-            this.updateCopterVelocity(delta);
+        this.updateCopterVelocity(delta);
+        this.position.y += this.velocity * delta;
+        this.updateCopterVelocity(delta);
     }
 
+    /**
+     * Does dead mode logic
+     * @param {number} delta 
+     */
     deadMode(delta) {
         if (this.position.y < this.game.el.height + 50) {
             this.velocity += 0.5 * this.gravity * delta;
