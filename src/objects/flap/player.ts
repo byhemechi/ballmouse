@@ -152,6 +152,7 @@ export default class Player extends Entity {
             // Set the correct frame
             if (this.velocity < 0) this.player.region.begin.x = 128
             else this.player.region.begin.x = 0
+            
     }
 
     copterMode(delta) {
@@ -165,10 +166,12 @@ export default class Player extends Entity {
     }
 
     deadMode(delta) {
-        this.velocity += 0.5 * this.gravity * delta;
+        if (this.position.y < this.game.el.height + 50) {
+            this.velocity += 0.5 * this.gravity * delta;
             this.position.y += this.velocity * delta;
             this.velocity += 0.5 * this.gravity * delta;
 
             this.rotation += delta * 4;
+        }
     }
 }
