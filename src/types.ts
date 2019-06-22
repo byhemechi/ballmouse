@@ -19,7 +19,7 @@ export class Vector {
             self.x += i.x;
             self.y += i.y;
         });
-        return self;
+          return self;
     }
 
     subtract(...values) {
