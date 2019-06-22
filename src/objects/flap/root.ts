@@ -126,7 +126,7 @@ export default class Root extends Entity {
      * Check if the player is colliding with the ceiling or ground
      */
     ceiling_groundCollision() {
-        if (this.player.position.y < 0 || this.player.position.y > this.game.el.height - 60) {
+        if (this.player.position.y < -30 || this.player.position.y > this.game.el.height - 30) {
             this.player.kill()
             this.speed = 0;
             this.started = false;
