@@ -10,11 +10,7 @@ export default class flap extends Game {
         this.root.children = [new Root];
         this.el.width  = 720;
         this.el.height = 480;
-<<<<<<< Updated upstream
-        this.el.style.backgroundColor = 'skyblue';
-=======
-        this.el.style.backgroundColor = 'skyblue'
->>>>>>> Stashed changes
+        this.el.style.backgroundColor = '#66C3D1';
     }
     render() {
         const ctx = this.ctx;
