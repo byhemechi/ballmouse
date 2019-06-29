@@ -1,6 +1,7 @@
 // Import classes
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
+import Rect from "../../primitives/rect";
 import { Vector } from "../../types";
 
 export default class Hand extends Entity {

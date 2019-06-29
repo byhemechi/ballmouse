@@ -81,8 +81,6 @@ export default class Player extends Entity {
     // Called every frame
     tick(delta) {
 
-        console.log(this.alive)
-
         if (this.alive && this.parent.started) {
             // Do proper gamemode logic
             if (this.state == 0) this.flapMode(delta);
@@ -137,7 +135,7 @@ export default class Player extends Entity {
         this.position.y += this.velocity * delta;
         this.updateCopterVelocity(delta);
         this.hoverboardSprites.children[0].children[2].position.y += 
-            ((this.game.keys.Space ? 18 : 24) - this.hoverboardSprites.children[0].children[2].position.y) / 3;
+            ((this.game.keys.Space || this.game.keys.ArrowUp ? 18 : 24) - this.hoverboardSprites.children[0].children[2].position.y) / 3;
 
         [0, 1].forEach((i) => {
             const hand = this.hoverboardSprites.children[0].children[i];
@@ -168,7 +166,7 @@ export default class Player extends Entity {
      * @param {number} delta 
      */
     updateCopterVelocity(delta) {
-        if (this.game.keys.Space) {
+        if (this.game.keys.Space || this.game.keys.ArrowUp) {
             // If we are going down, go up faster
             if (this.velocity > 0) this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
 
@@ -200,7 +198,6 @@ export default class Player extends Entity {
 
     spawnCorpse() {
 
-
         const leftHand = new Corpse;
         leftHand.position.x = this.position.x;
         leftHand.position.y = this.position.y;
@@ -219,7 +216,7 @@ export default class Player extends Entity {
         rightHand.children[2].visible = false;
         rightHand.spin = 10;
 
-        this.parent.corpses.children.push(leftHand, rightHand);
+    this.parent.corpses.children.push(leftHand, rightHand);
 
         if (this.state == 1) {
             const feet = new Corpse;
@@ -249,7 +246,6 @@ export default class Player extends Entity {
         this.rotation = 0;
         this.alive = true;
         this.state = 0;
-        console.log(this.velocity)
     }
 
 }
