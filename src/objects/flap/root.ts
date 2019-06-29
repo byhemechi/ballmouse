@@ -4,6 +4,7 @@ import Pipe from "./pipe";
 import Player from "./player";
 import Rect from "../../primitives/rect";
 import Cloud from "./cloud"
+import Ground from "./ground"
 import { Vector } from "../../types";
 import Label from "../../primitives/text";
 import { playSound } from "../../sound";
@@ -13,6 +14,8 @@ export default class Root extends Entity {
     player = new Player;
 
     pipeSet = new Entity;
+
+    ground = new Ground;
 
     corpses = new Entity;
 
@@ -26,17 +29,19 @@ export default class Root extends Entity {
 
     bgObjects = new Entity;
 
+    fgObjects = new Entity;
+
     started = false;
 
     maxSpeed: number = 600;
-    speed: number;
+    speed: number = 0;
 
     stateCount: number = 2;
     state: number;
 
     distanceBetweenPipes = 450;
-    distanceBetweenPipes2 = 45;
-    distanceBetweenPortal = 450 * 5;
+    distanceBetweenPipes2 = 45; 
+    distanceBetweenPortal = 450 * 10;
 
     distanceSincePoint: number;
     distanceSincePipe: number;
@@ -57,13 +62,10 @@ export default class Root extends Entity {
         this.children = [
             this.bgObjects,
             this.pipeSet,
-            new Rect({
-                position: new Vector(0, 440),
-                size: new Vector(720, 80),
-                fill: 'tan'
-            }),
+            this.ground,
             this.player,
             this.corpses,
+            this.fgObjects,
             this.text
         ]
     }
@@ -78,6 +80,10 @@ export default class Root extends Entity {
         // If we press jump and game has ended, reset the game
         if (this.jumpJustPressed && !this.started && this.screenShakeTimer <= 0) this.reset();
 
+        this.bgFgCounters(delta);
+
+        this.addBgFgObjects();
+        
         // Do player and pipe movements before collision
         super.tick(delta);
 
@@ -94,8 +100,6 @@ export default class Root extends Entity {
 
             this.addPipes();
 
-            this.addBgObjects();
-
             this.updateScore();
 
         } else {
@@ -105,7 +109,7 @@ export default class Root extends Entity {
 
         if (this.screenShakeTimer > 0) {
             this.screenShakeTimer -= delta;
-            this.shakeScreen(20, delta);
+            this.shakeScreen(50, delta);
             if (this.screenShakeTimer < 0) {
                 this.position.x = 0;
                 this.position.y = 0;
@@ -114,17 +118,22 @@ export default class Root extends Entity {
         
     }
 
+    bgFgCounters(delta) {
+        this.distanceSinceLastCloud += (this.speed + 80) * delta;
+    }
+
+
     /**
      * Check if this is the first frame where jump is pressed
      */
     isInitialJump() {
         var didJump
-        if (this.game.keys.Space && !this.prevJump) {
+        if ((this.game.keys.Space || this.game.keys.ArrowUp) && !this.prevJump) {
             didJump = true;
         } else {
             didJump = false;
         }
-        this.prevJump = this.game.keys.Space;
+        this.prevJump = this.game.keys.Space || this.game.keys.ArrowUp;
         return didJump;
     }
 
@@ -197,7 +206,6 @@ export default class Root extends Entity {
         this.distanceSincePoint += this.speed * delta;
         this.distanceSincePortal += this.speed * delta;
         this.distanceSinceStateChange += this.speed * delta;
-        this.distanceSinceLastCloud += this.speed * delta;
     }
 
     /**
@@ -236,13 +244,15 @@ export default class Root extends Entity {
                 var min = 160;
                 var range = 210;
                 var size = 64;
-
+                
                 const difficultyUp = this.speed / this.maxSpeed;
-
                 gap -= difficultyUp * 40;
                 min -= difficultyUp * 40;
+                range += difficultyUp * 40;
 
-                this.createPipe(gap, min, range, size, 0, this.distanceSincePipe, false);
+                //const movingPipes = (Math.random() + 0.7 < difficultyUp) ? 100 : 0;
+
+                this.createPipe(gap, min, range, size, 0, this.distanceSincePipe, false, 0/*movingPipes*/);
             };
         } else if (this.state == 1) {
             if (this.distanceSincePipe > this.distanceBetweenPipes2) {
@@ -259,20 +269,38 @@ export default class Root extends Entity {
                 min -= difficultyUp * 50;
                 range += difficultyUp * 50;
 
-                this.createPipe(gap, min, range, size, 1, this.distanceSincePipe, true);
+                this.createPipe(gap, min, range, size, 1, this.distanceSincePipe, true, 0);
             }
         }
     }
 
-    addBgObjects() {
-        if (this.distanceSinceLastCloud >= this.distanceToNextCloud) {
+    addBgFgObjects() {
+        while (this.distanceSinceLastCloud > this.distanceToNextCloud) {
             this.distanceSinceLastCloud -= this.distanceToNextCloud;
 
             const cloud = new Cloud;
-            
-            this.bgObjects.children.push(cloud);
 
-            this.distanceToNextCloud = Math.random() * 8 + 300;
+            cloud.sizeRatio = Math.random() * 3.3 + 0.2;
+            cloud.speedRatio = cloud.sizeRatio / 2;
+
+            if (cloud.speedRatio > 1) {
+                cloud.children[0].visible = false;
+                cloud.children[1].visible = true;
+                cloud.children[1].size.x = 128 * cloud.sizeRatio;
+                cloud.children[1].size.y = 64 * cloud.sizeRatio;
+
+                this.fgObjects.children.push(cloud);
+            } else {    
+                cloud.children[0].visible = true;
+                cloud.children[1].visible = false;
+                cloud.children[0].size.x = 128 * cloud.sizeRatio;
+                cloud.children[0].size.y = 64 * cloud.sizeRatio;
+                
+              this.bgObjects.children.push(cloud);
+            }
+            
+
+            this.distanceToNextCloud = Math.random() * 200 + 200;
             
         }
     }
@@ -322,19 +350,20 @@ export default class Root extends Entity {
      * @param {number} sprite ID of sprite to use
      * @param {number} xOffset How much we should offset the x position of the pipe
      * @param {bool} useSlidingRandom Should the position be smoothed
+     * @param {number} move How much the pipes move in the y-axis
      */
-    createPipe(width, min, range, size, sprite, xOffset, useSlidingRandom) {
+    createPipe(width, min, range, size, sprite, xOffset, useSlidingRandom, move) {
 
         var bottomTop = true; // Flag for if we should create bottom or top pipe
+        var bottomPipeMoveDirection = 1; // Which way does bottom pipe go
         var recycled = false; // Flag if we recycled pipes
         var bottomPipePosition = 0; // Position of bottom pipe
-
+        /*
         // Attempt to recycle pipes
         this.pipeSet.children.forEach(i => {
             if (i.isFree) {
                 // Raise flag that we recycled
                 recycled = true;
-
                 // Generate bottom and top pipe
                 if (bottomTop) {
                     // Generate new position based on if we should use sliding random, and offset x position
@@ -345,6 +374,16 @@ export default class Root extends Entity {
                     else {
                         i.position.x = 720 - xOffset;
                         i.position.y = min + Math.random() * range;
+                    }
+
+                    if (move) {
+                        if (i.position.y < 200 + ((width - 500 ) / 2)) {
+                            i.speedY = move;
+                            bottomPipeMoveDirection = 1;
+                        } else {
+                            i.speedY = -move;
+                            bottomPipeMoveDirection = -1;
+                        }
                     }
 
                     // Show appropriate sprite
@@ -365,6 +404,10 @@ export default class Root extends Entity {
                     i.position.x = 720 - xOffset;
                     i.position.y = bottomPipePosition - width;
 
+                    if (move) {
+                        i.speedY = move * bottomPipeMoveDirection;
+                    }
+
                     // Show appropriate sprite
                     if (sprite == 0) {
                         i.children[0].visible = true;
@@ -380,6 +423,7 @@ export default class Root extends Entity {
                 }
             }
         });
+        */
 
         // Create new pipes if no free pipes are available
         if (!recycled) {
@@ -416,6 +460,16 @@ export default class Root extends Entity {
             topPipe.position.x = 720 - xOffset;
             topPipe.position.y = bottomPipe.position.y - width;
 
+            if (move) {
+                if (bottomPipe.position.y < 200 + ((width - 500) / 2)) {
+                    bottomPipe.speedY = move;
+                    topPipe.speedY = move;
+                } else {
+                    bottomPipe.speedY = -move;
+                    topPipe.speedY = -move;
+                }
+            }
+
             // Add pipes to pipe root
             this.pipeSet.children.unshift(bottomPipe, topPipe);
         }
@@ -434,7 +488,7 @@ export default class Root extends Entity {
         this.text.visible = false; // Hide game over text
         this.player.reset();
         this.started = true;
-        this.speed = 3000;
+        this.speed = 255;
         this.game.score = 0;
         this.distanceSincePipe = this.distanceBetweenPipes; // Create a pipe as soon as we start the game
         this.distanceSincePortal = -90 - this.distanceBetweenPipes; // Set to how far the player is from the left of the screen, minus distance from first pipe
@@ -446,12 +500,12 @@ export default class Root extends Entity {
         this.pipeSet.children.forEach(i => {
             i.isFree = true;
             i.visible = false;
+            i.position.x = -101;
         });
 
         // Clean the crime scene
         this.corpses.children.forEach(i => {
-            i.free();
+            i.position.y = 600;
         });
-
     }
 }

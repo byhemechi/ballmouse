@@ -2,23 +2,25 @@ import Entity from '../../primitives/entity';
 import Sprite from '../../primitives/sprite';
 import { Vector } from '../../types';
 
-export default class Cloud extends Sprite {
+export default class Cloud extends Entity {
 
-    speedRatio: number = Math.random() + 0.2;
+    sizeRatio: number;
+    speedRatio: number;
+    minSpeed: number = 80;
 
     position: Vector = new Vector(740, Math.random() * 200)
 
-    sizeRatio: number = Math.random() * 2
-
-    constructor(...args) {
-        super({
-            src: "/assets/flap/cloud.png",
-        });
-        this.size = new Vector(128 * this.sizeRatio, 64 * this.sizeRatio)
-    }
+    children = [
+        new Sprite({
+            src: "/assets/flap/cloud.png"
+        }),
+        new Sprite({
+            src: "/assets/flap/cloudtransparent.png"
+        })
+    ]
     
     tick(delta) {
-        this.position.x -= this.parent.parent.speed * delta * this.speedRatio;
-        if(this.position.x < -128 * this.sizeRatio) this.free();
+        this.position.x -= this.parent.parent.speed * this.speedRatio * delta + this.minSpeed * this.speedRatio * delta;
+        if(this.position.x < -800) this.free();
     }
 }
