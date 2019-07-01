@@ -2,14 +2,21 @@
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
-
-const gravity = 1700;
+import { getSound, playSound } from "../../sound";
 
 export default class Player extends Entity {
-    v = new Vector(0, 0); // Velocity variable   
+    velocity = 0;
+
+    gravity = 1700;
+    copterSpeed = 1700;
+    copterGravity = 1500;
 
     alive = true;
-    
+
+    sounds: Object = {};
+
+    flapSound: ArrayBuffer;
+
     jumpJustPressed: boolean = false;
 
     player = new Sprite({
@@ -46,8 +53,8 @@ export default class Player extends Entity {
                 }),
                 new Sprite({
                     src: "/assets/hoverbored/hoverboard.png",
-                    position: new Vector(-58.75/2, 24),
-                    size: new Vector(47*1.25, 16),
+                    position: new Vector(-58.75 / 2, 24),
+                    size: new Vector(47 * 1.25, 16),
                 })
             ]
         })]
@@ -56,19 +63,28 @@ export default class Player extends Entity {
     children = [this.player, this.hoverboardSprites]
 
     size = new Vector(0, 0); // Hitbox size
-    const 
 
-    state = 0;    // Player state, 0: Flappy Bird, 1: Copter
+    state: number = 0; // Player state, 0: Flappy Bird, 1: Copter
 
     // Called when Player is created
     constructor(...args) {
         super(...args);
         this.reset();
+        getSound("point", "/assets/flap/point.wav");
+        getSound("flap", "/assets/flap/flap.wav");
+        getSound("death", "/assets/flap/death.wav");
     }
 
+    /** Sets player into death state */
     kill() {
-        this.root.started = false;
-        this.alive = false;
+        if (this.alive) {
+            this.alive = false;
+            playSound("death");
+            this.velocity = -600;
+            this.hoverboardSprites.visible = false;
+            this.player.visible = true;
+            this.player.region.begin.x = 256;
+        }
     }
 
     /**
@@ -77,50 +93,97 @@ export default class Player extends Entity {
     reset() {
         this.position.x = 200;
         this.position.y = 200;
-        this.v.y = -600;
+        this.velocity = -600;
+        this.rotation = 0;
         this.alive = true;
+        this.state = 0;
     }
 
     // Called every frame
     tick(delta) {
-        // Flappy Bird
-        if (this.state == 0){
-            this.children[0].visible = true;
-            this.hoverboardSprites.visible = false;
 
-            this.v.y += gravity * delta;
-            if (this.jumpJustPressed) {
-                this.v.y = -600;
-            }
-            // Set the correct frame
-            if(this.v.y < 0) this.children[0].region.begin.x = 128
-            else this.children[0].region.begin.x = 0
-            
-        }
-        // Copter
-        else if (this.state == 1) {
-            this.children[0].visible = false;
-            this.hoverboardSprites.visible = true;
-            this.v.y = this.game.keys.Space ? -400 : 400;
-            this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
-        }
-
-        // Clamp y velocity
-        this.v.y = Math.min(Math.max(this.v.y, -800), 800);
-
-       
-        // If player is alive, move the player
         if (this.alive && this.parent.started) {
-            this.position = this.position.add(this.v.multiply(delta))
-        }
+            // Do proper gamemode logic
+            if (this.state == 0) this.flapMode(delta);
+            else if (this.state == 1) this.copterMode(delta);
 
-        // If player is dead, when jump is pressed, reset game
-        else if (!this.alive) {
-            this.kill();
+            // Clamp y velocity
+            this.velocity = Math.min(Math.max(this.velocity, -600), 600);
+        } else if (!this.alive) this.deadMode(delta);
 
-        }
-
-        // Engine stuff, you must have this in tick() function
         super.tick(delta);
+    }
+
+    /**
+     * Updates our velocity in copter mode
+     * @param {number} delta 
+     */
+    updateCopterVelocity(delta) {
+        if (this.game.keys.Space) {
+            // If we are going down, go up faster
+            if (this.velocity > 0) this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
+
+            // Otherwise, go up at normal speed
+            else this.velocity -= 0.5 * this.copterSpeed * delta;
+        } else {
+            // If we are going up, fall faster
+            if (this.velocity < 0) this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
+
+            // Otherwise, fall at normal speed
+            else this.velocity += 0.5 * this.copterGravity * delta;
+        }
+    }
+
+    /**
+     * Does flap mode logic.
+     * @param {number} delta 
+     */
+    flapMode(delta) {
+        this.player.visible = true;
+        this.hoverboardSprites.visible = false;
+
+        this.velocity += 0.5 * this.gravity * delta;
+
+        if (this.jumpJustPressed) {
+            this.velocity = -600;
+            playSound("flap");
+        }
+
+        this.position.y += this.velocity * delta;
+
+        this.velocity += 0.5 * this.gravity * delta;
+
+        // Set the correct frame
+        if (this.velocity < 0) this.player.region.begin.x = 128
+        else this.player.region.begin.x = 0
+
+    }
+
+    /**
+     * Does copter mode logic
+     * @param {number} delta 
+     */
+    copterMode(delta) {
+        this.player.visible = false;
+        this.hoverboardSprites.visible = true;
+        this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
+
+        this.updateCopterVelocity(delta);
+        this.position.y += this.velocity * delta;
+        this.updateCopterVelocity(delta);
+    }
+
+    /**
+     * Does dead mode logic
+     * @param {number} delta 
+     */
+    deadMode(delta) {
+        if (this.position.y < this.game.el.height + 50) {
+            this.velocity += 0.5 * this.gravity * delta;
+            this.position.y += this.velocity * delta;
+            this.velocity += 0.5 * this.gravity * delta;
+
+            this.rotation += delta * 4;
+        }
     }
 }
