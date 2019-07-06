@@ -21,9 +21,10 @@ export default class Player extends Entity {
     // Array of weapons we currently possess
     weapons = [
         new Weapon({
-            speed: 1000,
-            spread: 0.1,
-            firerate: 0.01,
+            speed: 2000,
+            damage: 3,
+            spread: 0.05,
+            firerate: 0.1,
             magsize: 30,
             reloadtime: 3
         })
@@ -34,6 +35,8 @@ export default class Player extends Entity {
         size: new Vector(64, 128),
         position: new Vector(-32, -64),
     })]
+
+
 
     tick(delta) {
 
@@ -52,6 +55,8 @@ export default class Player extends Entity {
 
         super.tick(delta);
     }
+
+
 
     /**
      * Determine movement direction
@@ -110,9 +115,10 @@ export default class Player extends Entity {
                 angle: angle,
                 size: new Vector(16,4),
                 rotation: angle,
+                damage: this.weapons[this.currentWeapon].damage
             });
             bullet.position = this.position;
-            this.parent.children.push(bullet)
+            this.parent.bullets.children.push(bullet)
         }
     }
     /**

@@ -13,12 +13,13 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 /**
  * Bullet Class
  * @extends Entity
- * @param {Object}  options         Options for the Entity; See below
- * @param {Vector}  options.size    Size of bullet hitbox
- * @param {string}  options.src     Path or image of bullet
- * @param {Vector}  options.imgsize Size of image
- * @param {number}  options.speed   Speed of the bullet
- * @param {number}  options.angle   Angle that the bullet travels in radians clockwise
+ * @param options -          Options for the Entity; See below
+ * @param options.size -     Size of bullet hitbox
+ * @param options.src -      Path or image of bullet
+ * @param options.imgsize -  Size of image
+ * @param options.speed -    Speed of the bullet
+ * @param options.angle -    Angle that the bullet travels in radians clockwise
+ * @param options.damage -   How much damage the bullet does
  */
 
 export default class Bullet extends Entity {
@@ -26,12 +27,14 @@ export default class Bullet extends Entity {
     size: Vector;
     speed: number;
     angle: number;
+    damage: number;
 
     constructor(options) {
         super(options);
         this.size = options.size || new Vector(0,0);
         this.speed = options.speed;
         this.angle = options.angle;
+        this.damage = options.damage;
     }
 
     children = [new Rect({
@@ -47,6 +50,8 @@ export default class Bullet extends Entity {
                 sin(this.angle)
             ).multiply(this.speed * delta)
         )
+
+        if (this.isOffscreen()) this.free();
 
         super.tick(delta);
     }
