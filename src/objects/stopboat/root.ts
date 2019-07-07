@@ -22,6 +22,11 @@ export default class Root extends Entity {
     tick(delta) {
         super.tick(delta);
 
+        // Bullets offscreen are cleared after collision is done
+        this.bullets.children.forEach(i => {
+            i.clear();
+        });
+
         this.boatSpawnTimer += delta;
         this.spawnBoat()
     }
@@ -29,13 +34,13 @@ export default class Root extends Entity {
     spawnBoat() {
         if (this.boatSpawnTimer > this.timeUntilNextBoat) {
             this.boatSpawnTimer -= this.timeUntilNextBoat;
-            this.timeUntilNextBoat = 2;
+            this.timeUntilNextBoat = 0.2;
             
             const boat = new Boat;
 
             boat.position = new Vector(1024, Math.random() * 576);
 
-            const rotation = (Math.random() - 0.5) * 2 + Math.PI;
+            const rotation = (Math.random() - 0.5) * 2 * Math.PI / 6 + Math.PI;
 
             boat.rotation = rotation;
             boat.velocity = new Vector(Math.cos(rotation), Math.sin(rotation));

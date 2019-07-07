@@ -21,10 +21,10 @@ export default class Player extends Entity {
     // Array of weapons we currently possess
     weapons = [
         new Weapon({
-            speed: 1000,
-            damage: 4,
+            speed: 3000,
+            damage: 1,
             spread: 0.01,
-            firerate: 0.1,
+            firerate: 0.005,
             magsize: 30,
             reloadtime: 3
         })

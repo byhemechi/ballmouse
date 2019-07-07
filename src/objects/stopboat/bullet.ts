@@ -4,7 +4,6 @@ import Rect from "../../primitives/rect";
 import { Vector } from "../../types";
 
 // Makes it so you dont need 'Math.' before math functions
-const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 /**
  * Basic Bullet class. Most projectiles will be using this class.
@@ -14,7 +13,6 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
  * Bullet Class
  * @extends Entity
  * @param options -          Options for the Entity; See below
- * @param options.size -     Size of bullet hitbox
  * @param options.src -      Path or image of bullet
  * @param options.imgsize -  Size of image
  * @param options.speed -    Speed of the bullet
@@ -24,34 +22,29 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Bullet extends Entity {
 
-    size: Vector;
     speed: number;
     angle: number;
     damage: number;
 
     constructor(options) {
         super(options);
-        this.size = options.size || new Vector(0,0);
         this.speed = options.speed;
         this.angle = options.angle;
         this.damage = options.damage;
     }
 
-    children = [new Rect({
-        position: this.size.multiply(-0.5),
-        size: this.size,
-        fill: '#ffffff'
+    children = [new Sprite({
+        src: "/assets/stopboat/bullet.png",
+        position: new Vector(-37 / 2, -5 / 2)
     })]
 
     tick(delta) {
         this.position = this.position.add(
             new Vector(
-                cos(this.angle), 
-                sin(this.angle)
+                Math.cos(this.angle), 
+                Math.sin(this.angle)
             ).multiply(this.speed * delta)
         )
-
-        if (this.isOffscreen()) this.free();
 
         super.tick(delta);
     }
@@ -65,5 +58,9 @@ export default class Bullet extends Entity {
             this.position.y < 0) {
             return true
         }
+    }
+
+    clear() {
+        if (this.isOffscreen()) this.free()
     }
 }
