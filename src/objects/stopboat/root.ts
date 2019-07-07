@@ -29,13 +29,13 @@ export default class Root extends Entity {
     spawnBoat() {
         if (this.boatSpawnTimer > this.timeUntilNextBoat) {
             this.boatSpawnTimer -= this.timeUntilNextBoat;
-            this.timeUntilNextBoat = 1;
+            this.timeUntilNextBoat = 2;
             
             const boat = new Boat;
 
             boat.position = new Vector(1024, Math.random() * 576);
 
-            const rotation = (Math.random() - 0.5) * 0.25 + Math.PI;
+            const rotation = (Math.random() - 0.5) * 2 + Math.PI;
 
             boat.rotation = rotation;
             boat.velocity = new Vector(Math.cos(rotation), Math.sin(rotation));
