@@ -16,8 +16,6 @@ export default class Player extends Entity {
     // Position and speed of player
     position = new Vector(64,576/2);
     speed = 420;
-    rotation = PI/2;
-
     shootJustPressed: boolean = false;
 
     currentWeapon = 0;
@@ -35,13 +33,8 @@ export default class Player extends Entity {
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
-        size: new Vector(64, 128),
-        position: new Vector(-32, -64),
-        }),
-        new Rect({
-            size: new Vector(16, 16),
-            position: new Vector(-8, -8),
-            fill: '#ffffff'
+        size: new Vector(128, 64),
+        position: new Vector(-64, -32),
         })
     ]
 
