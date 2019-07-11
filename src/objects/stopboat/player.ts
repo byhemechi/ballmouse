@@ -34,7 +34,7 @@ export default class Player extends Entity {
     ]
 
     children = [new Sprite({
-        src: "/assets/stopboat/turret.png",
+        src: "/assets/stopboat/player.svg",
         size: new Vector(64, 128),
         position: new Vector(-32, -64),
         }),
@@ -44,8 +44,6 @@ export default class Player extends Entity {
             fill: '#ffffff'
         })
     ]
-
-
 
     tick(delta) {
 
@@ -91,7 +89,7 @@ export default class Player extends Entity {
 
     /**
      * Update timers for weapons and increment bullet queue
-     * @param {number} delta 
+     * @param delta 
      */
     incrementTimers(delta) {
         this.weapons.forEach(i => {
@@ -103,7 +101,10 @@ export default class Player extends Entity {
             }
         });
     }
-
+    /**
+     * Checks if we collided with an enemy bullet
+     * @param delta 
+     */
     checkCollision(delta) {
         this.root.enemyBullets.children.forEach(i => {
             const m = i.direction.y / i.direction.x;
@@ -113,9 +114,9 @@ export default class Player extends Entity {
 
             const distanceSquared = numerator / denominator;
 
-            const minX = i.position.x + i.direction.x * i.speed * delta;
+            const nextX = i.position.x + i.direction.x * i.speed * delta;
 
-            if (distanceSquared < this.sizeSquared && this.position.x > minX) {
+            if (distanceSquared < this.sizeSquared && this.position.x > nextX) {
                 this.game.score -= i.damage;
                 i.free();
             }

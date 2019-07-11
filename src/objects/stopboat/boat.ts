@@ -47,7 +47,10 @@ export default class Boat extends Entity {
         if (this.isDead()) this.kill();
     }
 
-    // Checks collision between boats and bullets using magic
+    /**
+     * Checks collision between boats and bullets using magic
+     * @param delta 
+     */
     collide(delta) {
         // Get sin and cosin of our angle off our velocity vector, and add minus on the end to make maths a bit easier
         const sin = -this.velocity.y;
@@ -135,7 +138,9 @@ export default class Boat extends Entity {
         }
     }
 
-    // Bounces boats when they touch the edge of the screen
+    /**
+     * Bounces boats when they touch the edge of the screen
+     */
     bounceOffWall() {
         if (this.position.y > this.game.el.height && this.velocity.y > 0
          || this.position.y < 0 && this.velocity.y < 0) {
@@ -144,6 +149,9 @@ export default class Boat extends Entity {
         }
     }
 
+    /**
+     * Check if we can invade, and do so if we can
+     */
     invade() {
         if (this.position.x < 100) {
             //this.game.score -= 10;
@@ -151,6 +159,10 @@ export default class Boat extends Entity {
         }
     }
 
+    /**
+     * Check if we can shoot, and do so if we can
+     * @param delta 
+     */
     attemptShoot(delta) {
         this.weapon.timer += delta;
         while (this.weapon.timer > this.weapon.firerate) {
@@ -159,22 +171,29 @@ export default class Boat extends Entity {
             const angle = Math.PI + Math.atan2(this.position.y - this.root.player.position.y, this.position.x - this.root.player.position.x);
 
             this.shoot(this.weapon.speed, this.weapon.damage, angle);
-            /*
+            
             // Do not enable this
             this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/6);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/3);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/2);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 2*Math.PI/3);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 5*Math.PI/6);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 7*Math.PI/6);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 4*Math.PI/3);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 3*Math.PI/2);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 5*Math.PI/3);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 11*Math.PI/6);
-            */
+
         }
     }
 
+    /**
+     * Creates a bullet with given parameters
+     * @param speed The speed the bullet travels at
+     * @param damage How much damage the bullet does
+     * @param angle The angle the bullet travels at
+     */
     shoot(speed, damage, angle) {
         const bullet = new Bullet({
             speed: speed,
@@ -192,12 +211,18 @@ export default class Boat extends Entity {
  
     }
 
+    /**
+     * Returns if we are dead
+     */
     isDead() {
         if (this.health <= 0) {
             return true;
         }
     }
 
+    /**
+     * Kills the boat
+     */
     kill() {
         this.game.score += 1;
         this.free();

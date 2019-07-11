@@ -12,12 +12,13 @@ import { Vector } from "../../types";
 /**
  * Bullet Class
  * @extends Entity
- * @param options -          Options for the Entity; See below
- * @param options.src -      Path or image of bullet
- * @param options.imgsize -  Size of image
- * @param options.speed -    Speed of the bullet
- * @param options.angle -    Angle that the bullet travels in radians clockwise
- * @param options.damage -   How much damage the bullet does
+ * @param options Options for the Entity; See below
+ * @param options.src Path or image of bullet
+ * @param options.imgsize Size of image
+ * @param options.speed Speed of the bullet
+ * @param options.angle Angle that the bullet travels in radians clockwise
+ * @param options.direction
+ * @param options.damage How much damage the bullet does
  */
 
 export default class Bullet extends Entity {
@@ -31,6 +32,7 @@ export default class Bullet extends Entity {
         super(options);
         this.speed = options.speed;
         this.angle = options.angle;
+        this.direction = options.direction;
         this.damage = options.damage;
     }
     children = [new Sprite({

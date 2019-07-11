@@ -33,10 +33,13 @@ export default class Root extends Entity {
         });
 
         this.boatSpawnTimer += delta;
-        this.spawnBoat()
+        this.spawnBoats()
     }
 
-    spawnBoat() {
+    /**
+     * Attempt to spawn boats in
+     */
+    spawnBoats() {
         if (this.boatSpawnTimer > this.timeUntilNextBoat) {
             this.boatSpawnTimer -= this.timeUntilNextBoat;
             this.timeUntilNextBoat = 1 + Math.random() * 1;
