@@ -15,8 +15,8 @@ export default class Boat extends Entity {
     weapon = new Weapon({
         speed: 500,
         damage: 1,
-        spread: 0.005,
-        firerate: 1,
+        spread: 0.5,
+        firerate: .01,
     })
 
     size = new Vector(64,32);
@@ -168,7 +168,7 @@ export default class Boat extends Entity {
         while (this.weapon.timer > this.weapon.firerate) {
             this.weapon.timer -= this.weapon.firerate;
 
-            const angle = Math.PI + Math.atan2(this.position.y - this.root.player.position.y, this.position.x - this.root.player.position.x);
+            const angle = Math.PI + this.squareRandom() * this.weapon.spread + Math.atan2(this.position.y - this.root.player.position.y, this.position.x - this.root.player.position.x);
 
             this.shoot(this.weapon.speed, this.weapon.damage, angle);
             /*
@@ -209,6 +209,13 @@ export default class Boat extends Entity {
 
         this.root.enemyBullets.children.push(bullet)
  
+    }
+
+    squareRandom() {
+        const spreadDirection = Math.random() > 0.5 ? -1 : 1;
+        const spreadAmount = Math.random() ** 2;
+        const spread = spreadDirection * spreadAmount;
+        return spread;
     }
 
     /**
