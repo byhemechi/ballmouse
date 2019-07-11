@@ -78,29 +78,6 @@ export default class Player extends Entity {
         getSound("death", "/assets/flap/death.wav");
     }
 
-    /** Sets player into death state */
-    kill() {
-        if (this.alive) {
-            this.alive = false;
-            playSound("death");
-            this.velocity = -600;
-            this.hoverboardSprites.visible = false;
-            this.player.visible = true;
-            this.player.region.begin.x = 256;
-        }
-    }
-
-    /**
-     * (Re)sets the player to the starting state
-     */
-    reset() {
-        this.position.x = 200;
-        this.position.y = 200;
-        this.velocity = -600;
-        this.rotation = 0;
-        this.alive = true;
-        this.state = 0;
-    }
 
     // Called every frame
     tick(delta) {
@@ -115,26 +92,6 @@ export default class Player extends Entity {
         } else if (!this.alive) this.deadMode(delta);
 
         super.tick(delta);
-    }
-
-    /**
-     * Updates our velocity in copter mode
-     * @param {number} delta 
-     */
-    updateCopterVelocity(delta) {
-        if (this.game.keys.Space) {
-            // If we are going down, go up faster
-            if (this.velocity > 0) this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
-
-            // Otherwise, go up at normal speed
-            else this.velocity -= 0.5 * this.copterSpeed * delta;
-        } else {
-            // If we are going up, fall faster
-            if (this.velocity < 0) this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
-
-            // Otherwise, fall at normal speed
-            else this.velocity += 0.5 * this.copterGravity * delta;
-        }
     }
 
     /**
