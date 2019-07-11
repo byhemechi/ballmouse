@@ -482,13 +482,13 @@ export default class Root extends Entity {
 
 
     /** 
-     * Reset the game back to its' default state
+     * Reset the game back to its default state
      */
     reset() {
         this.text.visible = false; // Hide game over text
         this.player.reset();
         this.started = true;
-        this.speed = 3000;
+        this.speed = 300;
         this.game.score = 0;
         this.distanceSincePipe = this.distanceBetweenPipes; // Create a pipe as soon as we start the game
         this.distanceSincePortal = -90 - this.distanceBetweenPipes; // Set to how far the player is from the left of the screen, minus distance from first pipe
