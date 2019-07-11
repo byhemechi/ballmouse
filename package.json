@@ -15,6 +15,7 @@
     "prettier": "^1.18.2",
     "rimraf": "^2.6.3",
     "ts-loader": "^6.0.3",
+    "tslint": "^5.18.0",
     "typedoc": "^0.14.2",
     "typedoc-plugin-markdown": "^2.0.4",
     "typescript": "^3.5.2",
