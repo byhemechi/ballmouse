@@ -16,7 +16,7 @@ export default class Boat extends Entity {
         speed: 500,
         damage: 3,
         spread: 0.005,
-        firerate: 0.1,
+        firerate: 1,
     })
 
     size = new Vector(64,32);
