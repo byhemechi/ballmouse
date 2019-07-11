@@ -8,6 +8,8 @@ import Boat from "./boat";
 
 export default class Root extends Entity {
 
+    firstFrame = true;
+
     player = new Player
 
     bullets = new Entity;
@@ -22,6 +24,9 @@ export default class Root extends Entity {
     timeUntilNextBoat = 1;
     
     tick(delta) {
+        if (this.firstFrame) this.firstFrame = false;
+        else {
+            
         super.tick(delta);
 
         // Bullets offscreen are cleared after collision is done
@@ -34,6 +39,7 @@ export default class Root extends Entity {
 
         this.boatSpawnTimer += delta;
         this.spawnBoats()
+        }
     }
 
     /**
