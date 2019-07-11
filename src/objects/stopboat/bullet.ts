@@ -33,17 +33,17 @@ export default class Bullet extends Entity {
         this.angle = options.angle;
         this.damage = options.damage;
     }
-
     children = [new Sprite({
         src: "/assets/stopboat/bullet.png",
         position: new Vector(-37 / 2, -5 / 2)
     })]
 
     tick(delta) {
+
         this.position.x += this.direction.x * this.speed * delta;
         this.position.y += this.direction.y * this.speed * delta;
 
-        this.clear();
+        //this.clear();
 
         super.tick(delta);
     }

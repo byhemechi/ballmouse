@@ -16,7 +16,7 @@ export default class Root extends Entity {
 
     boats = new Entity;
 
-    children = [this.player, this.bullets, this.enemyBullets, this.boats];
+    children = [this.player, this.bullets, this.boats, this.enemyBullets];
 
     boatSpawnTimer = 0;
     timeUntilNextBoat = 1;
@@ -26,6 +26,9 @@ export default class Root extends Entity {
 
         // Bullets offscreen are cleared after collision is done
         this.bullets.children.forEach(i => {
+            i.clear();
+        });
+        this.enemyBullets.children.forEach(i => {
             i.clear();
         });
 

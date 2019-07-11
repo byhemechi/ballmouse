@@ -14,7 +14,7 @@ export default class Boat extends Entity {
 
     weapon = new Weapon({
         speed: 500,
-        damage: 3,
+        damage: 1,
         spread: 0.005,
         firerate: 1,
     })
@@ -146,7 +146,7 @@ export default class Boat extends Entity {
 
     invade() {
         if (this.position.x < 100) {
-            this.game.score -= 10;
+            //this.game.score -= 10;
             this.free();
         }
     }
@@ -159,6 +159,8 @@ export default class Boat extends Entity {
             const angle = Math.PI + Math.atan2(this.position.y - this.root.player.position.y, this.position.x - this.root.player.position.x);
 
             this.shoot(this.weapon.speed, this.weapon.damage, angle);
+            /*
+            // Do not enable this
             this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/6);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/3);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/2);
@@ -169,6 +171,7 @@ export default class Boat extends Entity {
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 3*Math.PI/2);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 5*Math.PI/3);
             this.shoot(this.weapon.speed, this.weapon.damage, angle + 11*Math.PI/6);
+            */
         }
     }
 

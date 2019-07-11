@@ -11,7 +11,7 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
-    size = 8;
+    sizeSquared = 8 ** 2;
 
     // Position and speed of player
     position = new Vector(64,576/2);
@@ -58,13 +58,11 @@ export default class Player extends Entity {
 
         this.incrementTimers(delta);
 
-        this.checkCollision();
+        this.checkCollision(delta);
 
         if (this.game.keys.KeyZ) {
             this.shoot();
         }
-
-
 
         super.tick(delta);
     }
@@ -106,14 +104,23 @@ export default class Player extends Entity {
         });
     }
 
-    checkCollision() {
+    checkCollision(delta) {
         this.root.enemyBullets.children.forEach(i => {
-            if (Math.abs(i.position.x - this.position.x) < this.size
-             && Math.abs(i.position.y - this.position.y) < this.size) {
-                 this.game.score -= i.damage;
-                 i.free()
+            const m = i.direction.y / i.direction.x;
 
+            const numerator = (m * this.position.x - this.position.y + i.position.y - m * i.position.x) ** 2;
+            const denominator = m ** 2 + 1;
+
+            const distanceSquared = numerator / denominator;
+
+            const minX = i.position.x + i.direction.x * i.speed * delta;
+
+            if (distanceSquared < this.sizeSquared && this.position.x > minX) {
+                this.game.score -= i.damage;
+                i.free();
             }
+
+
         })
     }
 
