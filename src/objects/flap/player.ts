@@ -126,11 +126,21 @@ export default class Player extends Entity {
     copterMode(delta) {
         this.player.visible = false;
         this.hoverboardSprites.visible = true;
-        this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
 
         this.updateCopterVelocity(delta);
         this.position.y += this.velocity * delta;
         this.updateCopterVelocity(delta);
+
+        this.hoverboardSprites.children[0].children[2].position.y += 
+            ((this.game.keys.Space ? 18 : 24) - this.hoverboardSprites.children[0].children[2].position.y) / 3;
+
+        this.hoverboardSprites.children[0].rotation = 0.4 * this.velocity / 600;
+
+        [0, 1].forEach((i) => {
+            const hand = this.hoverboardSprites.children[0].children[i];
+            hand.rotation = this.velocity * 0.001 * (i == 0 ? -1 : 1);
+            hand.position.y = this.velocity * -0.02
+        })
     }
 
     /**
