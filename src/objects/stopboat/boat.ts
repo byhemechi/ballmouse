@@ -159,6 +159,16 @@ export default class Boat extends Entity {
             const angle = Math.PI + Math.atan2(this.position.y - this.root.player.position.y, this.position.x - this.root.player.position.x);
 
             this.shoot(this.weapon.speed, this.weapon.damage, angle);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/6);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/3);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + Math.PI/2);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 2*Math.PI/3);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 5*Math.PI/6);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 7*Math.PI/6);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 4*Math.PI/3);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 3*Math.PI/2);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 5*Math.PI/3);
+            this.shoot(this.weapon.speed, this.weapon.damage, angle + 11*Math.PI/6);
         }
     }
 
