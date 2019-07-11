@@ -1,11 +1,14 @@
 // Import classes
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
+import Corpse from "./corpse"
 import { Vector } from "../../types";
 import { getSound, playSound } from "../../sound";
 
 export default class Player extends Entity {
     velocity = 0;
+
+    velocityX: number = 0;
 
     gravity = 1700;
     copterSpeed = 1700;
@@ -53,8 +56,8 @@ export default class Player extends Entity {
                 }),
                 new Sprite({
                     src: "/assets/hoverbored/hoverboard.png",
-                    position: new Vector(-58.75 / 2, 24),
-                    size: new Vector(47 * 1.25, 16),
+                    position: new Vector(-94/4, 24),
+                    size: new Vector(94/2, 32/2),
                 })
             ]
         })]
@@ -180,10 +183,101 @@ export default class Player extends Entity {
     deadMode(delta) {
         if (this.position.y < this.game.el.height + 50) {
             this.velocity += 0.5 * this.gravity * delta;
-            this.position.y += this.velocity * delta;
-            this.velocity += 0.5 * this.gravity * delta;
 
+            this.position.x += this.velocityX * delta;
+            this.position.y += this.velocity * delta;
+
+            this.velocity += 0.5 * this.gravity * delta;
+            
             this.rotation += delta * 4;
         }
     }
+
+    /**
+     * Updates our velocity in copter mode
+     * @param {number} delta 
+     */
+    updateCopterVelocity(delta) {
+        if (this.game.keys.Space || this.game.keys.ArrowUp) {
+            // If we are going down, go up faster
+            if (this.velocity > 0) this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
+
+            // Otherwise, go up at normal speed
+            else this.velocity -= 0.5 * this.copterSpeed * delta;
+        } else {
+            // If we are going up, fall faster
+            if (this.velocity < 0) this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
+
+            // Otherwise, fall at normal speed
+            else this.velocity += 0.5 * this.copterGravity * delta;
+        }
+    }
+
+    /** Sets player into death state */
+    kill(speed) {
+        if (this.alive) {
+            this.alive = false;
+            playSound("death");
+            this.velocity = -600;
+            this.velocityX = speed;
+            this.hoverboardSprites.visible = false;
+            this.player.visible = true;
+            this.player.region.begin.x = 256;
+            this.spawnCorpse();
+
+        }
+    }
+
+    spawnCorpse() {
+
+        const leftHand = new Corpse;
+        leftHand.position.x = this.position.x;
+        leftHand.position.y = this.position.y;
+        leftHand.velocity.x = -240 + this.velocityX;
+        leftHand.velocity.y = -800;
+        leftHand.children[0].visible = false;
+        leftHand.children[2].visible = false;
+        leftHand.spin = -10;
+
+        const rightHand = new Corpse;
+        rightHand.position.x = this.position.x;
+        rightHand.position.y = this.position.y;
+        rightHand.velocity.x = 240 + this.velocityX;
+        rightHand.velocity.y = -800;
+        rightHand.children[1].visible = false;
+        rightHand.children[2].visible = false;
+        rightHand.spin = 10;
+
+    this.parent.corpses.children.push(leftHand, rightHand);
+
+        if (this.state == 1) {
+            const feet = new Corpse;
+
+            feet.position = this.position.add(new Vector(0, 8));
+            feet.velocity.x = 30 + this.velocityX;
+            feet.velocity.y = -300;
+            feet.children[0].visible = false;
+            feet.children[1].visible = false;
+            feet.spin = -1;
+
+            feet.gravity = 800;
+            feet.dragX = 150;
+
+            this.parent.corpses.children.push(feet);
+        }
+    }
+    
+    /**
+     * (Re)sets the player to the starting state
+     */
+    reset() {
+        this.position.x = 200;
+        this.position.y = 200;
+        this.velocity = -600;
+        this.velocityX = 0;
+        this.rotation = 0;
+        this.alive = true;
+        this.state = 0;
+    }
+
 }
