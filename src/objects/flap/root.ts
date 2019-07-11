@@ -40,34 +40,50 @@ export default class Root extends Entity {
     state: number;
 
     distanceBetweenPipes = 450;
-    distanceBetweenPipes2 = 45; 
-    distanceBetweenPortal = 450 * 10;
-
+    distanceBetweenPipes2 = 45;
+    distanceBetweenPortal = 450 * 2;
     distanceSincePoint: number;
     distanceSincePipe: number;
     distanceSinceStateChange: number;
     distanceSincePortal: number
 
-    distanceSinceLastCloud = 0;
-    distanceToNextCloud = 0;
-
     prevJump = false; // Space state on last frame
     jumpJustPressed = false;
 
-    shakeLength = 0.2;
-    screenShakeTimer = 0;
-
     constructor(...args) {
         super(...args);
+        this.reset();
         this.children = [
-            this.bgObjects,
             this.pipeSet,
-            this.ground,
-            this.player,
-            this.corpses,
-            this.fgObjects,
-            this.text
+            new Rect({
+                position: new Vector(0, 440),
+                size: new Vector(720, 40),
+                fill: 'tan'
+            }), this.player, new Label({
+                value: "Flappy Guy",
+                font: "32px sans-serif",
+                position: new Vector(360, 240),
+                baseline: "middle",
+                align: "center"
+            })
         ]
+    }
+
+
+    // Smooth random number generator 
+    slidingRandom = [0.5, 0.5, 0.5, 0.5];
+
+    /**
+     * Create a random value smoothed by previous outputs
+     */
+    newSlidingRandom() {
+        this.slidingRandom.push(Math.random()); // Add a new random number to slidingRandom
+        this.slidingRandom.shift(); // Remove the first value of slidingRandom
+        var total = 0.0;
+        for (var i = 0; i < this.slidingRandom.length; ++i) {
+            total += this.slidingRandom[i];
+        }
+        return total / this.slidingRandom.length // Return average of slidingRandom
     }
 
     // Called every frame
@@ -78,12 +94,8 @@ export default class Root extends Entity {
         this.player.jumpJustPressed = this.jumpJustPressed;
 
         // If we press jump and game has ended, reset the game
-        if (this.jumpJustPressed && !this.started && this.screenShakeTimer <= 0) this.reset();
+        if (this.jumpJustPressed && !this.started) this.reset();
 
-        this.bgFgCounters(delta);
-
-        this.addBgFgObjects();
-        
         // Do player and pipe movements before collision
         super.tick(delta);
 
@@ -104,22 +116,21 @@ export default class Root extends Entity {
 
         } else {
             // Show gameover text
-            this.text.visible = true;
+            this.children[(this.children).length - 1].visible = true;
         }
-
-        if (this.screenShakeTimer > 0) {
-            this.screenShakeTimer -= delta;
-            this.shakeScreen(50, delta);
-            if (this.screenShakeTimer < 0) {
-                this.position.x = 0;
-                this.position.y = 0;
-            }
-        }
-        
     }
 
-    bgFgCounters(delta) {
-        this.distanceSinceLastCloud += (this.speed + 80) * delta;
+    /**
+     * Increase speed as we progress further
+     * @param {number} delta 
+     */
+    increaseSpeed(delta: number) {
+        if (this.speed < this.maxSpeed && this.player.alive) {
+            this.speed += delta * 6;
+        }
+        if (this.speed >= this.maxSpeed && this.player.alive) {
+            this.speed = this.maxSpeed;
+        }
     }
 
 
@@ -178,19 +189,35 @@ export default class Root extends Entity {
      * Increase speed as we progress further
      * @param {number} delta 
      */
-    increaseSpeed(delta: number) {
-        if (this.speed < this.maxSpeed && this.player.alive) {
-            this.speed += delta * 5;
-        }
-        if (this.speed >= this.maxSpeed && this.player.alive) {
-            this.speed = this.maxSpeed;
-        }
-        /*
-        if (this.speed < 0 && this.player.alive) {
-            this.speed -= delta * 600;
-        }
-        if (this.speed <= 0 && this.player.alive) {
-            this.speed = 0;
+    addPipes() {
+        if (this.state == 0) {
+            if (this.distanceSincePipe > this.distanceBetweenPipes) {
+                this.distanceSincePipe -= this.distanceBetweenPipes;
+
+                // New pipe variables
+                var gap = 650;
+                var min = 140;
+                var range = 230;
+                var size = 64;
+
+                var difficultyUp = this.speed / this.maxSpeed;
+                gap -= difficultyUp * 30;
+                min += difficultyUp * 30;
+
+                this.createPipe(gap, min, range, size, 0, this.distanceSincePipe, false);
+            };
+        } else if (this.state == 1) {
+            if (this.distanceSincePipe > this.distanceBetweenPipes2) {
+                this.distanceSincePipe -= this.distanceBetweenPipes2;
+
+                // New pipe variables
+                var gap = 700;
+                var min = 205;
+                var range = 230;
+                var size = 32;
+                
+                this.createPipe(gap, min, range, size, 1, this.distanceSincePipe, true);
+            }
         }
         */
        
@@ -214,7 +241,7 @@ export default class Root extends Entity {
     setState() {
         // Change game state
         if (this.distanceSinceStateChange > this.distanceBetweenPortal) {
-
+            
             this.state = (this.state + 1) % this.stateCount;
             this.distanceSincePipe = 0;
 
@@ -361,66 +388,16 @@ export default class Root extends Entity {
         /*
         // Attempt to recycle pipes
         this.pipeSet.children.forEach(i => {
-            if (i.isFree) {
-                // Raise flag that we recycled
-                recycled = true;
-                // Generate bottom and top pipe
-                if (bottomTop) {
-                    // Generate new position based on if we should use sliding random, and offset x position
-                    if (useSlidingRandom) {
-                        i.position.x = 720 - xOffset;
-                        i.position.y = min + this.newSlidingRandom() * range;
-                    }
-                    else {
-                        i.position.x = 720 - xOffset;
-                        i.position.y = min + Math.random() * range;
-                    }
+            // Minkowski Difference collision
 
-                    if (move) {
-                        if (i.position.y < 200 + ((width - 500 ) / 2)) {
-                            i.speedY = move;
-                            bottomPipeMoveDirection = 1;
-                        } else {
-                            i.speedY = -move;
-                            bottomPipeMoveDirection = -1;
-                        }
-                    }
-
-                    // Show appropriate sprite
-                    if (sprite == 0) {
-                        i.children[0].visible = true;
-                        i.children[1].visible = false;
-                    } else if (sprite == 1) {
-                        i.children[0].visible = false;
-                        i.children[1].visible = true;
-                    }
-                    i.size.x = size; // Set size of pipe
-                    i.isFree = false; // Flag pipe as active
-                    i.visible = true; // Make pipe visible
-                    bottomPipePosition = i.position.y; // Store position of bottom pipe
-                    bottomTop = false;
-                } else {
-                    // Set top pipe position to bottom pipe position minus distance between pipes, and offset x position
-                    i.position.x = 720 - xOffset;
-                    i.position.y = bottomPipePosition - width;
-
-                    if (move) {
-                        i.speedY = move * bottomPipeMoveDirection;
-                    }
-
-                    // Show appropriate sprite
-                    if (sprite == 0) {
-                        i.children[0].visible = true;
-                        i.children[1].visible = false;
-                    } else if (sprite == 1) {
-                        i.children[0].visible = false;
-                        i.children[1].visible = true;
-                    }
-                    i.size.x = size // Set size of pipe
-                    i.isFree = false; // Flag pipe as active
-                    i.visible = true; // Make pipe visible
-
-                }
+            const minX = this.player.position.x - (i.position.x + i.size.x);
+            const maxX = this.player.position.x + this.player.size.x - i.position.x;
+            const minY = this.player.position.y - (i.position.y + i.size.y);
+            const maxY = this.player.position.y + this.player.size.y - i.position.y;
+            if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
+                this.player.kill()
+                this.speed = 0;
+                this.started = false;
             }
         });
         */
@@ -480,7 +457,104 @@ export default class Root extends Entity {
         this.position.y = (Math.random() - 0.5) * intensity;
     }
 
+    /**
+     * Creates a new pipe
+     * @param {number} width The size of the gap between pipes
+     * @param {number} min The minimum distance of bottom pipe from the top of the screen
+     * @param {number} range The range where the pipes can move
+     * @param {number} size Size of the hitbox for the pipe
+     * @param {number} sprite ID of sprite to use
+     * @param {number} xOffset How much we should offset the x position of the pipe
+     * @param {bool} useSlidingRandom Should the position be smoothed
+     */
+    createPipe(width, min, range, size, sprite, xOffset, useSlidingRandom) {
 
+        var bottomTop = true; // Flag for if we should create bottom or top pipe
+        var recycled = false; // Flag if we recycled pipes
+        var bottomPipePosition = 0; // Position of bottom pipe
+
+        // Attempt to recycle pipes
+        this.pipeSet.children.forEach(i => {
+            if (i.isFree) {
+                // Raise flag that we recycled
+                recycled = true;
+
+                // Generate bottom and top pipe
+                if (bottomTop) {
+                    // Generate new position based on if we should use sliding random, and offset x position
+                    if (useSlidingRandom) i.position = new Vector(720 - xOffset, min + this.newSlidingRandom() * range);
+                    else i.position = new Vector(720 - xOffset, min + Math.random() * range);
+
+                    // Show appropriate sprite
+                    if (sprite == 0) {
+                        i.children[0].visible = true;
+                        i.children[1].visible = false;
+                    }
+                    else if (sprite == 1) {
+                        i.children[0].visible = false;
+                        i.children[1].visible = true;
+                    }
+                    i.size.x = size;                    // Set size of pipe
+                    i.isFree = false;                   // Flag pipe as active
+                    i.visible = true;                   // Make pipe visible
+                    bottomPipePosition = i.position.y;  // Store position of bottom pipe
+                    bottomTop = false;
+                } else {
+                    // Set top pipe position to bottom pipe position minus distance between pipes, and offset x position
+                    i.position = new Vector(720 - xOffset, bottomPipePosition - width);
+
+                    // Show appropriate sprite
+                    if (sprite == 0) {
+                        i.children[0].visible = true;
+                        i.children[1].visible = false;
+                    }
+                    else if (sprite == 1) {
+                        i.children[0].visible = false;
+                        i.children[1].visible = true;
+                    }
+                    i.size.x = size                     // Set size of pipe
+                    i.isFree = false;                   // Flag pipe as active
+                    i.visible = true;                   // Make pipe visible
+
+                }
+            }
+        });
+
+        // Create new pipes if no free pipes are available
+        if (!recycled) {
+            // Create new top and bottom pipes
+            var bottomPipe = new Pipe;
+            var topPipe = new Pipe;
+
+            // Show appropriate sprite
+            if (sprite == 0) {
+                bottomPipe.children[0].visible = true;
+                bottomPipe.children[1].visible = false;
+
+                topPipe.children[0].visible = true;
+                topPipe.children[1].visible = false;
+            }
+            else if (sprite == 1) {
+                console.log('yee')
+                bottomPipe.children[0].visible = false;
+                bottomPipe.children[1].visible = true;
+
+                topPipe.children[0].visible = false;
+                topPipe.children[1].visible = true;
+            }
+
+            bottomPipe.size = new Vector(size, 500);    // Set size of bottom pipe
+            topPipe.size = new Vector(size, 500);       // Set size of top pipe
+
+            bottomPipe.position.x = 720 - xOffset;
+            if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingRandom() * range;
+            else bottomPipe.position.y = min + Math.random() * range;
+            topPipe.position = new Vector(720 - xOffset, bottomPipe.position.y - width);
+            this.pipeSet.children.unshift(bottomPipe, topPipe);
+        }
+    }
+
+    
     /** 
      * Reset the game back to its default state
      */

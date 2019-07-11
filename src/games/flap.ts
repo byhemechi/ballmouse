@@ -10,7 +10,7 @@ export default class flap extends Game {
         this.root.children = [new Root];
         this.el.width  = 720;
         this.el.height = 480;
-        this.el.style.backgroundColor = '#66C3D1';
+        this.el.style.backgroundImage = 'linear-gradient(rgb(211, 228, 255), skyblue, skyblue)';
     }
     render() {
         const ctx = this.ctx;

@@ -12,18 +12,14 @@ export default class Pipe extends Entity {
     speedY: number = 0; // Move pipe 
 
     children = [
-        new Entity({
-            children: [
-                new Sprite({
-                    src: '/assets/flap/pipe.png',
-                    position: new Vector(-6, 0)
-        })]}),
-        new Entity({
-            children: [
-                new Sprite({
-                    src: '/assets/flap/minipipe.png',
-                    position: new Vector(-3, 0)
-        })]})
+        new Sprite({
+            src: '/assets/flap/pipe.png',
+            size: new Vector(64,500)
+        }),
+        new Sprite({
+            src: '/assets/flap/minipipe.png',
+            size: new Vector(32,500)
+        })
     ]
 
     // Called when Pipe is created
@@ -37,13 +33,10 @@ export default class Pipe extends Entity {
         // Move pipe by speed
         if (!this.isFree) this.position.x -= this.parent.parent.speed * delta;
 
-        this.position.y += this.speedY * delta;
-
         // Flag as free if we are below x:-100
         if (this.position.x < -100) {
             this.free();            
             this.visible = false;
-            this.speedY = 0;
         }
 
         // Engine stuff, you must have this in tick() function
