@@ -33,8 +33,8 @@ export default class Player extends Entity {
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
-        size: new Vector(128, 64),
-        position: new Vector(-64, -32),
+        size: new Vector(64, 64),
+        position: new Vector(-32, -32),
         })
     ]
 
