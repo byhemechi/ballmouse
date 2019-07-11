@@ -4,36 +4,39 @@ import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
 import Bullet from "../stopboat/bullet";
 import Weapon from "./weapon";
+import Rect from "../../primitives/rect";
 
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
+    sizeSquared = 8 ** 2;
+
     // Position and speed of player
     position = new Vector(64,576/2);
     speed = 420;
-    rotation = PI/2;
-
     shootJustPressed: boolean = false;
 
     currentWeapon = 0;
     // Array of weapons we currently possess
     weapons = [
         new Weapon({
-            speed: 1000,
-            spread: 0.1,
-            firerate: 0.01,
+            speed: 3000,
+            damage: 10,
+            spread: 0.005,
+            firerate: 0.1,
             magsize: 30,
             reloadtime: 3
         })
     ]
 
     children = [new Sprite({
-        src: "/assets/stopboat/turret.png",
-        size: new Vector(64, 128),
-        position: new Vector(-32, -64),
-    })]
+        src: "/assets/stopboat/player.svg",
+        size: new Vector(64, 58),
+        position: new Vector(-32, -32),
+        })
+    ]
 
     tick(delta) {
 
@@ -46,12 +49,16 @@ export default class Player extends Entity {
 
         this.incrementTimers(delta);
 
+        this.checkCollision(delta);
+
         if (this.game.keys.KeyZ) {
             this.shoot();
         }
 
         super.tick(delta);
     }
+
+
 
     /**
      * Determine movement direction
@@ -75,7 +82,7 @@ export default class Player extends Entity {
 
     /**
      * Update timers for weapons and increment bullet queue
-     * @param {number} delta 
+     * @param delta 
      */
     incrementTimers(delta) {
         this.weapons.forEach(i => {
@@ -86,6 +93,29 @@ export default class Player extends Entity {
                 i.canFire = true;
             }
         });
+    }
+    /**
+     * Checks if we collided with an enemy bullet
+     * @param delta 
+     */
+    checkCollision(delta) {
+        this.root.enemyBullets.children.forEach(i => {
+            const m = i.direction.y / i.direction.x;
+
+            const numerator = (m * this.position.x - this.position.y + i.position.y - m * i.position.x) ** 2;
+            const denominator = m ** 2 + 1;
+
+            const distanceSquared = numerator / denominator;
+
+            const nextX = i.position.x + i.direction.x * i.speed * delta;
+
+            if (distanceSquared < this.sizeSquared && this.position.x > nextX) {
+                this.game.score -= i.damage;
+                i.free();
+            }
+
+
+        })
     }
 
     /**
@@ -105,14 +135,17 @@ export default class Player extends Entity {
             
             var angle = this.weaponSpread()
 
-            var bullet = new Bullet({
+            const bullet = new Bullet({
                 speed: this.weapons[this.currentWeapon].speed,
                 angle: angle,
                 size: new Vector(16,4),
                 rotation: angle,
+                damage: this.weapons[this.currentWeapon].damage
             });
-            bullet.position = this.position;
-            this.parent.children.push(bullet)
+            bullet.position.x = this.position.x;
+            bullet.position.y = this.position.y;
+            bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
+            this.parent.bullets.children.push(bullet)
         }
     }
     /**
