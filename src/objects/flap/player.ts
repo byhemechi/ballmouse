@@ -78,29 +78,6 @@ export default class Player extends Entity {
         getSound("death", "/assets/flap/death.wav");
     }
 
-    /** Sets player into death state */
-    kill() {
-        if (this.alive) {
-            this.alive = false;
-            playSound("death");
-            this.velocity = -600;
-            this.hoverboardSprites.visible = false;
-            this.player.visible = true;
-            this.player.region.begin.x = 256;
-        }
-    }
-
-    /**
-     * (Re)sets the player to the starting state
-     */
-    reset() {
-        this.position.x = 200;
-        this.position.y = 200;
-        this.velocity = -600;
-        this.rotation = 0;
-        this.alive = true;
-        this.state = 0;
-    }
 
     // Called every frame
     tick(delta) {
@@ -115,26 +92,6 @@ export default class Player extends Entity {
         } else if (!this.alive) this.deadMode(delta);
 
         super.tick(delta);
-    }
-
-    /**
-     * Updates our velocity in copter mode
-     * @param {number} delta 
-     */
-    updateCopterVelocity(delta) {
-        if (this.game.keys.Space) {
-            // If we are going down, go up faster
-            if (this.velocity > 0) this.velocity -= 1.25 * 0.5 * this.copterSpeed * delta;
-
-            // Otherwise, go up at normal speed
-            else this.velocity -= 0.5 * this.copterSpeed * delta;
-        } else {
-            // If we are going up, fall faster
-            if (this.velocity < 0) this.velocity += 1.25 * 0.5 * this.copterGravity * delta;
-
-            // Otherwise, fall at normal speed
-            else this.velocity += 0.5 * this.copterGravity * delta;
-        }
     }
 
     /**
@@ -169,11 +126,21 @@ export default class Player extends Entity {
     copterMode(delta) {
         this.player.visible = false;
         this.hoverboardSprites.visible = true;
-        this.hoverboardSprites.children[0].rotation += ((this.game.keys.Space ? -0.3 : 0.3) - this.hoverboardSprites.children[0].rotation) / 5
 
         this.updateCopterVelocity(delta);
         this.position.y += this.velocity * delta;
         this.updateCopterVelocity(delta);
+
+        this.hoverboardSprites.children[0].children[2].position.y += 
+            ((this.game.keys.Space ? 18 : 24) - this.hoverboardSprites.children[0].children[2].position.y) / 3;
+
+        this.hoverboardSprites.children[0].rotation = 0.4 * this.velocity / 600;
+
+        [0, 1].forEach((i) => {
+            const hand = this.hoverboardSprites.children[0].children[i];
+            hand.rotation = this.velocity * 0.001 * (i == 0 ? -1 : 1);
+            hand.position.y = this.velocity * -0.02
+        })
     }
 
     /**
