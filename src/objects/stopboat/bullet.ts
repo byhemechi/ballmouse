@@ -25,6 +25,7 @@ export default class Bullet extends Entity {
     speed: number;
     angle: number;
     damage: number;
+    direction: Vector;
 
     constructor(options) {
         super(options);
@@ -39,12 +40,10 @@ export default class Bullet extends Entity {
     })]
 
     tick(delta) {
-        this.position = this.position.add(
-            new Vector(
-                Math.cos(this.angle), 
-                Math.sin(this.angle)
-            ).multiply(this.speed * delta)
-        )
+        this.position.x += this.direction.x * this.speed * delta;
+        this.position.y += this.direction.y * this.speed * delta;
+
+        this.clear();
 
         super.tick(delta);
     }
@@ -52,9 +51,9 @@ export default class Bullet extends Entity {
      * Check if this bullet is offscreen
      */
     isOffscreen() {
-        if (this.position.x > this.game.el.width ||
+        if (this.position.x > 1024 ||
             this.position.x < 0 ||
-            this.position.y > this.game.el.height ||
+            this.position.y > 576 ||
             this.position.y < 0) {
             return true
         }

@@ -1,6 +1,8 @@
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
+import Weapon from "./weapon";
+import Bullet from "./bullet";
 
 export default class Boat extends Entity {
 
@@ -9,6 +11,13 @@ export default class Boat extends Entity {
     speed = 100;
 
     velocity: Vector;
+
+    weapon = new Weapon({
+        speed: 500,
+        damage: 3,
+        spread: 0.005,
+        firerate: 1,
+    })
 
     size = new Vector(64,32);
 
@@ -20,18 +29,26 @@ export default class Boat extends Entity {
     ]
 
     tick(delta) {
+
+        // Do collision before and after moving the boat
+        this.collide(delta);
+
         this.position.x += delta * this.speed * this.velocity.x;
         this.position.y += delta * this.speed * this.velocity.y;
-        this.collide();
+
+        this.collide(delta);
+
         this.bounceOffWall();
+
+        this.attemptShoot(delta);
 
         this.invade();
 
-        if (this.dead()) this.kill();
+        if (this.isDead()) this.kill();
     }
 
     // Checks collision between boats and bullets using magic
-    collide() {
+    collide(delta) {
         // Get sin and cosin of our angle off our velocity vector, and add minus on the end to make maths a bit easier
         const sin = -this.velocity.y;
         const cos = -this.velocity.x;
@@ -55,7 +72,7 @@ export default class Boat extends Entity {
             const Yx2 = this.position.x + (cos * this.size.x - sin * this.size.y) / 2; // Get the x value of the bottom point 
             const Yb2 = maxY - Ym2 * Yx2; // Calculate y when x is zero 
             
-            this.parent.parent.bullets.children.forEach(i => {
+            this.root.bullets.children.forEach(i => {
                 var Ym = 0.00000001; // Gradient of new line
                 var Yb = 0; // The 'b' value in y = mx + b
 
@@ -67,10 +84,11 @@ export default class Boat extends Entity {
                     Ym = Ym2;
                     Yb = Yb2;
                 }
-
-                if (!this.dead()) {
+            
+                if (!this.isDead()) {
+                    const maxX = this.position.x + i.speed * delta + 20;
                     // If the bullet is right of the line, we collided
-                    if (i.position.x > (i.position.y - Yb) / Ym) {
+                    if (i.position.x > (i.position.y - Yb) / Ym && i.position.x < maxX) {
                         this.health -= i.damage;
                         i.free()
                     }
@@ -90,9 +108,8 @@ export default class Boat extends Entity {
             const Yx2 = this.position.x - (-sin * this.size.x - cos * this.size.y) / 2; // Get the x value of the bottom point
             const Yb2 = maxY - Ym2 * Yx2; // Calculate y when x is zero 
             
-            this.parent.parent.bullets.children.forEach(i => {
+            this.root.bullets.children.forEach(i => {
                 var Ym = 0.00000001; // Gradient of new line
-                var Yx = 0; // Placeholder for finding Yb
                 var Yb = 0; // The 'b' value in y = mx + b
 
                 // If we are between the top and middle of the boat
@@ -104,10 +121,12 @@ export default class Boat extends Entity {
                     Ym = Ym2;
                     Yb = Yb2;
                 }
+            
 
-                if (!this.dead()) {
+                if (!this.isDead()) {
+                    const maxX = this.position.x + i.speed * delta + 20;
                     // If the bullet is right of the line, we collided
-                    if (i.position.x > (i.position.y - Yb) / Ym) {
+                    if (i.position.x > (i.position.y - Yb) / Ym && i.position.x < maxX) {
                         this.health -= i.damage;
                         i.free()
                     }
@@ -126,13 +145,41 @@ export default class Boat extends Entity {
     }
 
     invade() {
-        if (this.position.x < 20) {
+        if (this.position.x < 100) {
             this.game.score -= 10;
             this.free();
         }
     }
 
-    dead() {
+    attemptShoot(delta) {
+        this.weapon.timer += delta;
+        while (this.weapon.timer > this.weapon.firerate) {
+            this.weapon.timer -= this.weapon.firerate;
+
+            const angle = Math.PI + Math.atan2(this.position.y - this.root.player.position.y, this.position.x - this.root.player.position.x);
+
+            this.shoot(this.weapon.speed, this.weapon.damage, angle);
+        }
+    }
+
+    shoot(speed, damage, angle) {
+        const bullet = new Bullet({
+            speed: speed,
+            angle: angle,
+            size: new Vector(16,4),
+            rotation: angle,
+            damage: damage
+        });
+
+        bullet.position.x = this.position.x;
+        bullet.position.y = this.position.y;
+        bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
+
+        this.root.enemyBullets.children.push(bullet)
+ 
+    }
+
+    isDead() {
         if (this.health <= 0) {
             return true;
         }

@@ -4,11 +4,14 @@ import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
 import Bullet from "../stopboat/bullet";
 import Weapon from "./weapon";
+import Rect from "../../primitives/rect";
 
 // Makes it so you dont need 'Math.' before math functions
 const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
+
+    size = 8;
 
     // Position and speed of player
     position = new Vector(64,576/2);
@@ -22,9 +25,9 @@ export default class Player extends Entity {
     weapons = [
         new Weapon({
             speed: 3000,
-            damage: 1,
-            spread: 0.01,
-            firerate: 0.005,
+            damage: 10,
+            spread: 0.005,
+            firerate: 0.1,
             magsize: 30,
             reloadtime: 3
         })
@@ -34,7 +37,13 @@ export default class Player extends Entity {
         src: "/assets/stopboat/turret.png",
         size: new Vector(64, 128),
         position: new Vector(-32, -64),
-    })]
+        }),
+        new Rect({
+            size: new Vector(16, 16),
+            position: new Vector(-8, -8),
+            fill: '#ffffff'
+        })
+    ]
 
 
 
@@ -49,9 +58,13 @@ export default class Player extends Entity {
 
         this.incrementTimers(delta);
 
+        this.checkCollision();
+
         if (this.game.keys.KeyZ) {
             this.shoot();
         }
+
+
 
         super.tick(delta);
     }
@@ -93,6 +106,17 @@ export default class Player extends Entity {
         });
     }
 
+    checkCollision() {
+        this.root.enemyBullets.children.forEach(i => {
+            if (Math.abs(i.position.x - this.position.x) < this.size
+             && Math.abs(i.position.y - this.position.y) < this.size) {
+                 this.game.score -= i.damage;
+                 i.free()
+
+            }
+        })
+    }
+
     /**
      * Shoot bullets if we are able to 
      */
@@ -110,14 +134,16 @@ export default class Player extends Entity {
             
             var angle = this.weaponSpread()
 
-            var bullet = new Bullet({
+            const bullet = new Bullet({
                 speed: this.weapons[this.currentWeapon].speed,
                 angle: angle,
                 size: new Vector(16,4),
                 rotation: angle,
                 damage: this.weapons[this.currentWeapon].damage
             });
-            bullet.position = this.position;
+            bullet.position.x = this.position.x;
+            bullet.position.y = this.position.y;
+            bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
             this.parent.bullets.children.push(bullet)
         }
     }

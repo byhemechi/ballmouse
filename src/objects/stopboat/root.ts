@@ -12,9 +12,11 @@ export default class Root extends Entity {
 
     bullets = new Entity;
 
+    enemyBullets = new Entity;
+
     boats = new Entity;
 
-    children = [this.player, this.bullets, this.boats];
+    children = [this.player, this.bullets, this.enemyBullets, this.boats];
 
     boatSpawnTimer = 0;
     timeUntilNextBoat = 1;
@@ -34,7 +36,7 @@ export default class Root extends Entity {
     spawnBoat() {
         if (this.boatSpawnTimer > this.timeUntilNextBoat) {
             this.boatSpawnTimer -= this.timeUntilNextBoat;
-            this.timeUntilNextBoat = 0.2;
+            this.timeUntilNextBoat = 1 + Math.random() * 1;
             
             const boat = new Boat;
 
