@@ -15,11 +15,7 @@ export default class Player extends Entity {
     health = 100;
 
     // Size of the hitbox
-<<<<<<< HEAD
     size = 24;
-=======
-    size = 28;
->>>>>>> stopboat
     sizeSquared = this.size ** 2;
 
     // Position and speed of player
