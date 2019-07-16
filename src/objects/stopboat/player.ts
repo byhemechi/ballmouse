@@ -15,7 +15,7 @@ export default class Player extends Entity {
     health = 100;
 
     // Size of the hitbox
-    size = 20;
+    size = 24;
     sizeSquared = this.size ** 2;
 
     // Position and speed of player
@@ -107,7 +107,7 @@ export default class Player extends Entity {
 
             const nextX = i.position.x + i.direction.x * i.speed * delta;
             // Only check collision if the bullet will be behind us on this frame
-            if (this.position.x > nextX + this.size) {
+            if (this.position.x + this.size > nextX) {
 
                 const playerPreviousPosition = new Vector(this.position.x, this.position.y - this.keyboardMove() * this.speed * delta)
 

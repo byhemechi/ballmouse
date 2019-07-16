@@ -37,7 +37,7 @@ export default class Bullet extends Entity {
     }
     children = [new Sprite({
         src: "/assets/stopboat/bullet.png",
-        position: new Vector(-37 / 2, -5 / 2)
+        position: new Vector(-37, -5 / 2)
     })]
 
     tick(delta) {
