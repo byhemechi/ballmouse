@@ -11,8 +11,8 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
-    maxHealth = 100;
-    health = 100;
+    maxHealth = 300;
+    health = 300;
 
     // Size of the hitbox
     size = 24;
@@ -28,9 +28,9 @@ export default class Player extends Entity {
     weapons = [
         new Weapon({
             speed: 3000,
-            damage: 1,
-            spread: 0.1,
-            firerate: 0.01,
+            damage: 4,
+            spread: 0.01,
+            firerate: 0.05,
             magsize: 30,
             reloadtime: 3
         })
