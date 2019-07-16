@@ -5,8 +5,11 @@ import { Vector } from "../../types";
 import Sprite from "../../primitives/sprite";
 import Player from "./player"
 import Boat from "./boat";
+import UI from "./ui";
 
 export default class Root extends Entity {
+
+    ui = new UI;
 
     firstFrame = true;
 
@@ -18,7 +21,7 @@ export default class Root extends Entity {
 
     boats = new Entity;
 
-    children = [this.player, this.bullets, this.boats, this.enemyBullets];
+    children = [this.player, this.bullets, this.boats, this.enemyBullets, this.ui];
 
     boatSpawnTimer = 0;
     timeUntilNextBoat = 1;

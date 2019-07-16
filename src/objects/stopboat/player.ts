@@ -11,7 +11,10 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
-    sizeSquared = 8 ** 2;
+    health = 300;
+
+    // Size of the hitbox
+    sizeSquared = 16 ** 2;
 
     // Position and speed of player
     position = new Vector(64,576/2);
@@ -23,9 +26,9 @@ export default class Player extends Entity {
     weapons = [
         new Weapon({
             speed: 3000,
-            damage: 10,
-            spread: 0.005,
-            firerate: 0.1,
+            damage: 1,
+            spread: 0.1,
+            firerate: 0.01,
             magsize: 30,
             reloadtime: 3
         })
@@ -41,9 +44,8 @@ export default class Player extends Entity {
     tick(delta) {
 
         this.shootJustPressed = this.isShootJustPressed();
-        var moveY = this.keyboardMove();
 
-        this.position.y += moveY * this.speed * delta;
+        this.position.y += this.keyboardMove() * this.speed * delta;
 
         this.clampPosition();
 
@@ -100,21 +102,31 @@ export default class Player extends Entity {
      */
     checkCollision(delta) {
         this.root.enemyBullets.children.forEach(i => {
-            const m = i.direction.y / i.direction.x;
-
-            const numerator = (m * this.position.x - this.position.y + i.position.y - m * i.position.x) ** 2;
-            const denominator = m ** 2 + 1;
-
-            const distanceSquared = numerator / denominator;
 
             const nextX = i.position.x + i.direction.x * i.speed * delta;
+            // Only check collision if the bullet will be behind us on this frame
+            if (this.position.x > nextX) {
 
-            if (distanceSquared < this.sizeSquared && this.position.x > nextX) {
-                this.game.score -= i.damage;
-                i.free();
+                const playerPreviousPosition = new Vector(this.position.x, this.position.y - this.keyboardMove() * this.speed * delta)
+
+                const x1 = i.position.x - playerPreviousPosition.x;
+                const y1 = i.position.y - playerPreviousPosition.y;
+                const x2 = nextX - this.position.x;
+                const y2 = i.position.y + i.direction.y * i.speed * delta - this.position.y;
+                
+                const m = (y2 - y1) / (x2 - x1);
+
+                const numerator = (y1 - m * x1) ** 2;
+                const denominator = m ** 2 + 1;
+
+                const distanceSquared = numerator / denominator;
+
+
+                if (distanceSquared < this.sizeSquared) {
+                    this.game.score -= i.damage;
+                    i.free();
+                }
             }
-
-
         })
     }
 
