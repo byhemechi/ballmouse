@@ -10,7 +10,7 @@ export default class Shootup extends Game {
         super();
         this.el.width  = 1024;
         this.el.height = 576;
-        this.el.style.backgroundColor = "black";
+        this.el.style.backgroundColor = "#76bccf";
     }
     render() {
         const ctx = this.ctx;

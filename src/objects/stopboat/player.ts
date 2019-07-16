@@ -11,10 +11,12 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
-    health = 300;
+    maxHealth = 100;
+    health = 100;
 
     // Size of the hitbox
-    sizeSquared = 16 ** 2;
+    size = 20;
+    sizeSquared = this.size ** 2;
 
     // Position and speed of player
     position = new Vector(64,576/2);
@@ -105,7 +107,7 @@ export default class Player extends Entity {
 
             const nextX = i.position.x + i.direction.x * i.speed * delta;
             // Only check collision if the bullet will be behind us on this frame
-            if (this.position.x > nextX) {
+            if (this.position.x > nextX + this.size) {
 
                 const playerPreviousPosition = new Vector(this.position.x, this.position.y - this.keyboardMove() * this.speed * delta)
 
@@ -123,7 +125,7 @@ export default class Player extends Entity {
 
 
                 if (distanceSquared < this.sizeSquared) {
-                    this.game.score -= i.damage;
+                    this.health -= i.damage;
                     i.free();
                 }
             }
