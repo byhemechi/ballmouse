@@ -1,7 +1,7 @@
 {
   "scripts": {
     "docs": "rimraf docs/ts && typedoc --name ballmouse --module system --out docs/ts",
-    "dev": "webpack-dev-server",
+    "dev": "webpack-dev-server --host 0.0.0.0",
     "build": "NODE_ENV=production webpack",
     "clean": "rimraf dist"
   },
