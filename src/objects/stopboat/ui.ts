@@ -1,14 +1,31 @@
 import Entity from "../../primitives/entity";
 import Rect from "../../primitives/rect";
 import { Vector } from "../../types";
+import Label from "../../primitives/text";
+
+class WeaponBox extends Rect {
+    size = new Vector(72, 42);
+
+    fill = '#0000';
+
+    thickness = 3;
+    borderFill = '#ddd';
+    lineJoin = 'round';
+
+    children = [
+
+    ]
+    
+}
 
 export default class UI extends Entity {
 
     healthbarSize = 400;
 
-    healthbarAlpha = 1;
-    healthbarAplhaChangeRate = 4;
-    healthbarMinAlpha = 0.4;
+    alpha = 1;
+    aplhaChangeRate = 4;
+    minAlpha = 0.2;
+    maxY = 200;
 
     healthbarTimeBeforeDefill = 0.5;
     healthbarTimer = 0;
@@ -32,40 +49,101 @@ export default class UI extends Entity {
         position: new Vector(40, 40),
         fill: '#000000'
     });
+
+    healthbarOver = new Rect({
+        size: new Vector(this.healthbarSize + 6, 36),
+        position: new Vector(37, 37),
+        fill: '#0000',
+        thickness: 3,
+        borderFill: '#000000ff',
+        lineJoin: 'round'
+    })
+
+    weapons = new Entity({
+        children: [
+            new WeaponBox({
+                position: new Vector(44, 100)
+            }),
+            new WeaponBox({
+                position: new Vector(44 + 80, 100)
+            }),
+            new WeaponBox({
+                position: new Vector(44 + 160, 100)
+            }),
+            new WeaponBox({
+                position: new Vector(44 + 240, 100)
+            }),
+            new WeaponBox({
+                position: new Vector(44 + 320, 100)
+            }),
+        ]
+    })
     
-    children = [this.healthbarUnder, this.healthbarRed, this.healthbar]
+    children = [this.healthbarUnder, 
+                this.healthbarRed, 
+                this.healthbar,
+                this.healthbarOver,
+                this.weapons
+                ]
 
     tick(delta) {
         this.updateHealthbar(delta);
 
+        this.updateWeaponUI(delta);
+
         this.updateUIAlpha(delta);
+
+
+
+    }
+
+    private updateWeaponUI(delta: any) {
+        var count = 0;
+
+        this.root.player.weapons.forEach(i => {
+            this.weapons.children[count].value
+        });
     }
 
 
-    private updateUIAlpha(delta: any) {
-        if (this.root.player.position.y < 150 && this.healthbarAlpha > this.healthbarMinAlpha) {
-            this.healthbarAlpha -= delta * this.healthbarAplhaChangeRate;
-            if (this.healthbarAlpha < this.healthbarMinAlpha)
-                this.healthbarAlpha = this.healthbarMinAlpha;
+    /**
+     * Checks if the player is under the UI and lower the opacity if so
+     * @param delta 
+     */
+    private updateUIAlpha(delta: number) {
+        // Updates healthbar alpha
+        if (this.root.player.position.y < this.maxY && this.alpha > this.minAlpha) {
+            this.alpha -= delta * this.aplhaChangeRate;
+            if (this.alpha < this.minAlpha)
+                this.alpha = this.minAlpha;
             this.updateHealthbarAlpha();
         }
-        else if (this.root.player.position.y >= 150 && this.healthbarAlpha < 1) {
-            this.healthbarAlpha += delta * this.healthbarAplhaChangeRate;
-            if (this.healthbarAlpha > 1)
-                this.healthbarAlpha = 1;
+        else if (this.root.player.position.y >= this.maxY && this.alpha < 1) {
+            this.alpha += delta * this.aplhaChangeRate;
+            if (this.alpha > 1)
+                this.alpha = 1;
             this.updateHealthbarAlpha();
         }
     }
 
-    updateHealthbarAlpha() {
-        const alphaHex = Math.round(this.healthbarAlpha * 255).toString(16);
+    /**
+     * Updates the opacity of the healthbar
+     */
+    private updateHealthbarAlpha() {
+        const alphaHex = Math.round(this.alpha * 255).toString(16);
 
         [this.healthbarUnder, this.healthbar, this.healthbarRed].forEach(i => {
             i.fill = i.fill.substr(0, 7) + alphaHex;
         });
+
+        this.healthbarOver.borderFill = this.healthbarOver.borderFill.substr(0, 7) + alphaHex;
     }
 
-    private updateHealthbar(delta: any) {
+    /**
+     * Updates the healthbar value to that of player health
+     * @param delta 
+     */
+    private updateHealthbar(delta: number) {
         this.healthbar.size.x = Math.max(this.healthbarSize * this.root.player.health / this.root.player.maxHealth, 0);
         if (!this.healthbarCanDefill && this.healthbarRed.size.x > this.healthbar.size.x && !this.healthbarTimer) {
             this.healthbarTimer = this.healthbarTimeBeforeDefill;

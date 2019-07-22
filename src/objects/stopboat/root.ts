@@ -27,7 +27,9 @@ export default class Root extends Entity {
     timeUntilNextBoat = 1;
     
     tick(delta) {
-        if (this.firstFrame) this.firstFrame = false;
+        if (this.firstFrame) {
+            this.firstFrame = false;
+        }
         else {
             
         super.tick(delta);

@@ -2,6 +2,7 @@
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
+import { getSound, playSound } from "../../sound";
 import Bullet from "../stopboat/bullet";
 import Weapon from "./weapon";
 import Rect from "../../primitives/rect";
@@ -11,58 +12,121 @@ const {sin, cos, tan, PI, random, abs, SQRT2, min, max, atan2} = Math;
 
 export default class Player extends Entity {
 
+    constructor(...args) {
+        super(...args);
+        getSound('hurt', '/assets/stopboat/playerHurt.wav');
+    }
+
     maxHealth = 300;
     health = 300;
 
-    // Size of the hitbox
+    // Size of the hitbox's radius and its square value
     size = 24;
     sizeSquared = this.size ** 2;
 
     // Position and speed of player
     position = new Vector(64,576/2);
     speed = 420;
+
     shootJustPressed: boolean = false;
+    leftJustPressed: boolean = false;
+    rightJustPressed: boolean = false;
 
     currentWeapon = 0;
     // Array of weapons we currently possess
     weapons = [
         new Weapon({
             speed: 3000,
-            damage: 4,
+            damage: 20,
             spread: 0.01,
-            firerate: 0.05,
-            magsize: 30,
-            reloadtime: 3
+            fireRate: 0.25,
+            magazineSize: 30,
+            reloadTime: 2.75,
+            shootSound: '/assets/stopboat/shoot1.wav',
+            reloadSound: '/assets/stopboat/reload1.wav'
+        }),
+        new Weapon({
+            speed: 3000,
+            damage: 4,
+            spread: 0.1,
+            fireRate: 0.025,
+            magazineSize: 60,
+            reloadTime: 2.75,
+            shootSound: '/assets/stopboat/shoot1.wav',
+            reloadSound: '/assets/stopboat/reload1.wav'
         })
     ]
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
-        size: new Vector(64, 58),
-        position: new Vector(-32, -32),
+        size: new Vector(60, 64),
+        position: new Vector(-30, -32),
         })
     ]
 
     tick(delta) {
 
         this.shootJustPressed = this.isShootJustPressed();
+        this.leftJustPressed = this.isLeftJustPressed();
+        this.rightJustPressed = this.isRightJustPressed();
+
 
         this.position.y += this.keyboardMove() * this.speed * delta;
 
         this.clampPosition();
 
+        this.switchWeapons();
+
         this.incrementTimers(delta);
 
         this.checkCollision(delta);
 
-        if (this.game.keys.KeyZ) {
+        this.reloadCurrentWeapon(delta);
+
+        if (this.game.keys.KeyZ && !this.weapons[this.currentWeapon].reloadTimer) {
             this.shoot();
         }
 
         super.tick(delta);
     }
 
+    private reloadCurrentWeapon(delta: any) {
+        var weaponNumber = 0;
 
+        this.weapons.forEach(i => {
+            // If the weapon is empty, we pressed reload, or it is already reloading, and our magazine is not full
+            if ((i.magazine == 0 || this.game.keys.KeyR || i.reloadTimer) && i.magazine != i.magazineSize) {
+                if (weaponNumber == this.currentWeapon) { // We can only reload the current weapon
+                    if (i.reloadTimer == 0) { // If we just started reloading
+                        i.playreload();
+                    }
+
+                    i.reloadTimer += delta; // Increment the reload timer
+
+                    if (i.reloadTimer >= i.reloadTime) { // If the timer is up, reload the weapon and set timer to 0
+                        i.reloadTimer = 0;
+                        i.magazine = i.magazineSize;
+                        i.timer = 0;
+                        i.canFire = true;
+                        i.queue = 0;
+                    }
+                } else { // Weapons that are not our current weapon cannot be reloaded
+                    i.reloadTimer = 0;
+                }
+            }
+            weaponNumber++;
+        });
+    }
+
+    switchWeapons() {
+        if (this.leftJustPressed) {
+            this.currentWeapon -= 1;
+        }
+        if (this.rightJustPressed) {
+            this.currentWeapon += 1;
+        }
+        this.currentWeapon = (this.weapons.length + this.currentWeapon) % this.weapons.length;
+    }
 
     /**
      * Determine movement direction
@@ -89,13 +153,24 @@ export default class Player extends Entity {
      * @param delta 
      */
     incrementTimers(delta) {
+        var weaponNumber = 0;
+
         this.weapons.forEach(i => {
             i.timer += delta
-            while (i.timer >= i.firerate) {
-                i.timer -= i.firerate;
-                i.queue += 1;
-                i.canFire = true;
+            if (weaponNumber == this.currentWeapon) {
+                while (i.timer >= i.fireRate) {
+                    i.timer -= i.fireRate;
+                    i.canFire = true;
+                    i.queue += 1;
+                }
+            } else {
+                if (i.timer >= i.fireRate) {
+                    i.timer = 0;
+                    i.canFire = true;
+                    i.queue = 0;
+                }
             }
+            weaponNumber++;
         });
     }
     /**
@@ -105,6 +180,15 @@ export default class Player extends Entity {
     checkCollision(delta) {
         this.root.enemyBullets.children.forEach(i => {
 
+            const nextX = i.position.x + i.direction.x * i.speed * delta;
+            const nextY = i.position.y + i.direction.y * i.speed * delta;
+
+            if ((nextX - this.position.x) ** 2 + (nextY - this.position.y) ** 2 < this.sizeSquared) {
+                this.hurt(i.damage);
+                i.free();
+            }
+
+            /* // Broken; try to fix later if possible
             const nextX = i.position.x + i.direction.x * i.speed * delta;
             // Only check collision if the bullet will be behind us on this frame
             if (this.position.x + this.size > nextX) {
@@ -129,8 +213,19 @@ export default class Player extends Entity {
                     i.free();
                 }
             }
+            */
         })
     }
+    
+    /**
+     * Logic for when we get hurt
+     * @param damage How much damage we took
+     */
+    hurt(damage: number) {
+        this.health -= damage;
+        playSound('hurt')
+    }
+
 
     /**
      * Shoot bullets if we are able to 
@@ -144,10 +239,13 @@ export default class Player extends Entity {
             this.weapons[this.currentWeapon].queue = 1;
         }
         // If we can fire, create a bullet
-        while (this.weapons[this.currentWeapon].queue) {
-            this.weapons[this.currentWeapon].queue -= 1;
+        while (this.weapons[this.currentWeapon].queue && this.weapons[this.currentWeapon].magazine) {
+            this.weapons[this.currentWeapon].queue --;
+            this.weapons[this.currentWeapon].magazine --;
             
-            var angle = this.weaponSpread()
+            this.weapons[this.currentWeapon].playshoot();
+
+            var angle = this.weaponSpread();
 
             const bullet = new Bullet({
                 speed: this.weapons[this.currentWeapon].speed,
@@ -181,11 +279,36 @@ export default class Player extends Entity {
         var didShoot
         if (this.game.keys.KeyZ && !this.prevShoot) {
             didShoot = true;
-        }
-        else {
+        } else {
             didShoot = false;
         }
         this.prevShoot = this.game.keys.KeyZ;
         return didShoot;
+    }
+
+    prevLeft = false;
+
+    isLeftJustPressed() {
+        var didLeft;
+        if (this.game.keys.ArrowLeft && !this.prevLeft) {
+            didLeft = true;
+        } else {
+            didLeft = false;
+        }
+        this.prevLeft = this.game.keys.ArrowLeft;
+        return didLeft;
+    }
+
+    prevRight = false;
+
+    isRightJustPressed() {
+        var didRight;
+        if (this.game.keys.ArrowRight && !this.prevRight) {
+            didRight = true;
+        } else {
+            didRight = false;
+        }
+        this.prevRight = this.game.keys.ArrowRight;
+        return didRight;
     }
 }

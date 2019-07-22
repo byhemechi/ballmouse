@@ -16,7 +16,8 @@ export default class Boat extends Entity {
         speed: 500,
         damage: 10,
         spread: 0.005,
-        firerate: .8,
+        fireRate: 1,
+        shootSound: '/assets/stopboat/shoot1.wav'
     })
 
     size = new Vector(64,32);
@@ -165,8 +166,9 @@ export default class Boat extends Entity {
      */
     attemptShoot(delta) {
         this.weapon.timer += delta;
-        while (this.weapon.timer > this.weapon.firerate) {
-            this.weapon.timer -= this.weapon.firerate;
+        
+        while (this.weapon.timer > this.weapon.fireRate) {
+            this.weapon.timer -= this.weapon.fireRate;
 
             const angle = Math.PI + this.squareRandom() * this.weapon.spread
              + Math.atan2(this.position.y - this.root.player.position.y,
@@ -197,6 +199,9 @@ export default class Boat extends Entity {
      * @param angle The angle the bullet travels at
      */
     shoot(speed, damage, angle) {
+
+        this.weapon.playshoot();
+
         const bullet = new Bullet({
             speed: speed,
             angle: angle,

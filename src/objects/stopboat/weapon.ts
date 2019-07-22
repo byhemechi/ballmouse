@@ -1,4 +1,4 @@
-import { Vector } from "../../types"
+import { getSound, playSound } from "../../sound";
 
 interface WeaponOptions {
     /** How much damage the bullets do */
@@ -12,19 +12,25 @@ interface WeaponOptions {
     /** How many bullets left to fire */
     queue: number;
     /** Time between each bullet in seconds */
-    firerate: number;
+    fireRate: number;
     /** Timer for how long it has been since we shot */
     timer: number;
     /** Size of magazine */
-    magsize: number;
+    magazineSize: number;
+    /** What type of ammo the weapon uses */
+    ammoType: number
     /** Time it takes to reload in seconds */
-    reloadtime: number;
+    reloadTime: number;
     /** How many bullets per shot, default to 1 */
-    burstcount: number;
+    burstCount: number;
     /** Time between each burst shot in seconds */
-    burstfirerate: number;
+    burstFireRate: number;
     /** Timer for how long it has been since last bullet fired */
-    bursttimer: number;
+    burstTimer: number;
+    /** Path to shoot sound */
+    shootSound: string;
+    /** Path to reload sound */
+    reloadSound: string;
 }
 
 export default class Weapon {
@@ -33,15 +39,32 @@ export default class Weapon {
     spread: number;
     canFire: boolean = true;
     queue: number = 0;
-    firerate: number;
+    fireRate: number;
     timer: number = 0;
-    magsize: number;
-    reloadtime: number;
-    burstcount: number = 1;
-    burstfirerate: number = 0;
-    bursttimer: number = 0;
+    magazine: number;
+    magazineSize: number;
+    ammoType: number = 0;
+    reloadTime: number;
+    reloadTimer: number = 0;
+    burstCount: number = 1;
+    burstFireRate: number = 0;
+    burstTimer: number = 0;
+    shootSound: string;
+    reloadSound: string;
+
 
     constructor(options: Object = {}) {
         Object.assign(this, options);
+        this.magazine = this.magazineSize;
+        getSound("shoot", this.shootSound);
+        getSound("reload", this.reloadSound);
+    }
+
+    playshoot() {
+        playSound('shoot')
+    }
+    
+    playreload() {
+        playSound('reload')
     }
 }
