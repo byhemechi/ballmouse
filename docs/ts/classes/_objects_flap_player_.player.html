@@ -103,14 +103,14 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_objects_flap_player_.player.html#children" class="tsd-kind-icon">children</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#coptergravity" class="tsd-kind-icon">copter<wbr>Gravity</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#copterspeed" class="tsd-kind-icon">copter<wbr>Speed</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#coptersprites" class="tsd-kind-icon">copter<wbr>Sprites</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#flapsound" class="tsd-kind-icon">flap<wbr>Sound</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#flapsprites" class="tsd-kind-icon">flap<wbr>Sprites</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_flap_player_.player.html#game" class="tsd-kind-icon">game</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#gravity" class="tsd-kind-icon">gravity</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#hoverboardsprites" class="tsd-kind-icon">hoverboard<wbr>Sprites</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#jumpjustpressed" class="tsd-kind-icon">jump<wbr>Just<wbr>Pressed</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_flap_player_.player.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_flap_player_.player.html#parent" class="tsd-kind-icon">parent</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_flap_player_.player.html#player" class="tsd-kind-icon">player</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_flap_player_.player.html#position" class="tsd-kind-icon">position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_flap_player_.player.html#root" class="tsd-kind-icon">root</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_flap_player_.player.html#rotation" class="tsd-kind-icon">rotation</a></li>
@@ -184,7 +184,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="children" class="tsd-anchor"></a>
 					<h3>children</h3>
-					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[this.player, this.hoverboardSprites]</span></div>
+					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[this.flapSprites, this.copterSprites]</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#children">children</a></p>
 						<ul>
@@ -213,12 +213,32 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="coptersprites" class="tsd-anchor"></a>
+					<h3>copter<wbr>Sprites</h3>
+					<div class="tsd-signature tsd-kind-icon">copter<wbr>Sprites<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol"> =&nbsp;new Sprite({src: &#x27;/assets/hoverbored/coolguy.png&#x27;,size: new Vector(32, 34),position: new Vector(-16, -23),visible: false,region: {begin: new Vector(0, 0),size: new Vector(64, 68)},children: [new Entity({position: new Vector(16, 17),children: [new Sprite({src: &quot;/assets/hoverbored/hand.png&quot;,position: new Vector(22, -4),size: new Vector(36 * 0.75, 18 * 0.75),}),new Sprite({src: &quot;/assets/hoverbored/hand2.png&quot;,position: new Vector(-49, -4),size: new Vector(27, 13),}),new Sprite({src: &quot;/assets/hoverbored/hoverboard.png&quot;,position: new Vector(-94/4, 24),size: new Vector(94/2, 32/2),})]})]})</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in objects/flap/player.ts:35</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="flapsound" class="tsd-anchor"></a>
 					<h3>flap<wbr>Sound</h3>
 					<div class="tsd-signature tsd-kind-icon">flap<wbr>Sound<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ArrayBuffer</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in objects/flap/player.ts:21</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="flapsprites" class="tsd-anchor"></a>
+					<h3>flap<wbr>Sprites</h3>
+					<div class="tsd-signature tsd-kind-icon">flap<wbr>Sprites<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol"> =&nbsp;new Sprite({src: &quot;/assets/flap/flap.png&quot;,size: new Vector(64, 64),position: new Vector(-32, -32),region: {begin: new Vector,size: new Vector(128, 128)}})</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in objects/flap/player.ts:25</li>
 						</ul>
 					</aside>
 				</section>
@@ -240,16 +260,6 @@
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in objects/flap/player.ts:13</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="hoverboardsprites" class="tsd-anchor"></a>
-					<h3>hoverboard<wbr>Sprites</h3>
-					<div class="tsd-signature tsd-kind-icon">hoverboard<wbr>Sprites<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol"> =&nbsp;new Sprite({src: &#x27;/assets/hoverbored/coolguy.png&#x27;,size: new Vector(32, 34),position: new Vector(-16, -23),visible: false,region: {begin: new Vector(0, 0),size: new Vector(64, 68)},children: [new Entity({position: new Vector(16, 17),children: [new Sprite({src: &quot;/assets/hoverbored/hand.png&quot;,position: new Vector(22, -4),size: new Vector(36 * 0.75, 18 * 0.75),}),new Sprite({src: &quot;/assets/hoverbored/hand2.png&quot;,position: new Vector(-49, -4),size: new Vector(27, 13),}),new Sprite({src: &quot;/assets/hoverbored/hoverboard.png&quot;,position: new Vector(-94/4, 24),size: new Vector(94/2, 32/2),})]})]})</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in objects/flap/player.ts:35</li>
 						</ul>
 					</aside>
 				</section>
@@ -282,16 +292,6 @@
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#parent">parent</a></p>
 						<ul>
 							<li>Defined in primitives/entity.ts:16</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="player" class="tsd-anchor"></a>
-					<h3>player</h3>
-					<div class="tsd-signature tsd-kind-icon">player<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol"> =&nbsp;new Sprite({src: &quot;/assets/flap/flap.png&quot;,size: new Vector(64, 64),position: new Vector(-32, -32),region: {begin: new Vector,size: new Vector(128, 128)}})</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in objects/flap/player.ts:25</li>
 						</ul>
 					</aside>
 				</section>
@@ -413,7 +413,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:126</li>
+									<li>Defined in objects/flap/player.ts:129</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -443,7 +443,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:150</li>
+									<li>Defined in objects/flap/player.ts:153</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -473,7 +473,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:101</li>
+									<li>Defined in objects/flap/player.ts:104</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -521,7 +521,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:184</li>
+									<li>Defined in objects/flap/player.ts:187</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -577,7 +577,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:240</li>
+									<li>Defined in objects/flap/player.ts:243</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -599,7 +599,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:198</li>
+									<li>Defined in objects/flap/player.ts:201</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -658,7 +658,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/flap/player.ts:167</li>
+									<li>Defined in objects/flap/player.ts:170</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -780,16 +780,19 @@
 								<a href="_objects_flap_player_.player.html#copterspeed" class="tsd-kind-icon">copter<wbr>Speed</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_objects_flap_player_.player.html#coptersprites" class="tsd-kind-icon">copter<wbr>Sprites</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_flap_player_.player.html#flapsound" class="tsd-kind-icon">flap<wbr>Sound</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_objects_flap_player_.player.html#flapsprites" class="tsd-kind-icon">flap<wbr>Sprites</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_flap_player_.player.html#game" class="tsd-kind-icon">game</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_flap_player_.player.html#gravity" class="tsd-kind-icon">gravity</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_objects_flap_player_.player.html#hoverboardsprites" class="tsd-kind-icon">hoverboard<wbr>Sprites</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_flap_player_.player.html#jumpjustpressed" class="tsd-kind-icon">jump<wbr>Just<wbr>Pressed</a>
@@ -799,9 +802,6 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_flap_player_.player.html#parent" class="tsd-kind-icon">parent</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_objects_flap_player_.player.html#player" class="tsd-kind-icon">player</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_flap_player_.player.html#position" class="tsd-kind-icon">position</a>
