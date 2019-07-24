@@ -3,33 +3,19 @@
 Main game loop
 ```pascal
 BEGIN MAIN
-  SET timer TO 0
-  SET score TO 0
   WHILE TRUE
     INCREASE timer BY 1
     SET spaceJustPressed TO S͟P͟A͟C͟E͟J͟U͟S͟T͟P͟R͟E͟S͟S͟E͟D͟
     IF timer > cloudSpawnTime
-      A͟D͟D͟C͟L͟O͟U͟D͟S͟
+      A͟D͟D͟C͟L͟O͟U͟D͟
     END IF
     M͟O͟V͟E͟C͟L͟O͟U͟D͟S͟
     
-    IF (GameStarted)
+    CASEWHERE: GameStarted
       M͟O͟V͟E͟P͟L͟A͟Y͟E͟R͟
       M͟O͟V͟E͟P͟I͟P͟E͟S͟
       
-      FOR EACH pipe IN pipes
-        IF O͟V͟E͟R͟L͟A͟P͟S͟(pipe, player)
-          E͟N͟D͟G͟A͟M͟E͟
-          SET GameStarted TO False
-        END IF
-        
-        IF pipe NOT passed
-          IF playerPositionX > pipePositionX
-            INCREASE score BY 1
-            SET passed IN pipe TO True
-          END IF
-        END IF
-      END FOR
+      C͟O͟L͟L͟I͟D͟E͟P͟L͟A͟Y͟E͟R͟A͟N͟D͟P͟I͟P͟E͟S͟
       
       IF timer > pipeSpawnTime
         C͟R͟E͟A͟T͟E͟P͟I͟P͟E͟
@@ -38,13 +24,29 @@ BEGIN MAIN
       IF timer > stateChangeTime
         C͟H͟A͟N͟G͟E͟G͟A͟M͟E͟S͟T͟A͟T͟E͟
       END IF
-    END IF
+    OTHERWISE:
+      IF spaceJustPressed
+        R͟E͟S͟E͟T͟
+      END IF
+    END CASE
   END WHILE
 END MAIN
 ```
+## Collide Player
+```pascal
+BEGIN COLLIDEPLAYERANDPIPES
+  FOR EACH pipe IN pipes
+    IF O͟V͟E͟R͟L͟A͟P͟S͟(pipe, player)
+      E͟N͟D͟G͟A͟M͟E͟
+      SET GameStarted TO False
+      BREAK
+    END IF
+  END FOR
+END COLLIDEPLAYERANDPIPES
+```
 ## Move Player, Move Pipes
 Refer to pseudocode in respective folders
-## Kill Player
+## End Game
 ```pascal
 BEGIN ENDGAME
   SET GameStarted TO False
@@ -64,4 +66,30 @@ BEGIN OVERLAPS(a, b)
     RETURN TRUE
   END IF
 END OVERLAPS
+```
+## Reset
+```pascal
+BEGIN RESET
+  SET timer TO 0
+  SET score TO 0
+  
+  R͟E͟S͟E͟T͟P͟L͟A͟Y͟E͟R͟P͟O͟S͟I͟T͟I͟O͟N͟
+  
+  FOR EACH pipe IN pipes
+    DELETE pipe
+  END FOR
+  
+END RESET
+```
+## Space Just Pressed
+```pascal
+BEGIN SPACEJUSTPRESSED
+  CASEWHERE: S͟P͟A͟C͟E͟P͟R͟E͟S͟S͟E͟D͟ AND NOT prevSpacePressed
+    RETURN TRUE
+  OTHERWISE:
+    RETURN FALSE
+  END CASE
+  
+  SET prevSpacePressed TO S͟P͟A͟C͟E͟P͟R͟E͟S͟S͟E͟D͟
+END SPACEJUSTPRESSED
 ```

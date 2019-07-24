@@ -22,7 +22,7 @@ export default class Player extends Entity {
 
     jumpJustPressed: boolean = false;
 
-    player = new Sprite({
+    flapSprites = new Sprite({
         src: "/assets/flap/flap.png",
         size: new Vector(64, 64),
         position: new Vector(-32, -32),
@@ -32,7 +32,7 @@ export default class Player extends Entity {
         }
     });
 
-    hoverboardSprites = new Sprite({
+    copterSprites = new Sprite({
         src: '/assets/hoverbored/coolguy.png',
         size: new Vector(32, 34),
         position: new Vector(-16, -23),
@@ -63,7 +63,7 @@ export default class Player extends Entity {
         })]
     })
 
-    children = [this.player, this.hoverboardSprites]
+    children = [this.flapSprites, this.copterSprites]
 
     size = new Vector(0, 0); // Hitbox size
 
@@ -82,6 +82,9 @@ export default class Player extends Entity {
     // Called every frame
     tick(delta) {
 
+        this.jumpJustPressed = this.parent.jumpJustPressed;
+
+
         if (this.alive && this.parent.started) {
             // Do proper gamemode logic
             if (this.state == 0) this.flapMode(delta);
@@ -99,9 +102,10 @@ export default class Player extends Entity {
      * @param {number} delta 
      */
     flapMode(delta) {
-        this.player.visible = true;
-        this.hoverboardSprites.visible = false;
+        this.flapSprites.visible = true; // Show normal sprites
+        this.copterSprites.visible = false; // Hide coptermode sprites
 
+        // We add half gravity before and after movement to remove framerate dependance
         this.velocity += 0.5 * this.gravity * delta;
 
         if (this.jumpJustPressed) {
@@ -113,10 +117,9 @@ export default class Player extends Entity {
 
         this.velocity += 0.5 * this.gravity * delta;
 
-        // Set the correct frame
-        if (this.velocity < 0) this.player.region.begin.x = 128
-        else this.player.region.begin.x = 0
-
+        // Change player sprite to normal/flapping
+        if (this.velocity < 0) this.flapSprites.region.begin.x = 128
+        else this.flapSprites.region.begin.x = 0
     }
 
     /**
@@ -124,20 +127,20 @@ export default class Player extends Entity {
      * @param {number} delta 
      */
     copterMode(delta) {
-        this.player.visible = false;
-        this.hoverboardSprites.visible = true;
+        this.flapSprites.visible = false; // Hide
+        this.copterSprites.visible = true;
 
         this.updateCopterVelocity(delta);
         this.position.y += this.velocity * delta;
         this.updateCopterVelocity(delta);
 
-        this.hoverboardSprites.children[0].children[2].position.y += 
-            ((this.game.keys.Space ? 18 : 24) - this.hoverboardSprites.children[0].children[2].position.y) / 3;
+        this.copterSprites.children[0].children[2].position.y += 
+            ((this.game.keys.Space ? 18 : 24) - this.copterSprites.children[0].children[2].position.y) / 3;
 
-        this.hoverboardSprites.children[0].rotation = 0.4 * this.velocity / 600;
+        this.copterSprites.children[0].rotation = 0.4 * this.velocity / 600;
 
         [0, 1].forEach((i) => {
-            const hand = this.hoverboardSprites.children[0].children[i];
+            const hand = this.copterSprites.children[0].children[i];
             hand.rotation = this.velocity * 0.001 * (i == 0 ? -1 : 1);
             hand.position.y = this.velocity * -0.02
         })
@@ -187,9 +190,9 @@ export default class Player extends Entity {
             playSound("death");
             this.velocity = -600;
             this.velocityX = speed;
-            this.hoverboardSprites.visible = false;
-            this.player.visible = true;
-            this.player.region.begin.x = 256;
+            this.copterSprites  .visible = false;
+            this.flapSprites.visible = true;
+            this.flapSprites.region.begin.x = 256;
             this.spawnCorpse();
 
         }

@@ -17,15 +17,15 @@ END PLAYER
 Flap mode method
 ```pascal
 BEGIN FLAPMODE
-  INCREASE flapGravity BY velocity
+  INCREASE velocity by flapGravity
   IF spaceJustPressed
     SET velocity TO jumpForce
   END IF
   
   CASEWHERE velocity > 0
-    SET sprite TO 1
+    SET sprite TO 'flapping'
   OTHERWISE
-    SET sprite TO 0
+    SET sprite TO 'normal'
   END CASE
 END FLAPMODE
 ```
@@ -40,17 +40,4 @@ BEGIN COPTERMODE
   
   SET spriteRotation TO velocity
 END COPTERMODE
-```
-## Space Just Pressed
-Space Pressed function/method, run once per cycle or else it will break
-```pascal
-BEGIN SPACEJUSTPRESSED
-  CASEWHERE S͟P͟A͟C͟E͟P͟R͟E͟S͟S͟E͟D͟ AND NOT prevSpacePressed
-    RETURN TRUE
-  OTHERWISE
-    RETURN FALSE
-  END CASE
-  
-  SET prevSpacePressed TO S͟P͟A͟C͟E͟P͟R͟E͟S͟S͟E͟D͟
-END SPACEJUSTPRESSED
 ```

@@ -23,10 +23,7 @@ export default class Root extends Entity {
     boatSpawnTimer = 0;
     timeUntilNextBoat = 1;
     
-    tick(delta) {
-        if (this.firstFrame) this.firstFrame = false;
-        else {
-            
+    tick(delta) {            
         super.tick(delta);
 
         // Bullets offscreen are cleared after collision is done
@@ -38,8 +35,7 @@ export default class Root extends Entity {
         });
 
         this.boatSpawnTimer += delta;
-        this.spawnBoats()
-        }
+        this.spawnBoats();
     }
 
     /**
