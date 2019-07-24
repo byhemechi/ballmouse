@@ -10,21 +10,27 @@ light go toward, blue shift;
 $$
 f' = f\frac{v_{wave} \pm v_{observer}}{v_{wave}\pm v_{source}}
 $$
+
 $$
 \text{Sound} = 340ms^{-1}
 $$
+
 $$
 \text{Light} = 3\times10^8ms^{-1}
 $$
+
 #### Examples
 1)
+
 $$
 \begin{aligned}
 f' &= 650 \frac{320ms^{-1}}{320ms^{-1}- 20ms^{-1}} \\
 f' &= 693.\overline{3}
 \end{aligned}
 $$
+
 2a)
+
 $$
 \begin{aligned}
 f' &= 400 \frac{340ms^{-1} + 80kmh^{-1}}{340ms^{-1} + 100kmh^{-1}} \\

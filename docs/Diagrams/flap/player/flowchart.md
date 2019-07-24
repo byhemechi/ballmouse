@@ -1,4 +1,4 @@
-# Main
+# Flowchart
 ``` 
 mermaid graph TD
 A(START MAIN) --> B[Player Movement]

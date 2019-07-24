@@ -1,4 +1,4 @@
----
+Move rightwards at a constant velocity and occasionally jump to dodge obstacles such as spikes and blocks: The Game1---
 author: Joon Suh
 ---
 # Day 2: Collision
