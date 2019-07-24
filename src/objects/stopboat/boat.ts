@@ -16,7 +16,7 @@ export default class Boat extends Entity {
         speed: 500,
         damage: 10,
         spread: 0.005,
-        fireRate: 1,
+        fireRate: 3,
         shootSound: '/assets/stopboat/shoot1.wav'
     })
 

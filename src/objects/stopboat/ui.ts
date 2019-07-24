@@ -10,11 +10,7 @@ class WeaponBox extends Rect {
 
     thickness = 3;
     borderFill = '#ddd';
-    lineJoin = 'round';
-
-    children = [
-
-    ]
+    lineJoin = 'round'
     
 }
 
@@ -77,13 +73,36 @@ export default class UI extends Entity {
                 position: new Vector(44 + 320, 100)
             }),
         ]
-    })
+    });
+
+    currentWeaponText = new Label({
+        font: '24px sans-serif',
+        value: '|',
+        align: 'center',
+        position: new Vector(0, 150),
+
+        children: [
+            new Label({
+                font: '24px sans-serif',
+                value: '0',
+                align: 'right',
+                position: new Vector(-6, 0)
+            }),
+            new Label({
+                font: '24px sans-serif',
+                value: '0',
+                align: 'left',
+                position: new Vector(6, 0)
+            }),
+        ]
+    });
     
     children = [this.healthbarUnder, 
                 this.healthbarRed, 
                 this.healthbar,
                 this.healthbarOver,
-                this.weapons
+                this.weapons,
+                this.currentWeaponText
                 ]
 
     tick(delta) {
@@ -98,11 +117,16 @@ export default class UI extends Entity {
     }
 
     private updateWeaponUI(delta: any) {
-        var count = 0;
+        // Set aliase to keep code shortish
+        let player = this.root.player;
+        let pw = player.currentWeapon;
+        // Set the left text to how much ammo is in the weapon clip
+        this.currentWeaponText.children[0].value = player.weapons[pw].magazine;
+        // Set the right text to how much ammo of that type we have left
+        this.currentWeaponText.children[1].value = player.ammo[player.weapons[pw].ammoType]
+        // Set the offset of the label based on player weapon
+        this.currentWeaponText.position.x = 80 + pw * 80;
 
-        this.root.player.weapons.forEach(i => {
-            this.weapons.children[count].value
-        });
     }
 
 

@@ -40,6 +40,7 @@ export default class Player extends Entity {
             damage: 20,
             spread: 0.01,
             fireRate: 0.25,
+            ammoType: 0,
             magazineSize: 30,
             reloadTime: 2.75,
             shootSound: '/assets/stopboat/shoot1.wav',
@@ -50,12 +51,15 @@ export default class Player extends Entity {
             damage: 4,
             spread: 0.1,
             fireRate: 0.025,
+            ammoType: 1,
             magazineSize: 60,
             reloadTime: 2.75,
             shootSound: '/assets/stopboat/shoot1.wav',
             reloadSound: '/assets/stopboat/reload1.wav'
         })
-    ]
+    ];
+
+    ammo = [600, 1800, 0, 0, 0]
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
@@ -90,12 +94,18 @@ export default class Player extends Entity {
         super.tick(delta);
     }
 
+
+    /**
+     * Checks if we should reload our current weapon and does so if we should
+     * @param delta 
+     */
     private reloadCurrentWeapon(delta: any) {
         var weaponNumber = 0;
 
         this.weapons.forEach(i => {
-            // If the weapon is empty, we pressed reload, or it is already reloading, and our magazine is not full
-            if ((i.magazine == 0 || this.game.keys.KeyR || i.reloadTimer) && i.magazine != i.magazineSize) {
+            // If the weapon is empty, we pressed reload, or it is already reloading, and our magazine is not full, and we have that ammotype left
+            if ((i.magazine == 0 || this.game.keys.KeyR || i.reloadTimer)
+              && i.magazine != i.magazineSize && this.ammo[i.ammoType]) {
                 if (weaponNumber == this.currentWeapon) { // We can only reload the current weapon
                     if (i.reloadTimer == 0) { // If we just started reloading
                         i.playreload();
@@ -105,7 +115,9 @@ export default class Player extends Entity {
 
                     if (i.reloadTimer >= i.reloadTime) { // If the timer is up, reload the weapon and set timer to 0
                         i.reloadTimer = 0;
-                        i.magazine = i.magazineSize;
+                        const reloadAmount = Math.min(i.magazineSize, this.ammo[i.ammoType])
+                        i.magazine = reloadAmount;
+                        this.ammo[i.ammoType] -= reloadAmount;
                         i.timer = 0;
                         i.canFire = true;
                         i.queue = 0;
@@ -180,18 +192,23 @@ export default class Player extends Entity {
     checkCollision(delta) {
         this.root.enemyBullets.children.forEach(i => {
 
-            const nextX = i.position.x + i.direction.x * i.speed * delta;
+            //const nextX = i.position.x + i.direction.x * i.speed * delta;
+            /*
             const nextY = i.position.y + i.direction.y * i.speed * delta;
 
             if ((nextX - this.position.x) ** 2 + (nextY - this.position.y) ** 2 < this.sizeSquared) {
                 this.hurt(i.damage);
                 i.free();
             }
+            */
 
-            /* // Broken; try to fix later if possible
+            // Find the position the bullet will be next
             const nextX = i.position.x + i.direction.x * i.speed * delta;
+
             // Only check collision if the bullet will be behind us on this frame
-            if (this.position.x + this.size > nextX) {
+            if (this.position.x > nextX + this.size * i.direction.x) {
+
+                // Magic collision detection using distance of a point from a line
 
                 const playerPreviousPosition = new Vector(this.position.x, this.position.y - this.keyboardMove() * this.speed * delta)
 
@@ -207,16 +224,15 @@ export default class Player extends Entity {
 
                 const distanceSquared = numerator / denominator;
 
-
                 if (distanceSquared < this.sizeSquared) {
-                    this.health -= i.damage;
-                    i.free();
+                    this.hurt(i.damage);
+                    i.free()
                 }
             }
-            */
+            
         })
     }
-    
+
     /**
      * Logic for when we get hurt
      * @param damage How much damage we took
