@@ -15,22 +15,22 @@ interface WeaponOptions {
     fireRate: number;
     /** Timer for how long it has been since we shot */
     timer: number;
-    /** Size of magazine */
-    magazineSize: number;
     /** What type of ammo the weapon uses */
-    ammoType: number
-    /** Time it takes to reload in seconds */
-    reloadTime: number;
-    /** How many bullets per shot, default to 1 */
-    burstCount: number;
-    /** Time between each burst shot in seconds */
-    burstFireRate: number;
+    ammoType: number;
+    /** How many bullets fires per shot */
+    shotCount: number;
+    /** Is the shot spread random? */
+    spreadIsRandom: number;
     /** Timer for how long it has been since last bullet fired */
     burstTimer: number;
+    /** Max charge amount */
+    chargeMax: number;
+    /** Time to max charge */
+    chargeTime: number;
+    /** Charge timer */
+    chargeTimer: number
     /** Path to shoot sound */
     shootSound: string;
-    /** Path to reload sound */
-    reloadSound: string;
 }
 
 export default class Weapon {
@@ -41,30 +41,22 @@ export default class Weapon {
     queue: number = 0;
     fireRate: number;
     timer: number = 0;
-    magazine: number;
-    magazineSize: number;
     ammoType: number = 0;
-    reloadTime: number;
-    reloadTimer: number = 0;
-    burstCount: number = 1;
-    burstFireRate: number = 0;
+    spreadIsRandom: boolean = true;
+    shotCount: number = 1;
     burstTimer: number = 0;
+    chargeMax: number = 0;
+    chargeTime: number = 0;
+    chargeTimer: number = 0;
     shootSound: string;
-    reloadSound: string;
 
 
     constructor(options: Object = {}) {
         Object.assign(this, options);
-        this.magazine = this.magazineSize;
         getSound("shoot", this.shootSound);
-        getSound("reload", this.reloadSound);
     }
 
     playshoot() {
         playSound('shoot')
-    }
-    
-    playreload() {
-        playSound('reload')
     }
 }

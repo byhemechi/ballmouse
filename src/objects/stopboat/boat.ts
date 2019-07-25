@@ -14,13 +14,13 @@ export default class Boat extends Entity {
 
     weapon = new Weapon({
         speed: 500,
-        damage: 10,
+        damage: 5,
         spread: 0.005,
         fireRate: 3,
         shootSound: '/assets/stopboat/shoot1.wav'
     })
 
-    size = new Vector(64,32);
+    size = new Vector(68,36);
 
     children = [
         new Sprite({
@@ -45,14 +45,15 @@ export default class Boat extends Entity {
 
         this.invade();
 
-        if (this.isDead()) this.kill();
+        if (this.isDead()) this.kill()
+
     }
 
     /**
      * Checks collision between boats and bullets using magic
      * @param delta 
      */
-    collide(delta) {
+    private collide(delta) {
         // Get sin and cosin of our angle off our velocity vector, and add minus on the end to make maths a bit easier
         const sin = -this.velocity.y;
         const cos = -this.velocity.x;
@@ -93,8 +94,10 @@ export default class Boat extends Entity {
                     const maxX = this.position.x + i.speed * delta + 20;
                     // If the bullet is right of the line, we collided
                     if (i.position.x > (i.position.y - Yb) / Ym && i.position.x < maxX) {
+                        
+                        const sub = Math.min(this.health, i.damage)
                         this.health -= i.damage;
-                        i.free()
+                        i.damage -= sub
                     }
                 }
             });
@@ -131,8 +134,9 @@ export default class Boat extends Entity {
                     const maxX = this.position.x + i.speed * delta + 20;
                     // If the bullet is right of the line, we collided
                     if (i.position.x > (i.position.y - Yb) / Ym && i.position.x < maxX) {
+                        const sub = Math.min(this.health, i.damage)
                         this.health -= i.damage;
-                        i.free()
+                        i.damage -= sub
                     }
                 }
             });
@@ -142,7 +146,7 @@ export default class Boat extends Entity {
     /**
      * Bounces boats when they touch the edge of the screen
      */
-    bounceOffWall() {
+    private bounceOffWall() {
         if (this.position.y > this.game.el.height && this.velocity.y > 0
          || this.position.y < 0 && this.velocity.y < 0) {
             this.velocity.y = -this.velocity.y;
@@ -153,9 +157,10 @@ export default class Boat extends Entity {
     /**
      * Check if we can invade, and do so if we can
      */
-    invade() {
-        if (this.position.x < 100) {
+    private invade() {
+        if (this.position.x < 125) {
             //this.game.score -= 10;
+            this.root.increaseScoreMultiplier(-0.1);
             this.free();
         }
     }
@@ -164,10 +169,10 @@ export default class Boat extends Entity {
      * Check if we can shoot, and do so if we can
      * @param delta 
      */
-    attemptShoot(delta) {
+    private attemptShoot(delta) {
         this.weapon.timer += delta;
         
-        while (this.weapon.timer > this.weapon.fireRate) {
+        while (this.weapon.timer > this.weapon.fireRate && this.position.x > 250) {
             this.weapon.timer -= this.weapon.fireRate;
 
             const angle = Math.PI + this.squareRandom() * this.weapon.spread
@@ -198,7 +203,7 @@ export default class Boat extends Entity {
      * @param damage How much damage the bullet does
      * @param angle The angle the bullet travels at
      */
-    shoot(speed, damage, angle) {
+    private shoot(speed, damage, angle) {
 
         this.weapon.playshoot();
 
@@ -218,7 +223,7 @@ export default class Boat extends Entity {
  
     }
 
-    squareRandom() {
+    private squareRandom() {
         const spreadDirection = Math.random() > 0.5 ? -1 : 1;
         const spreadAmount = Math.random() ** 2;
         const spread = spreadDirection * spreadAmount;
@@ -228,17 +233,17 @@ export default class Boat extends Entity {
     /**
      * Returns if we are dead
      */
-    isDead() {
-        if (this.health <= 0) {
-            return true;
-        }
+    private isDead() {
+        if (this.health <= 0) return true;
     }
 
     /**
      * Kills the boat
      */
-    kill() {
-        this.game.score += 1;
+    private kill() {
+        this.game.score += Math.round(10 * this.root.scoreMultiplier);
+        this.root.increaseScoreMultiplier(0.01);
+        this.root.giveLootToPlayer([0, 2, 0])
         this.free();
     }
 }

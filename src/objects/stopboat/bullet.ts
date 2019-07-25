@@ -45,7 +45,9 @@ export default class Bullet extends Entity {
         this.position.x += this.direction.x * this.speed * delta;
         this.position.y += this.direction.y * this.speed * delta;
 
-        //this.clear();
+        this.clear()
+
+        if(this.damage <= 0) this.free();
 
         super.tick(delta);
     }

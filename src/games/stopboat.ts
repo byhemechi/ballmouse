@@ -15,5 +15,7 @@ export default class Shootup extends Game {
     render() {
         const ctx = this.ctx;
         super.render();
+        ctx.font = "24px Courier New";
+        ctx.fillText("Score: " + this.score.toString(), 700, 10);
     }
 }
