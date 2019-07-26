@@ -7,6 +7,7 @@ light go away, red shift;
 light go toward, blue shift;
 
 ### Doppler Effect equation
+
 $$
 f' = f\frac{v_{wave} \pm v_{observer}}{v_{wave}\pm v_{source}}
 $$

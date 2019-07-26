@@ -3,13 +3,13 @@
 Main player loop
 ```pascal
 BEGIN PLAYER
-  WHILE Player IS ALIVE
+  WHILE Player IS Alive
     SET spaceJustPressed TO S͟P͟A͟C͟E͟J͟U͟S͟T͟P͟R͟E͟S͟S͟E͟D͟
-    CASEWHERE state = 0:
+    CASEWHERE state IS "flap":
       F͟L͟A͟P͟M͟O͟D͟E͟
-    OTHERWISE
+    state IS "copter":
       C͟O͟P͟T͟E͟R͟M͟O͟D͟E͟
-    ENDCASE
+    END CASE
   END WHILE
 END PLAYER
 ```
