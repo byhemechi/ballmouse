@@ -6,11 +6,19 @@ import Label from "../../primitives/text";
 class WeaponBox extends Rect {
     size = new Vector(120, 42);
 
-    fill = '#0000';
+    fill = '#00000000';
 
-    thickness = 3;
-    borderFill = '#ddd';
+    thickness = 5;
+    borderFill = '#ddddddff';
     lineJoin = 'round'
+
+    children = [
+        new Rect({
+            size: new Vector(110, 32),
+            fill: '#777777ff',
+            position: new Vector(5,5)
+        })
+    ]
     
 }
 
@@ -49,15 +57,11 @@ export default class UI extends Entity {
 
 
     weapons = new Entity({
+        position: new Vector(44, 125),
         children: [
-            new WeaponBox({
-                position: new Vector(44, 125)
-            }),
-            new WeaponBox({
-                position: new Vector(44 + 136, 125)
-            }),
-            new WeaponBox({
-                position: new Vector(44 + 272, 125)
+            new WeaponBox,
+            new WeaponBox({ position: new Vector(136, 0) }),
+            new WeaponBox({ position: new Vector(272, 0)
             }),
         ]
     });
@@ -73,7 +77,7 @@ export default class UI extends Entity {
         size: new Vector(this.blitzbarSize, 20),
         position: new Vector(40, 87.5),
         thickness: 20,
-        borderFill: '#42b5eb',
+        borderFill: '#42b5ebff',
         lineJoin: 'round'
     });
 
@@ -81,7 +85,7 @@ export default class UI extends Entity {
         size: new Vector(this.blitzbarSize, 20),
         position: new Vector(40, 87.5),
         thickness: 20,
-        borderFill: '#276e8f',
+        borderFill: '#276e8fff',
         lineJoin: 'round'
     });
     
@@ -109,15 +113,12 @@ export default class UI extends Entity {
         this.updateWeaponUI(delta);
 
         this.checkUpdateAlpha(delta);
-
-
-
     }
 
     private updateBlitzUI(delta: number) {
         this.blitzMeter.size.x = this.blitzbarSize * 
-                                (this.root.scoreMultiplier - 0.6) / (this.root.maxScoreMultiplier - 0.6);
-        this.blitzMeterLabel.value = this.root.scoreMultiplier.toFixed(1) + '×'
+                                (this.root.scoreMultiplier - 0.5) / (this.root.maxScoreMultiplier - 0.5);
+        this.blitzMeterLabel.value = (Math.floor(this.root.scoreMultiplier * 10) / 10).toFixed(1) + '×'
     }
 
     private updateWeaponUI(delta: number) {
@@ -164,6 +165,11 @@ export default class UI extends Entity {
         [this.blitzMeter].forEach(i => {
             i.borderFill = i.borderFill.substr(0, 7) + alphaHex;
         });
+        
+        this.weapons.children.forEach(i => {
+            i.borderFill = i.borderFill.substr(0, 7) + alphaHex;
+            i.children[0].fill = i.children[0].fill.substr(0, 7) + alphaHex; 
+        });
     }
 
     /**
@@ -172,6 +178,8 @@ export default class UI extends Entity {
      */
     private updateHealthbar(delta: number) {
         this.healthbar.size.x = Math.max(this.healthbarSize * this.root.player.health / this.root.player.maxHealth, 0);
+        this.healthbarRed.size.x = Math.max(this.healthbarRed.size.x, this.healthbar.size.x);
+
         if (!this.healthbarCanDefill && this.healthbarRed.size.x > this.healthbar.size.x && !this.healthbarTimer) {
             this.healthbarTimer = this.healthbarTimeBeforeDefill;
         }

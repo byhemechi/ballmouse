@@ -1,12 +1,15 @@
 import { getSound, playSound } from "../../sound";
+import { Vector } from "../../types";
 
 interface WeaponOptions {
     /** How much damage the bullets do */
     damage: number;
     /** Speed of bullets */
     speed: number;
-    /** Spread of bullets in radians */
-    spread: number;
+    /** Angular spread of bullets in radians */
+    angularSpread: number;
+    /** Linear spread of bullets */
+    linearSpread: number;
     /** Flag if we can fire */
     canFire: boolean;
     /** How many bullets left to fire */
@@ -31,15 +34,20 @@ interface WeaponOptions {
     chargeTimer: number
     /** Path to shoot sound */
     shootSound: string;
+    /** Path to bullet sprite */
+    src: string;
+    /** Size of bullet sprite */
+    spriteSize: Vector
 }
 
 export default class Weapon {
-    damage: number;
-    speed: number;
-    spread: number;
+    damage: number = 0;
+    speed: number = 0;
+    angularSpread: number = 0;
+    linearSpread: number = 0;
     canFire: boolean = true;
     queue: number = 0;
-    fireRate: number;
+    fireRate: number = 1;
     timer: number = 0;
     ammoType: number = 0;
     spreadIsRandom: boolean = true;
@@ -49,14 +57,17 @@ export default class Weapon {
     chargeTime: number = 0;
     chargeTimer: number = 0;
     shootSound: string;
-
+    src: string = "/assets/stopboat/bullet.png";
+    spriteSize: Vector;
+    id: string;
 
     constructor(options: Object = {}) {
         Object.assign(this, options);
-        getSound("shoot", this.shootSound);
+        this.id = btoa(crypto.getRandomValues(new Uint8Array(4)).join(""))
+        getSound(this.id + "shoot", this.shootSound);
     }
 
     playshoot() {
-        playSound('shoot')
+        playSound(this.id + 'shoot')
     }
 }

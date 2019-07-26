@@ -14,7 +14,7 @@ import { Vector } from "../../types";
  * @extends Entity
  * @param options Options for the Entity; See below
  * @param options.src Path or image of bullet
- * @param options.imgsize Size of image
+ * @param options.imgSize Size of image
  * @param options.speed Speed of the bullet
  * @param options.angle Angle that the bullet travels in radians clockwise
  * @param options.direction
@@ -34,20 +34,19 @@ export default class Bullet extends Entity {
         this.angle = options.angle;
         this.direction = options.direction;
         this.damage = options.damage;
+        this.children = [new Sprite({
+            src: options.src,
+            size: options.imgSize,
+            position: options.imgSize.multiply(-0.5)
+        })];
     }
-    children = [new Sprite({
-        src: "/assets/stopboat/bullet.png",
-        position: new Vector(-37, -5 / 2)
-    })]
+    
 
     tick(delta) {
 
         this.position.x += this.direction.x * this.speed * delta;
         this.position.y += this.direction.y * this.speed * delta;
-
-        this.clear()
-
-        if(this.damage <= 0) this.free();
+        // this.clear();
 
         super.tick(delta);
     }
@@ -55,15 +54,19 @@ export default class Bullet extends Entity {
      * Check if this bullet is offscreen
      */
     isOffscreen() {
-        if (this.position.x > 1024 ||
-            this.position.x < 0 ||
+        if (this.position.x > 1124 ||
+            this.position.x < -100 ||
             this.position.y > 576 ||
             this.position.y < 0) {
-            return true
+            return true;
+        } else {
+            return false;
         }
     }
 
     clear() {
-        if (this.isOffscreen()) this.free()
+        if (this.isOffscreen() || this.damage <= 0) {
+            this.free()
+        }
     }
 }

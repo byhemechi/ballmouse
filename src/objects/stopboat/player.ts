@@ -18,8 +18,13 @@ export default class Player extends Entity {
         getSound('hurt', '/assets/stopboat/playerHurt.wav');
     }
 
-    maxHealth = 100;
-    health = 100;
+    maxHealth = 99;
+    health = 99;
+
+    damage = 0; // How much damage we took, used for deathblitzing
+
+    deathBlitzTimer = 0;
+    deathBlitzMaxTime = 0.15;
 
     // Size of the hitbox's radius and its square value
     size = 24;
@@ -35,35 +40,56 @@ export default class Player extends Entity {
         new Weapon({ // 312.5 dps
             speed: 4000,
             damage: 125,
-            spread: 0.01,
+            angularSpread: 0.01,
             fireRate: 0.4,
             ammoType: 0,
             shootSound: '/assets/stopboat/shoot1.wav',
+            src: "/assets/stopboat/bullet.png",
+            spriteSize: new Vector(74,5)
         }),
         new Weapon({ // 600 dps
             speed: 4000,
             damage: 12,
-            spread: 0.1,
+            angularSpread: 0.12,
+            linearSpread: 5,
             fireRate: 0.02,
             ammoType: 1,
             shootSound: '/assets/stopboat/shoot1.wav',
+            src: "/assets/stopboat/bullet.png",
+            spriteSize: new Vector(74,5)
         }),
-        new Weapon({ // 266.7 dps
+        new Weapon({ // 250 dps
             speed: 5000,
-            damage: 10,
-            spread: 0.075,
+            damage: 15,
+            angularSpread: 0.1,
+            linearSpread: 50,
             fireRate: 0.1,
             ammoType: 2,
             spreadIsRandom: false,
-            chargeMax: 80,
+            chargeMax: 50,
             chargeTime: 2.9,
             shootSound: '/assets/stopboat/shoot1.wav',
+            src: "/assets/stopboat/bullet.png",
+            spriteSize: new Vector(74,5)
         })
 
     ];
 
-    ammo = [Infinity, 200, Infinity]
-    MAXAMMO = [Infinity, 500, Infinity]
+    blitzWeapon = new Weapon({
+        speed: 5000,
+        damage: 2,
+        angularSpread: 0.02,
+        linearSpread: 75,
+        fireRate: 0.0025,
+        ammoType: 3,
+        shootSound: '/assets/stopboat/shootBlitz2.wav',
+        src: "/assets/stopboat/testBullet.png",
+        spriteSize: new Vector(64, 64)
+
+    });
+
+    ammo = [Infinity, 200, 1000, 0]
+    MAXAMMO = [Infinity, 500, 5000, 1800]
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
@@ -85,16 +111,16 @@ export default class Player extends Entity {
 
         this.capAmmo();
 
-        this.shoot();
+        this.tryShoot();
         
+        this.checkBlitz();
+
+        this.doBlitz(delta);
 
         super.tick(delta);
 
+        this.health = Math.min(this.health, this.maxHealth);
 
-        // At the end, store the input for input on this frame
-        this.prevShoot = this.game.keys.Space;
-        this.prevLeft = this.game.keys.ArrowLeft;
-        this.prevRight = this.game.keys.ArrowRight;
     }
     
     private capAmmo() {
@@ -137,10 +163,10 @@ export default class Player extends Entity {
     */
 
     private switchWeapons() {
-        if (this.isLeftJustPressed()) {
+        if (this.game.keyJustPressed('ArrowLeft')) {
             this.currentWeapon -= 1;
         }
-        if (this.isRightJustPressed()) {
+        if (this.game.keyJustPressed('ArrowRight')) {
             this.currentWeapon += 1;
         }
         this.currentWeapon = (this.weapons.length + this.currentWeapon) % this.weapons.length;
@@ -183,7 +209,7 @@ export default class Player extends Entity {
                         i.queue += 1;
                     }
                 } else { // If this weapon is a charge shot
-                    if (this.game.keys.Space && i.timer > i.fireRate) { // If space is pressed and we can start charging, increase the charge
+                    if (this.game.keys.KeyZ && i.timer > i.fireRate) { // If soot is pressed and we can start charging, increase the charge
                         i.chargeTimer += delta;
                     }
                 }
@@ -210,7 +236,7 @@ export default class Player extends Entity {
 
             if ((nextX - this.position.x) ** 2 + (nextY - this.position.y) ** 2 < this.sizeSquared) {
                 this.hurt(i.damage);
-                i.free();
+                i.damage = 0;
             }
             
             /*
@@ -251,29 +277,31 @@ export default class Player extends Entity {
      * @param damage How much damage we took
      */
     private hurt(damage: number) {
-        this.health -= damage;
-        playSound('hurt')
+        if (this.ammo[this.blitzWeapon.ammoType] <= 0) { // Invincible during blitz
+            this.health -= damage;
+            playSound('hurt')
+        }
     }
 
 
     /**
      * Shoot bullets if we are able to 
      */
-    private shoot() {
+    private tryShoot() {
         // If we just pressed shoot and we are ready to shoot, 
         // set the timer to zero and flag that we can't fire  
         let wpn = this.weapons[this.currentWeapon];
 
-        if (!this.game.keys.Space) wpn.queue = 0;
+        if (!this.game.keys.KeyZ) wpn.queue = 0;
 
         if (wpn.chargeMax == 0) {
-            if (this.isShootJustPressed() && wpn.canFire) {
+            if (this.game.keyJustPressed('KeyZ') && wpn.canFire) {
                 wpn.timer = 0;
                 wpn.queue = 1;
             }
         } else {
-            if (this.isShootJustReleased()) {
-                wpn.shotCount = Math.min(wpn.chargeTimer / wpn.chargeTime, 1) * wpn.chargeMax;
+            if (this.game.keyJustReleased('KeyZ')) {
+                wpn.shotCount = Math.round(Math.min(wpn.chargeTimer / wpn.chargeTime, 1) * wpn.chargeMax);
                 wpn.chargeTimer = 0;
                 wpn.timer = 0;
                 wpn.queue = 1;
@@ -285,31 +313,51 @@ export default class Player extends Entity {
         while (wpn.queue > 0 && this.ammo[wpn.ammoType] > 0) {
             wpn.queue--;
             wpn.canFire = false;
-            this.ammo[wpn.ammoType]--
+            this.ammo[wpn.ammoType] -= Math.ceil(wpn.shotCount);
             
-            wpn.playshoot();
+            if (wpn.shotCount > 0) wpn.playshoot();
 
-            for (var i = 0; i < wpn.shotCount; i++) {
-                var angle: number;
-
-                if (wpn.spreadIsRandom) angle = this.weaponSpread() * wpn.spread;
-                else angle = wpn.spread * i / wpn.shotCount - wpn.spread / 2;
-
-                const bullet = new Bullet({
-                    speed: wpn.speed,
-                    angle: angle,
-                    size: new Vector(16,4),
-                    rotation: angle,
-                    damage: wpn.damage
-                });
-                bullet.position.x = this.position.x;
-                bullet.position.y = this.position.y;
-                bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
-                this.parent.bullets.children.push(bullet)
-            }
+            this.shoot(wpn, this.position);
+            
         }
         wpn.queue = 0; // If we run out of ammo before we finish our queue, clear the queue
     }
+
+    private shoot(wpn: Weapon, position: Vector, tilt=0) {
+        for (var i = 0.5; i < wpn.shotCount; i++) {
+            var angle: number;
+            var variance: number;
+            if (wpn.spreadIsRandom) {
+                angle = this.weaponSpread() * wpn.angularSpread + tilt;
+                variance = this.weaponSpread() * wpn.linearSpread;
+            } else {
+                if (wpn.chargeMax > 1) { 
+                    variance = (wpn.shotCount / wpn.chargeMax) * wpn.linearSpread * i / wpn.shotCount - 
+                    (wpn.shotCount / wpn.chargeMax) * wpn.linearSpread / 2;
+
+                    angle = (wpn.shotCount / wpn.chargeMax) * wpn.angularSpread * i / wpn.shotCount - 
+                    (wpn.shotCount / wpn.chargeMax) * wpn.angularSpread / 2 + tilt;
+                }
+                else {
+                    variance = wpn.linearSpread * i / wpn.shotCount - wpn.linearSpread / 2;
+                    angle = wpn.angularSpread * i / wpn.shotCount - wpn.angularSpread / 2 + tilt;
+                }
+            }
+            const bullet = new Bullet({
+                speed: wpn.speed,
+                angle: angle,
+                src: wpn.src,
+                imgSize: wpn.spriteSize,
+                rotation: angle,
+                damage: wpn.damage
+            });
+            bullet.position.x = position.x;
+            bullet.position.y = position.y + variance;
+            bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
+            this.root.bullets.children.push(bullet);
+        }
+    }
+
     /**
      * Return a random angle for the bullets. Squares its output to make it more center heavy.
      */
@@ -320,52 +368,25 @@ export default class Player extends Entity {
         return spread;
     }
 
-
-    prevShoot = false
-    /**
-     * Determine if we pressed shoot on this frame
-     */
-    private isShootJustPressed() {
-        var didShoot
-        if (this.game.keys.Space && !this.prevShoot) {
-            didShoot = true;
-        } else {
-            didShoot = false;
+    private checkBlitz() {
+        if (this.game.keyJustPressed('KeyX') && !this.ammo[this.blitzWeapon.ammoType]) {
+            if (this.root.scoreMultiplier >= 2) {
+                //this.health += 15;
+                //this.root.scoreMultiplier--;
+                this.ammo[this.blitzWeapon.ammoType] = this.MAXAMMO[this.blitzWeapon.ammoType]
+                this.blitzWeapon.playshoot();
+            }
         }
-        return didShoot;
     }
 
-    private isShootJustReleased() {
-        var didLetGo;
-        if (!this.game.keys.Space && this.prevShoot) {
-            didLetGo = true;
-        } else {
-            didLetGo = false;
+    private doBlitz(delta: number) {
+        if (this.ammo[this.blitzWeapon.ammoType] > 0) {
+            this.blitzWeapon.timer += delta;
+            while (this.blitzWeapon.timer > this.blitzWeapon.fireRate && this.ammo[this.blitzWeapon.ammoType] > 0) {
+                this.blitzWeapon.timer -= this.blitzWeapon.fireRate;
+                this.ammo[this.blitzWeapon.ammoType]--;
+                this.shoot(this.blitzWeapon, this.position.subtract(new Vector(100, 0)), this.keyboardMove() * 0.1);
+            }
         }
-        return didLetGo;
-    }
-
-    prevLeft = false;
-
-    private isLeftJustPressed() {
-        var didLeft;
-        if (this.game.keys.ArrowLeft && !this.prevLeft) {
-            didLeft = true;
-        } else {
-            didLeft = false;
-        }
-        return didLeft;
-    }
-
-    prevRight = false;
-
-    private isRightJustPressed() {
-        var didRight;
-        if (this.game.keys.ArrowRight && !this.prevRight) {
-            didRight = true;
-        } else {
-            didRight = false;
-        }
-        return didRight;
     }
 }
