@@ -13,6 +13,7 @@ class Game {
     ctx: CanvasRenderingContext2D = this.el.getContext('2d');
     lt = 0;
     keys: KeySet = {};
+    lk: KeySet = {};
     delta: number;
     fps: number;
 
@@ -38,12 +39,35 @@ class Game {
         this.lt = time;
         this.root.game = this;
         this.root.tick(delta);
+        this.lk = JSON.parse(JSON.stringify(this.keys));
     }
 
     render() {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.el.width, this.el.height);
         this.root.render(ctx);
+    }
+
+    keyJustPressed(key: string) {
+        var justPressed: boolean;
+        if (this.keys[key] && !this.lk[key]) {
+            justPressed = true;
+        } else {
+            justPressed = false;
+        }
+
+        return justPressed;
+    }
+
+    keyJustReleased(key: string) {
+        var justReleased: boolean;
+        if (!this.keys[key] && this.lk[key]) {
+            justReleased = true;
+        } else {
+            justReleased = false;
+        }
+
+        return justReleased;
     }
 }
 
