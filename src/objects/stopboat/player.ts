@@ -29,6 +29,9 @@ export default class Player extends Entity {
     deathBlitzTimer = 0;
     deathBlitzMaxTime = 0.15;
 
+    invincibleTimer = 0;
+    invincibleTime = 3;
+
     // Size of the hitbox's radius and its square value
     size = 24;
 
@@ -48,7 +51,7 @@ export default class Player extends Entity {
             ammoType: 0,
             shootSound: '/assets/stopboat/shoot1.wav',
             src: "/assets/stopboat/bullet.png",
-            spriteSize: new Vector(74, 5)
+            spriteSize: new Vector(102, 5),
         }),
         new Weapon({ // 600 dps
             speed: 4000,
@@ -59,7 +62,7 @@ export default class Player extends Entity {
             ammoType: 1,
             shootSound: '/assets/stopboat/shoot1.wav',
             src: "/assets/stopboat/bullet.png",
-            spriteSize: new Vector(74, 5)
+            spriteSize: new Vector(102, 5)
         }),
         new Weapon({ // 250 dps
             speed: 5000,
@@ -73,7 +76,7 @@ export default class Player extends Entity {
             chargeTime: 2.9,
             shootSound: '/assets/stopboat/shoot1.wav',
             src: "/assets/stopboat/bullet.png",
-            spriteSize: new Vector(74, 5)
+            spriteSize: new Vector(102, 5)
         })
 
     ];
@@ -86,51 +89,58 @@ export default class Player extends Entity {
 
     // Array of blitz weapons we currently possess
     blitzWeapons = [
-        new Weapon({
-            speed: 5000,
-            damage: 2,
-            angularSpread: 0.02,
-            linearSpread: 75,
-            fireRate: 0.0025,
+        new Weapon({ // 2400 total
+            speed: 1500,
+            damage: 50,
+            angularSpread: Math.PI,
+            linearSpread: 0,
+            spreadIsRandom: false,
+            fireRate: 0.03,
             ammoType: 3,
-            shootSound: '/assets/stopboat/shootBlitz2.wav',
-            src: "/assets/stopboat/testBullet.png",
-            spriteSize: new Vector(64, 64)
+            chargeMax: 12,
+            shotCount: 12,
+            chargeTime: 1,
+            chargeTimer: 1,
+            blitzSound: '/assets/stopboat/shootBlitz2.wav',
+            src: "/assets/stopboat/bullet.png",
+            spriteSize: new Vector(204, 5),
+            bounceCount: 8,
+            positionLocked: true
         }),
-        new Weapon({ // 3600 total
+        new Weapon({ // 2400 total
             speed: 5000,
             damage: 2,
             angularSpread: 0.02,
             linearSpread: 75,
             tilt: 0.1,
-            fireRate: 0.0025,
+            fireRate: 0.00375,
             ammoType: 4,
-            shootSound: '/assets/stopboat/shootBlitz2.wav',
+            blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
-            spriteSize: new Vector(74, 5),
-            bulletDestroyRadius: 20,
+            spriteSize: new Vector(102, 5),
         }),
-        new Weapon({ // 4000 total
+        new Weapon({ // 5000 total
             speed: 200,
             damage: 10,
-            angularSpread: 0.1,
+            angularSpread: 0,
             linearSpread: 1500,
             fireRate: 0.1,
             ammoType: 5,
             spreadIsRandom: false,
-            chargeMax: 400,
-            shotCount: 400,
+            chargeMax: 500,
+            shotCount: 500,
             chargeTime: 1,
             chargeTimer: 1,
-            shootSound: '/assets/stopboat/shootBlitz2.wav',
+            blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
-            spriteSize: new Vector(74, 5),
-            bulletDestroyRadius: 20,
+            spriteSize: new Vector(102, 5),
         })
     ];
 
+    blitzPosition = new Vector;
+
     ammo = [Infinity, 200, 1000, 0, 0, 0]
-    MAXAMMO = [Infinity, 500, 5000, 0, 1800, 1]
+    MAXAMMO = [Infinity, 500, 5000, 4, 1200, 1]
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
@@ -141,26 +151,28 @@ export default class Player extends Entity {
 
     tick(delta) {
         // Move player according to user input
-        this.position.y += this.keyboardMove() * this.speed * delta;
-        this.clampPosition();
+        if (this.root.gameStarted) {
+            this.position.y += this.keyboardMove() * this.speed * delta;
+            this.clampPosition();
 
-        this.switchWeapons();
+            this.switchWeapons();
 
-        this.incrementTimers(delta);
+            this.incrementTimers(delta);
 
-        this.checkCollision(delta);
+            this.checkCollision(delta);
 
-        this.capAmmo();
+            this.capAmmo();
 
-        this.tryShoot();
+            this.tryShoot();
 
-        this.deathBlitzIncrease(delta);
+            this.deathBlitzIncrease(delta);
 
-        this.checkBlitz();
+            this.checkBlitz();
 
-        this.doBlitz(delta);
+            this.doBlitz(delta);
 
-        // this.health = Math.min(this.health, this.maxHealth);
+            // this.health = Math.min(this.health, this.maxHealth);
+        }
     }
 
     /** Clamp player position so they don't go off screen */
@@ -293,6 +305,8 @@ export default class Player extends Entity {
             }
 
             wpn.queue = 0; // If we run out of ammo before we finish our queue, clear the queue
+        } else {
+            this.weapons[this.currentWeapon].timer = 0;
         }
     }
 
@@ -308,10 +322,25 @@ export default class Player extends Entity {
             this.health -= this.damage;
             this.damage = 0;
             this.deathBlitzTimer = 0;
+            this.invincibleTimer = this.invincibleTime;
         }
 
         this.blitzCooldownTimer -= delta;
         if (this.blitzCooldownTimer < 0) this.blitzCooldownTimer = 0;
+
+        if (this.invincibleTimer > 0) {
+            this.invincibleTimer -= delta;
+            this.children[0].visible = !this.children[0].visible
+
+        } else if (this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] > 0) {
+            this.children[0].visible = !this.children[0].visible
+        }
+
+        if (this.invincibleTimer < 0) {
+            this.invincibleTimer = 0;
+            this.children[0].visible = true;
+        }
+
     }
 
     /** Check if the player activated a blitz, and if they can blitz */
@@ -323,7 +352,9 @@ export default class Player extends Entity {
                 this.root.scoreMultiplier--;
                 this.currentBlitzWeapon = this.currentWeapon; // Set the blitz weapon to our current weapon
                 this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] = this.MAXAMMO[this.blitzWeapons[this.currentBlitzWeapon].ammoType]
-                this.blitzWeapons[this.currentBlitzWeapon].playshoot(); // Play shoot sound
+                this.blitzPosition.x = this.position.x;
+                this.blitzPosition.y = this.position.y;
+                this.blitzWeapons[this.currentBlitzWeapon].playblitz(); // Play shoot sound
 
                 this.blitzCooldownTimer = this.blitzCooldownTime;
 
@@ -335,7 +366,7 @@ export default class Player extends Entity {
     }
 
     /** 
-     * Activate blitz
+     * Activate blitz and also start invincibility timer when blitz finishes
      * @param delta 
      */
     private doBlitz(delta: number) {
@@ -346,9 +377,18 @@ export default class Player extends Entity {
             while (bw.timer > bw.fireRate && this.ammo[bw.ammoType] > 0) {
                 bw.timer -= bw.fireRate;
                 this.ammo[bw.ammoType]--;
-                this.shoot(bw, this.position.subtract(new Vector(100, 0)));
+                
+                const pos = bw.positionLocked ? this.blitzPosition : this.position;
+                this.shoot(bw, pos.multiply(1));
+            }
+
+            // Start invincibility time
+            if (this.ammo[bw.ammoType] <= 0) {
+                this.invincibleTimer = this.invincibleTime;
             }
         }
+
+        
     }
 
     /**
@@ -368,8 +408,9 @@ export default class Player extends Entity {
      * @param damage How much damage we took
      */
     private hurt(damage: number) {
-        if (this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] <= 0) { // Invincible during blitz
-            this.damage += damage;
+        if (this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] <= 0 &&
+            this.invincibleTimer <= 0 && this.damage == 0) {
+            this.damage = damage;
             playSound('hurt')
         }
     }
@@ -407,8 +448,9 @@ export default class Player extends Entity {
                 imgSize: wpn.spriteSize,
                 rotation: angle,
                 damage: wpn.damage,
-                bulletDestroyRadius: wpn.bulletDestroyRadius
+                bounceCount: wpn.bounceCount
             });
+
             bullet.position.x = position.x;
             bullet.position.y = position.y + variance;
             bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));

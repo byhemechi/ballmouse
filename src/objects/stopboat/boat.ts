@@ -14,7 +14,7 @@ export default class Boat extends Entity {
 
     weapon = new Weapon({
         speed: 500,
-        damage: 20,
+        damage: 25,
         spread: 0.005,
         fireRate: 2,
         shootSound: '/assets/stopboat/shoot1.wav',
@@ -92,7 +92,7 @@ export default class Boat extends Entity {
                 }
                 
                 if (!this.isDead() && i.position.y > 0) { // Collision breaks when bullet y position is less than 0
-                    const maxX = this.position.x + i.speed * delta + 20;
+                    const maxX = this.position.x + i.speed * delta + 50;
                     // If the bullet is right of the line, we collided
                     if ((i.position.x > (i.position.y - Yb) / Ym) && (i.position.x < maxX)) {
 
@@ -132,7 +132,7 @@ export default class Boat extends Entity {
             
 
                 if (!this.isDead() && i.position.y > 0) {
-                    const maxX = this.position.x + i.speed * delta + 20;
+                    const maxX = this.position.x + i.speed * delta + 50;
                     // If the bullet is right of the line, we collided
                     if ((i.position.x > (i.position.y - Yb) / Ym) && (i.position.x < maxX)) {
 

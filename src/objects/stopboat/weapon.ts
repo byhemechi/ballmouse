@@ -36,12 +36,16 @@ interface WeaponOptions {
     chargeTimer: number
     /** Path to shoot sound */
     shootSound: string;
+    /** Path to blitz sound */
+    blitzSound: string;
     /** Path to bullet sprite */
     src: string;
     /** Size of bullet sprite */
     spriteSize: Vector;
-    /** Range of bullet destroying; disabled by default */
-    bulletDestroyRadius: number;
+    /** How many times the bullet bounces off the edges of the screen, defaults to zero */
+    bounceCount: number;
+    /** Is the bullet firing position locked, defaults to false */
+    positionLocked: boolean;
 }
 
 export default class Weapon {
@@ -62,9 +66,11 @@ export default class Weapon {
     chargeTime: number = 0;
     chargeTimer: number = 0;
     shootSound: string;
+    blitzSound: string;
     src: string = "/assets/stopboat/bullet.png";
     spriteSize: Vector;
-    bulletDestroyRadius: number = 0;
+    bounceCount: number = 0;
+    positionLocked: boolean = false;
     id: string;
 
     constructor(options: Object = {}) {
@@ -72,9 +78,14 @@ export default class Weapon {
         
         this.id = btoa(crypto.getRandomValues(new Uint8Array(4)).join(""))
         getSound(this.id + "shoot", this.shootSound);
+        if (this.blitzSound) getSound(this.id + "blitz", this.blitzSound);
     }
 
     playshoot() {
         playSound(this.id + 'shoot')
+    }
+
+    playblitz() {
+        playSound(this.id + 'blitz')
     }
 }
