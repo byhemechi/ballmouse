@@ -19,6 +19,7 @@ import { Vector } from "../../types";
  * @param options.angle Angle that the bullet travels in radians clockwise
  * @param options.direction
  * @param options.damage How much damage the bullet does
+ * @param options.bulletDestroyRadius Range of bullet destruction. Disabled when value is falsy
  */
 
 export default class Bullet extends Entity {
@@ -27,13 +28,16 @@ export default class Bullet extends Entity {
     angle: number;
     damage: number;
     direction: Vector;
+    bulletDestroyRadius: number;
 
     constructor(options) {
         super(options);
         this.speed = options.speed;
         this.angle = options.angle;
-        this.direction = options.direction;
         this.damage = options.damage;
+        this.direction = options.direction;
+        this.bulletDestroyRadius = options.bulletDestroyRadius;
+
         this.children = [new Sprite({
             src: options.src,
             size: options.imgSize,
@@ -43,13 +47,26 @@ export default class Bullet extends Entity {
     
 
     tick(delta) {
-
+        // Move bullet
         this.position.x += this.direction.x * this.speed * delta;
         this.position.y += this.direction.y * this.speed * delta;
-        // this.clear();
+    
 
-        super.tick(delta);
+        // Check if the bullet destruction radius is a non-zero value
+        if (this.bulletDestroyRadius) this.destroyBullets();
+
     }
+    private destroyBullets() {
+        for (var i = this.root.enemyBullets.children.length - 1; i >= 0; i--) {
+            let eb = this.root.enemyBullets.children[i];
+            if (eb.position.x < this.position.x && 
+                eb.position.y > this.position.y - this.bulletDestroyRadius &&
+                eb.position.y < this.position.y + this.bulletDestroyRadius) {
+                eb.free()
+            }
+        }
+    }
+
     /**
      * Check if this bullet is offscreen
      */

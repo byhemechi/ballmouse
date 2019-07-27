@@ -10,6 +10,8 @@ interface WeaponOptions {
     angularSpread: number;
     /** Linear spread of bullets */
     linearSpread: number;
+    /** How much tilt there is in correlation to player input */
+    tilt: number;
     /** Flag if we can fire */
     canFire: boolean;
     /** How many bullets left to fire */
@@ -37,7 +39,9 @@ interface WeaponOptions {
     /** Path to bullet sprite */
     src: string;
     /** Size of bullet sprite */
-    spriteSize: Vector
+    spriteSize: Vector;
+    /** Range of bullet destroying; disabled by default */
+    bulletDestroyRadius: number;
 }
 
 export default class Weapon {
@@ -45,6 +49,7 @@ export default class Weapon {
     speed: number = 0;
     angularSpread: number = 0;
     linearSpread: number = 0;
+    tilt: number = 0;
     canFire: boolean = true;
     queue: number = 0;
     fireRate: number = 1;
@@ -59,10 +64,12 @@ export default class Weapon {
     shootSound: string;
     src: string = "/assets/stopboat/bullet.png";
     spriteSize: Vector;
+    bulletDestroyRadius: number = 0;
     id: string;
 
     constructor(options: Object = {}) {
         Object.assign(this, options);
+        
         this.id = btoa(crypto.getRandomValues(new Uint8Array(4)).join(""))
         getSound(this.id + "shoot", this.shootSound);
     }

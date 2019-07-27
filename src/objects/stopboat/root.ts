@@ -42,12 +42,15 @@ export default class Root extends Entity {
         super.tick(delta);
 
         // Bullets offscreen are cleared after collision is done
-        this.bullets.children.forEach(i => {
-            i.clear();
-        });
-        this.enemyBullets.children.forEach(i => {
-            i.clear();
-        });
+
+        for (var i = this.bullets.children.length - 1; i >= 0; i--) {
+            this.bullets.children[i].clear();
+        }
+
+        for (var i = this.enemyBullets.children.length - 1; i >= 0; i--) {
+            this.enemyBullets.children[i].clear();
+        }
+
 
         if (this.gameStarted) {
             this.boatSpawnTimer += delta;
