@@ -12,6 +12,8 @@ export default class Boat extends Entity {
 
     velocity: Vector;
 
+    giveBlitz = true;
+
     weapon = new Weapon({
         speed: 500,
         damage: 25,
@@ -98,8 +100,10 @@ export default class Boat extends Entity {
 
                         const sub = Math.min(this.health, i.damage)
                         this.health -= i.damage;
-                        i.damage -= sub
-                    }
+                        i.damage -= sub;
+
+                        this.giveBlitz = i.rewardBlitz;
+                        }
                 }
             });
         } else {
@@ -138,7 +142,9 @@ export default class Boat extends Entity {
 
                         const sub = Math.min(this.health, i.damage)
                         this.health -= i.damage;
-                        i.damage -= sub
+                        i.damage -= sub;
+
+                        this.giveBlitz = i.rewardBlitz;
                     }
                 }
             });
@@ -162,7 +168,7 @@ export default class Boat extends Entity {
     private invade() {
         if (this.position.x < 125) {
             //this.game.score -= 10;
-            this.root.increaseScoreMultiplier(-0.05);
+            this.root.increaseScoreMultiplier(-0.1);
             this.free();
         }
     }
@@ -231,8 +237,8 @@ export default class Boat extends Entity {
      */
     private kill() {
         this.game.score += Math.round(10 * this.root.scoreMultiplier);
-        this.root.increaseScoreMultiplier(0.015);
-        this.root.giveLootToPlayer([0, 2, 0])
+        this.root.giveLootToPlayer([0, 2, 0]);
+        if (this.giveBlitz) this.root.increaseScoreMultiplier(0.035);
         this.free();
     }
 }

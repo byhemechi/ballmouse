@@ -11,6 +11,7 @@ interface BulletOptions {
     damage: number;
     bulletDestroyRadius: number;
     bounceCount: number;
+    rewardBlitz: boolean
 }
 
 /**
@@ -23,6 +24,7 @@ export default class Bullet extends Entity {
     damage: number;
     direction: Vector;
     bounceCount: number;
+    rewardBlitz: boolean;
 
     constructor(options) {
         super(options);
@@ -32,6 +34,7 @@ export default class Bullet extends Entity {
         this.damage = options.damage;
         this.direction = options.direction;
         this.bounceCount = options.bounceCount;
+        this.rewardBlitz = options.rewardBlitz;
 
         this.children = [new Sprite({
             src: options.src,

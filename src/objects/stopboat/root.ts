@@ -16,7 +16,7 @@ export default class Root extends Entity {
 
     ui = new UI;
 
-    music = new Audio('/assets/stopboat/boss1.ogg');
+    music = new Audio('/assets/stopboat/bgm.ogg');
 
     player = new Player;
     bullets = new Entity({
@@ -92,10 +92,10 @@ export default class Root extends Entity {
     }
 
     private increaseDifficulty() {
-        this.nextWaveStart -= 0.5;
-        this.nextWaveEnd -= 0.3;
-        this.boatSpawnTimer -= 0.05;
-        this.waveSpawnRate -= 0.03;
+        this.nextWaveStart -= 0.5 * 1.5;
+        this.nextWaveEnd -= 0.3 * 1.5;
+        this.boatSpawnTimer -= 0.05 * 1.5;
+        this.waveSpawnRate -= 0.03 * 1.5;
 
         this.nextWaveStart = Math.max(this.nextWaveStart, 4);
         this.nextWaveEnd = Math.max(this.nextWaveStart, 9);
@@ -130,7 +130,7 @@ export default class Root extends Entity {
     reset() {
         this.gameStarted = true;
         this.music.play()
-        this.scoreMultiplier = 1;
+        this.scoreMultiplier = 5;
         this.player.health = this.player.maxHealth;
         this.boatSpawnTimer = 0;
         this.timeUntilNextBoat = 1.25;

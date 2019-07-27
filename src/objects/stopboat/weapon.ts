@@ -46,6 +46,8 @@ interface WeaponOptions {
     bounceCount: number;
     /** Is the bullet firing position locked, defaults to false */
     positionLocked: boolean;
+    /** Should boats killed by this bullet reward blitz? */
+    rewardBlitz: boolean;
 }
 
 export default class Weapon {
@@ -71,6 +73,7 @@ export default class Weapon {
     spriteSize: Vector;
     bounceCount: number = 0;
     positionLocked: boolean = false;
+    rewardBlitz: boolean = true;
     id: string;
 
     constructor(options: Object = {}) {

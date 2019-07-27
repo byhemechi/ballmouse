@@ -29,8 +29,8 @@ export default class UI extends Entity {
 
     alpha = 1;
     aplhaChangeRate = 4;
-    minAlpha = 0.2;
-    maxY = 200;
+    minAlpha = 0.1;
+    maxY = 275;
 
     healthbarTimeBeforeDefill = 0.5;
     healthbarTimer = 0;
@@ -85,7 +85,7 @@ export default class UI extends Entity {
         size: new Vector(this.blitzbarSize, 20),
         position: new Vector(40, 87.5),
         thickness: 20,
-        borderFill: '#276e8fff',
+        borderFill: '#052f42ff',
         lineJoin: 'round'
     });
     
@@ -162,7 +162,7 @@ export default class UI extends Entity {
             i.fill = i.fill.substr(0, 7) + alphaHex;
         });
 
-        [this.blitzMeter].forEach(i => {
+        [this.blitzMeter, this.blitzMeterUnder].forEach(i => {
             i.borderFill = i.borderFill.substr(0, 7) + alphaHex;
         });
         

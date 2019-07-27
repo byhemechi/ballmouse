@@ -67,13 +67,13 @@ export default class Player extends Entity {
         new Weapon({ // 250 dps
             speed: 5000,
             damage: 15,
-            angularSpread: 0.1,
+            angularSpread: 0.15,
             linearSpread: 50,
             fireRate: 0.1,
             ammoType: 2,
             spreadIsRandom: false,
             chargeMax: 50,
-            chargeTime: 2.9,
+            chargeTime: 1.9,
             shootSound: '/assets/stopboat/shoot1.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(102, 5)
@@ -91,37 +91,39 @@ export default class Player extends Entity {
     blitzWeapons = [
         new Weapon({ // 2400 total
             speed: 1500,
-            damage: 50,
-            angularSpread: Math.PI,
+            damage: 15,
+            angularSpread: Math.PI * 4 / 5,
             linearSpread: 0,
             spreadIsRandom: false,
             fireRate: 0.03,
             ammoType: 3,
-            chargeMax: 12,
-            shotCount: 12,
+            chargeMax: 36,
+            shotCount: 36,
             chargeTime: 1,
             chargeTimer: 1,
             blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(204, 5),
-            bounceCount: 8,
-            positionLocked: true
+            bounceCount: 6,
+            positionLocked: true,
+            rewardBlitz: false
         }),
         new Weapon({ // 2400 total
             speed: 5000,
-            damage: 2,
+            damage: 3,
             angularSpread: 0.02,
             linearSpread: 75,
             tilt: 0.1,
-            fireRate: 0.00375,
+            fireRate: 0.0035,
             ammoType: 4,
             blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(102, 5),
+            rewardBlitz: false
         }),
         new Weapon({ // 5000 total
             speed: 200,
-            damage: 10,
+            damage: 12,
             angularSpread: 0,
             linearSpread: 1500,
             fireRate: 0.1,
@@ -134,13 +136,14 @@ export default class Player extends Entity {
             blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(102, 5),
+            rewardBlitz: false
         })
     ];
 
     blitzPosition = new Vector;
 
     ammo = [Infinity, 200, 1000, 0, 0, 0]
-    MAXAMMO = [Infinity, 500, 5000, 4, 1200, 1]
+    MAXAMMO = [Infinity, 500, 5000, 4, 1100, 1]
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
@@ -448,7 +451,8 @@ export default class Player extends Entity {
                 imgSize: wpn.spriteSize,
                 rotation: angle,
                 damage: wpn.damage,
-                bounceCount: wpn.bounceCount
+                bounceCount: wpn.bounceCount,
+                rewardBlitz: wpn.rewardBlitz
             });
 
             bullet.position.x = position.x;
