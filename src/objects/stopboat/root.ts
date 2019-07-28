@@ -130,7 +130,7 @@ export default class Root extends Entity {
     reset() {
         this.gameStarted = true;
         this.music.play()
-        this.scoreMultiplier = 5;
+        this.scoreMultiplier = 1;
         this.player.health = this.player.maxHealth;
         this.boatSpawnTimer = 0;
         this.timeUntilNextBoat = 1.25;

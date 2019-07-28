@@ -18,6 +18,7 @@ export default class Player extends Entity {
     constructor(...args) {
         super(...args);
         getSound('hurt', '/assets/stopboat/playerHurt.wav');
+        getSound('graze', '/assets/stopboat/graze.wav');
     }
 
     maxHealth = 99;
@@ -32,8 +33,11 @@ export default class Player extends Entity {
     invincibleTimer = 0;
     invincibleTime = 3;
 
-    // Size of the hitbox's radius and its square value
+    // Size of the hitbox's radius
     size = 24;
+
+    // Size of the graze hitbox's radius, used for scoring
+    grazeSize = 64;
 
     // Position and speed of player
     position = new Vector(64, 576 / 2);
@@ -91,20 +95,20 @@ export default class Player extends Entity {
     blitzWeapons = [
         new Weapon({ // 2400 total
             speed: 1500,
-            damage: 15,
+            damage: 20,
             angularSpread: Math.PI * 4 / 5,
             linearSpread: 0,
             spreadIsRandom: false,
             fireRate: 0.03,
             ammoType: 3,
-            chargeMax: 36,
-            shotCount: 36,
+            chargeMax: 24,
+            shotCount: 24,
             chargeTime: 1,
             chargeTimer: 1,
             blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(204, 5),
-            bounceCount: 6,
+            bounceCount: 10,
             positionLocked: true,
             rewardBlitz: false
         }),
@@ -241,6 +245,13 @@ export default class Player extends Entity {
                 this.hurt(eb.damage);
                 eb.damage = 0;
             }
+            if (!eb.grazed && (nextX - this.position.x) ** 2 + (nextY - this.position.y) ** 2 < this.grazeSize ** 2) { 
+                eb.grazed = true;
+                this.game.score += Math.round(1 * this.root.scoreMultiplier);
+                playSound('graze');
+                this.root.increaseScoreMultiplier(0.005);
+            }
+
         }
     }
 

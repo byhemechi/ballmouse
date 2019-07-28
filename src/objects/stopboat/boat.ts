@@ -238,7 +238,7 @@ export default class Boat extends Entity {
     private kill() {
         this.game.score += Math.round(10 * this.root.scoreMultiplier);
         this.root.giveLootToPlayer([0, 2, 0]);
-        if (this.giveBlitz) this.root.increaseScoreMultiplier(0.035);
+        if (this.giveBlitz) this.root.increaseScoreMultiplier(0.03);
         this.free();
     }
 }

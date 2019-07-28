@@ -26,6 +26,8 @@ export default class Bullet extends Entity {
     bounceCount: number;
     rewardBlitz: boolean;
 
+    grazed: boolean = false; // Flag if we already grazed this bullet
+
     constructor(options) {
         super(options);
 
