@@ -86,7 +86,7 @@ export default class Player extends Entity {
     ];
 
     // Timer so we can't spam blitz
-    blitzCooldownTime = 5;
+    blitzCooldownTime = 7;
     blitzCooldownTimer = 0;
 
     currentBlitzWeapon = 0;
@@ -363,7 +363,8 @@ export default class Player extends Entity {
         if (this.game.keyJustPressed('KeyX') && !this.blitzCooldownTimer) {
             // If we can afford to blitz
             if (this.root.scoreMultiplier >= 2) {
-                this.root.scoreMultiplier--;
+                if (this.invincibleTimer) this.root.scoreMultiplier -= 0.5;
+                else this.root.scoreMultiplier -= 1;
                 this.currentBlitzWeapon = this.currentWeapon; // Set the blitz weapon to our current weapon
                 this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] = this.MAXAMMO[this.blitzWeapons[this.currentBlitzWeapon].ammoType]
                 this.blitzPosition.x = this.position.x;
