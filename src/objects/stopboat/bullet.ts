@@ -67,7 +67,7 @@ export default class Bullet extends Entity {
     }
 
     clear() {
-        if (this.damage <= 0) this.free();
+        if (this.damage <= 0 && this.parent) this.free();
 
         if (this.isOffscreen()) {
             if (this.bounceCount) {

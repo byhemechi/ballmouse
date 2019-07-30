@@ -14,6 +14,8 @@ export default class Boat extends Entity {
 
     giveBlitz = true;
 
+    size = new Vector(64,32);
+
     weapon = new Weapon({
         speed: 500,
         damage: 25,
@@ -23,7 +25,6 @@ export default class Boat extends Entity {
         spriteSize: new Vector(74,5)
     })
 
-    size = new Vector(68,36);
 
     children = [
         new Sprite({
@@ -58,96 +59,53 @@ export default class Boat extends Entity {
      */
     private collide(delta) {
         // Get sin and cosin of our angle off our velocity vector, and add minus on the end to make maths a bit easier
-        const sin = -this.velocity.y;
-        const cos = -this.velocity.x;
+        const sin = this.velocity.y;
+        const cos = this.velocity.x;
 
-        // Key Y points of the boat
-        var minY: number; // Top point of boat
-        var midY: number; // Left most point of boat
-        var maxY: number; // Bottom point of boat
+        const lp = new Vector(this.position.x - this.velocity.x * this.speed * delta, this.position.y - this.velocity.y * this.speed * delta)
 
-        if (this.rotation > Math.PI) {
-            // Calculate Y points
-            minY = this.position.y - (cos * this.size.y + sin * this.size.x) / 2;
-            midY = this.position.y + (cos * this.size.y - sin * this.size.x) / 2;
-            maxY = this.position.y + (cos * this.size.y + sin * this.size.x) / 2;
+        for (var i = 0; i < this.root.bullets.children.length; i++) {
+            const bullet = this.root.bullets.children[i];
 
-            const Ym1 = -cos / sin; // Gradient is -cot(x), which is -cos(x)/sin(x)
-            const Yx1 = this.position.x - (cos * this.size.x - sin * this.size.y) / 2; // Get the x value of the top point 
-            const Yb1 = minY - Ym1 * Yx1; // Calculate y when x is zero 
+            const bp = bullet.position;
+            const lbp = new Vector(bp.x - bullet.direction.x * bullet.speed * delta - (this.position.x - lp.x), 
+                bp.y - bullet.direction.y * bullet.speed * delta - (this.position.y - lp.y));
 
-            const Ym2 = sin / cos; // Gradient is tan(x), which is sin(x)/cos(x)
-            const Yx2 = this.position.x + (cos * this.size.x - sin * this.size.y) / 2; // Get the x value of the bottom point 
-            const Yb2 = maxY - Ym2 * Yx2; // Calculate y when x is zero 
-            
-            this.root.bullets.children.forEach(i => {
-                var Ym = Number.MIN_VALUE; // Gradient of new line
-                var Yb = 0; // The 'b' value in y = mx + b
+            const m1 = (lbp.y - bp.y) / (lbp.x - bp.x);
+            const b1 = bp.y - m1 * bp.x;
 
-                // If we are between the top and middle of the boat
-                if (i.position.y > minY && i.position.y < midY) {
-                    Ym = Ym1;
-                    Yb = Yb1;
-                } else if (i.position.y >= midY && i.position.y < maxY) {
-                    Ym = Ym2;
-                    Yb = Yb2;
-                }
-                
-                if (!this.isDead() && i.position.y > 0) { // Collision breaks when bullet y position is less than 0
-                    const maxX = this.position.x + i.speed * delta + 50;
-                    // If the bullet is right of the line, we collided
-                    if ((i.position.x > (i.position.y - Yb) / Ym) && (i.position.x < maxX)) {
+            var collided = false;
 
-                        const sub = Math.min(this.health, i.damage)
-                        this.health -= i.damage;
-                        i.damage -= sub;
+            [
+                [this.position.x - this.size.x * -cos - this.size.y * sin, this.position.y - this.size.y * -cos + this.size.x * sin, this.position.x + this.size.x * -cos - this.size.y * sin, this.position.y - this.size.y * -cos - this.size.x * sin],
+                [this.position.x + this.size.x * -cos - this.size.y * sin, this.position.y - this.size.y * -cos - this.size.x * sin, this.position.x + this.size.x * -cos + this.size.y * sin, this.position.y + this.size.y * -cos - this.size.x * sin],
+                [this.position.x + this.size.x * -cos + this.size.y * sin, this.position.y + this.size.y * -cos - this.size.x * sin, this.position.x - this.size.x * -cos + this.size.y * sin, this.position.y + this.size.y * -cos + this.size.x * sin],
+                [this.position.x - this.size.x * -cos + this.size.y * sin, this.position.y + this.size.y * -cos + this.size.x * sin, this.position.x - this.size.x * -cos - this.size.y * sin, this.position.y - this.size.y * -cos + this.size.x * sin],
+            ].forEach((i, j) => {
+                if (!collided) {
+                    
+                    const m2 = (i[1] - i[3]) / (i[0] - i[2]);
 
-                        this.giveBlitz = i.rewardBlitz;
-                        }
-                }
-            });
-        } else {
-            // Calculate Y points
-            minY = this.position.y - (cos * this.size.y + -sin * this.size.x) / 2;
-            midY = this.position.y + (-cos * this.size.y + -sin * this.size.x) / 2;
-            maxY = this.position.y + (cos * this.size.y + -sin * this.size.x) / 2;
+                    const b2 = i[1] - m2 * i[0];
 
-            const Ym1 = sin / cos; // Gradient is tan(x), which is sin(x)/cos(x)
-            const Yx1 = this.position.x + (cos * this.size.x - -sin * this.size.y) / 2; // Get the x value of the top point 
-            const Yb1 = minY - Ym1 * Yx1; // Calculate y when x is zero 
+                    const collisionX = (b2 - b1) / (m1 - m2);
+        
+                    const minX = Math.max(Math.min(i[0], i[2]), Math.min(bp.x, lbp.x));
+                    const maxX = Math.min(Math.max(i[0], i[2]), Math.max(bp.x, lbp.x));
+        
 
-            const Ym2 = -cos / sin; // Gradient is -cot(x), which is -cos(x)/sin(x)
-            const Yx2 = this.position.x - (-sin * this.size.x - cos * this.size.y) / 2; // Get the x value of the bottom point
-            const Yb2 = maxY - Ym2 * Yx2; // Calculate y when x is zero 
-            
-            this.root.bullets.children.forEach(i => {
-                var Ym = Number.MIN_VALUE; // Gradient of new line, set to lowest number to prevent false positives
-                var Yb = 0; // The 'b' value in y = mx + b
-
-                // If we are between the top and middle of the boat
-                if (i.position.y > minY && i.position.y < midY) {
-                    Ym = Ym1;
-                    Yb = Yb1;
-
-                } else if (i.position.y >= midY && i.position.y < maxY) {
-                    Ym = Ym2;
-                    Yb = Yb2;
-                }
-            
-
-                if (!this.isDead() && i.position.y > 0) {
-                    const maxX = this.position.x + i.speed * delta + 50;
-                    // If the bullet is right of the line, we collided
-                    if ((i.position.x > (i.position.y - Yb) / Ym) && (i.position.x < maxX)) {
-
-                        const sub = Math.min(this.health, i.damage)
-                        this.health -= i.damage;
-                        i.damage -= sub;
-
-                        this.giveBlitz = i.rewardBlitz;
+                    if (collisionX > minX && collisionX < maxX) {
+                        collided = true;
+                        const sub = Math.min(this.health, bullet.damage)
+                        this.health -= bullet.damage;
+                        bullet.damage -= sub;
+        
+                        bullet.giveBlitz = bullet.rewardBlitz;
                     }
+                    
                 }
             });
+            
         }
     }
 
