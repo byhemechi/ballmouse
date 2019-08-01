@@ -11,5 +11,11 @@
         "title": "Stop the Soviets",
         "icon": "/assets/stopboat/title.png",
         "background": "#690000"
+    },
+    {
+        "entry": "/dist/dino.bundle.js",
+        "title": "GO OUP",
+        "icon": "/assets/flap/flap.png",
+        "background": "skyblue"
     }]
 }
