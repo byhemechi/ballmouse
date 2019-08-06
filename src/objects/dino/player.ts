@@ -1,32 +1,35 @@
 import Entity from "../../primitives/entity";
-import Rect from "../../primitives/rect";
 import { Vector } from "../../types";
+import Sprite from "../../primitives/sprite";
 
 export default class Player extends Entity {
-    children = [new Rect({
-        size: new Vector(40, 40)
+    children = [new Sprite({
+        size: new Vector(40, 40),
+        src: "/assets/dinoguy/player.png",
+        position: new Vector(-20,-20)
     })]
 
-    position = new Vector(100, 400)
+    position = new Vector(100, 420)
 
     velocity = 0;
 
-    gravity = 900;
+    gravity = 1300;
 
-    jumpForce = 500;
+    jumpForce = 600;
 
-    size = new Vector(40,40)
+    size = new Vector(0,0)
 
     isGrounded = true;
 
     tick(delta) {
+        this.rotation += delta * this.root.speed / 50
         if (!this.isGrounded){
             this.velocity += this.gravity*delta;
             this.position.y += this.velocity*delta;
         }
 
-        if (this.position.y > 400){
-            this.position.y = 400
+        if (this.position.y > 420){
+            this.position.y = 420
             this.isGrounded = true
         }
 
@@ -39,10 +42,13 @@ export default class Player extends Entity {
     cactusCollide() {
         this.root.cactusContainer.children.forEach(cactus => {
             if (this.position.x < cactus.position.x + cactus.size.x &&
-                this.position.x + this.size.x > cactus.position.x &&
+                this.position.x > cactus.position.x &&
                 this.position.y < cactus.position.y + cactus.size.y &&
-                this.position.y + this.size.y > cactus.position.y) {
-                    console.log("died")
+                this.position.y > cactus.position.y) {
+                    this.root.gameOver()
+                    if (this.game.keyJustPressed("Space")) {
+                        this.root.reset()
+                    }
                 }
         });
     }
