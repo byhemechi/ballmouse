@@ -1,8 +1,9 @@
-Move rightwards at a constant velocity and occasionally jump to dodge obstacles such as spikes and blocks: The Game1---
+---
 author: Joon Suh
 ---
 # Day 2: Collision
-#### Author: Joon Suh
+**Author: Joon Suh**  
+**Date: 2019 07 07**
 
 ## The Problem
 One of the main challenges for creating this game was the collision.  Whereas in Flying Guy we could use AABB collision because all of the pipes were axis-aligned, in this game the boats would move in different angles.

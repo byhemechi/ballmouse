@@ -2,7 +2,8 @@
 author: Joon Suh
 ---
 # Day 3: Even more Collison
-#### Author: Joon Suh
+**Author: Joon Suh**  
+**Date: 2019 07 11**
 
 ##  The Problem
 Now that you could shoot at the enemy, I now needed to create a collision detection algorithm for enemy bullets colliding with the player.  I had a few options here.  I could use AABB, SAT, the same method as the boats, or a new method.  Each method had ups and downs.
