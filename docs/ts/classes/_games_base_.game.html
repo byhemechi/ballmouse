@@ -103,6 +103,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_base_.game.html#el" class="tsd-kind-icon">el</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_base_.game.html#fps" class="tsd-kind-icon">fps</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_base_.game.html#keys" class="tsd-kind-icon">keys</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_base_.game.html#lk" class="tsd-kind-icon">lk</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_base_.game.html#lt" class="tsd-kind-icon">lt</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_base_.game.html#root" class="tsd-kind-icon">root</a></li>
 							</ul>
@@ -110,6 +111,8 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_games_base_.game.html#keyjustpressed" class="tsd-kind-icon">key<wbr>Just<wbr>Pressed</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_games_base_.game.html#keyjustreleased" class="tsd-kind-icon">key<wbr>Just<wbr>Released</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_games_base_.game.html#render" class="tsd-kind-icon">render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_games_base_.game.html#tick" class="tsd-kind-icon">tick</a></li>
 							</ul>
@@ -129,7 +132,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in games/base.ts:19</li>
+									<li>Defined in games/base.ts:20</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -160,7 +163,7 @@
 					<div class="tsd-signature tsd-kind-icon">delta<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in games/base.ts:16</li>
+							<li>Defined in games/base.ts:17</li>
 						</ul>
 					</aside>
 				</section>
@@ -180,7 +183,7 @@
 					<div class="tsd-signature tsd-kind-icon">fps<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in games/base.ts:17</li>
+							<li>Defined in games/base.ts:18</li>
 						</ul>
 					</aside>
 				</section>
@@ -191,6 +194,16 @@
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in games/base.ts:15</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="lk" class="tsd-anchor"></a>
+					<h3>lk</h3>
+					<div class="tsd-signature tsd-kind-icon">lk<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_games_base_.keyset.html" class="tsd-signature-type">KeySet</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in games/base.ts:16</li>
 						</ul>
 					</aside>
 				</section>
@@ -210,13 +223,59 @@
 					<div class="tsd-signature tsd-kind-icon">root<span class="tsd-signature-symbol">:</span> <a href="_primitives_entity_.entity.html" class="tsd-signature-type">Entity</a><span class="tsd-signature-symbol"> =&nbsp;new Entity({})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in games/base.ts:19</li>
+							<li>Defined in games/base.ts:20</li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="keyjustpressed" class="tsd-anchor"></a>
+					<h3>key<wbr>Just<wbr>Pressed</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">key<wbr>Just<wbr>Pressed<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in games/base.ts:51</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="keyjustreleased" class="tsd-anchor"></a>
+					<h3>key<wbr>Just<wbr>Released</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">key<wbr>Just<wbr>Released<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in games/base.ts:62</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="render" class="tsd-anchor"></a>
 					<h3>render</h3>
@@ -227,7 +286,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in games/base.ts:43</li>
+									<li>Defined in games/base.ts:45</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -244,7 +303,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in games/base.ts:33</li>
+									<li>Defined in games/base.ts:34</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -362,10 +421,19 @@
 								<a href="_games_base_.game.html#keys" class="tsd-kind-icon">keys</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_games_base_.game.html#lk" class="tsd-kind-icon">lk</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_games_base_.game.html#lt" class="tsd-kind-icon">lt</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_games_base_.game.html#root" class="tsd-kind-icon">root</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_games_base_.game.html#keyjustpressed" class="tsd-kind-icon">key<wbr>Just<wbr>Pressed</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_games_base_.game.html#keyjustreleased" class="tsd-kind-icon">key<wbr>Just<wbr>Released</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_games_base_.game.html#render" class="tsd-kind-icon">render</a>

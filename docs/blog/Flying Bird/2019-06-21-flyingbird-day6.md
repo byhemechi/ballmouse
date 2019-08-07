@@ -1,4 +1,4 @@
-# Flying Guy Day 6
+# Day 5: Gameplay Inhancements
 Today I made numerous changes to the game.  I changed how the second gamemode controlled, added a death animation,  improved the pipe spawning logic, and fixed bugs that were not previously caught.
 ## Second game mode change
 When we got other people to playtest our game, one of their suggestions was to give the player some momentum during the second gamemode.  After discussing as a group, we decided to listen to our playtesters and change the second gamemode.

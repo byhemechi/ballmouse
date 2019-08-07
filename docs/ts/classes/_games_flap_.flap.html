@@ -100,6 +100,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#el" class="tsd-kind-icon">el</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#fps" class="tsd-kind-icon">fps</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#keys" class="tsd-kind-icon">keys</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#lk" class="tsd-kind-icon">lk</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#lt" class="tsd-kind-icon">lt</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_games_flap_.flap.html#root" class="tsd-kind-icon">root</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_games_flap_.flap.html#score" class="tsd-kind-icon">score</a></li>
@@ -108,6 +109,8 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#keyjustpressed" class="tsd-kind-icon">key<wbr>Just<wbr>Pressed</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_games_flap_.flap.html#keyjustreleased" class="tsd-kind-icon">key<wbr>Just<wbr>Released</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_games_flap_.flap.html#render" class="tsd-kind-icon">render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_games_flap_.flap.html#tick" class="tsd-kind-icon">tick</a></li>
 							</ul>
@@ -156,7 +159,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_games_base_.game.html">Game</a>.<a href="_games_base_.game.html#delta">delta</a></p>
 						<ul>
-							<li>Defined in games/base.ts:16</li>
+							<li>Defined in games/base.ts:17</li>
 						</ul>
 					</aside>
 				</section>
@@ -178,7 +181,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_games_base_.game.html">Game</a>.<a href="_games_base_.game.html#fps">fps</a></p>
 						<ul>
-							<li>Defined in games/base.ts:17</li>
+							<li>Defined in games/base.ts:18</li>
 						</ul>
 					</aside>
 				</section>
@@ -190,6 +193,17 @@
 						<p>Inherited from <a href="_games_base_.game.html">Game</a>.<a href="_games_base_.game.html#keys">keys</a></p>
 						<ul>
 							<li>Defined in games/base.ts:15</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="lk" class="tsd-anchor"></a>
+					<h3>lk</h3>
+					<div class="tsd-signature tsd-kind-icon">lk<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_games_base_.keyset.html" class="tsd-signature-type">KeySet</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_games_base_.game.html">Game</a>.<a href="_games_base_.game.html#lk">lk</a></p>
+						<ul>
+							<li>Defined in games/base.ts:16</li>
 						</ul>
 					</aside>
 				</section>
@@ -228,6 +242,54 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="keyjustpressed" class="tsd-anchor"></a>
+					<h3>key<wbr>Just<wbr>Pressed</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">key<wbr>Just<wbr>Pressed<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_games_base_.game.html">Game</a>.<a href="_games_base_.game.html#keyjustpressed">keyJustPressed</a></p>
+								<ul>
+									<li>Defined in games/base.ts:51</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="keyjustreleased" class="tsd-anchor"></a>
+					<h3>key<wbr>Just<wbr>Released</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">key<wbr>Just<wbr>Released<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_games_base_.game.html">Game</a>.<a href="_games_base_.game.html#keyjustreleased">keyJustReleased</a></p>
+								<ul>
+									<li>Defined in games/base.ts:62</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="render" class="tsd-anchor"></a>
 					<h3>render</h3>
@@ -375,6 +437,9 @@
 								<a href="_games_flap_.flap.html#keys" class="tsd-kind-icon">keys</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_games_flap_.flap.html#lk" class="tsd-kind-icon">lk</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_games_flap_.flap.html#lt" class="tsd-kind-icon">lt</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
@@ -382,6 +447,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_games_flap_.flap.html#score" class="tsd-kind-icon">score</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_games_flap_.flap.html#keyjustpressed" class="tsd-kind-icon">key<wbr>Just<wbr>Pressed</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_games_flap_.flap.html#keyjustreleased" class="tsd-kind-icon">key<wbr>Just<wbr>Released</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_games_flap_.flap.html#render" class="tsd-kind-icon">render</a>
