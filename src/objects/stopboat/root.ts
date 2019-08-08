@@ -25,7 +25,7 @@ export default class Root extends Entity {
     enemyBullets = new Entity;
     boats = new Entity;
 
-    children = [this.bullets, this.player, this.boats, this.enemyBullets, this.ui];
+    children = [this.bullets, this.player, this.enemyBullets, this.boats, this.ui];
 
     boatSpawnTimer = 0;
     timeUntilNextBoat = 1.25;
@@ -45,11 +45,11 @@ export default class Root extends Entity {
 
         // Bullets offscreen are cleared after collision is done
 
-        for (var i = this.bullets.children.length - 1; i >= 0; i--) {
+        for (let i = this.bullets.children.length - 1; i >= 0; i--) {
             this.bullets.children[i].clear();
         }
 
-        for (var i = this.enemyBullets.children.length - 1; i >= 0; i--) {
+        for (let i = this.enemyBullets.children.length - 1; i >= 0; i--) {
             this.enemyBullets.children[i].clear();
         }
 
@@ -98,9 +98,9 @@ export default class Root extends Entity {
         this.waveSpawnRate -= 0.03 * 1.5;
 
         this.nextWaveStart = Math.max(this.nextWaveStart, 4);
-        this.nextWaveEnd = Math.max(this.nextWaveStart, 9);
-        this.boatSpawnTimer = Math.max(this.boatSpawnTimer, 0.25);
-        this.waveSpawnRate = Math.max(this.waveSpawnRate, 0.15);
+        this.nextWaveEnd = Math.max(this.nextWaveStart, 10);
+        this.boatSpawnTimer = Math.max(this.boatSpawnTimer, 0.2);
+        this.waveSpawnRate = Math.max(this.waveSpawnRate, 0.1);
     }
 
     private createBoat() {
@@ -130,7 +130,7 @@ export default class Root extends Entity {
     reset() {
         this.gameStarted = true;
         this.music.play()
-        this.scoreMultiplier = 1;
+        this.scoreMultiplier = 5;
         this.player.health = this.player.maxHealth;
         this.boatSpawnTimer = 0;
         this.timeUntilNextBoat = 1.25;
@@ -139,15 +139,15 @@ export default class Root extends Entity {
         this.nextWaveEnd = 12.5;
         this.waveSpawnRate = 0.35;
 
-        for (var i = this.boats.children.length - 1; i > -1; i--) {
+        for (let i = this.boats.children.length - 1; i > -1; i--) {
             this.boats.children[i].free();
         }
 
-        for (var i = this.bullets.children.length - 1; i > -1; i--) {
+        for (let i = this.bullets.children.length - 1; i > -1; i--) {
             this.bullets.children[i].free();
         }
 
-        for (var i = this.enemyBullets.children.length - 1; i > -1; i--) {
+        for (let i = this.enemyBullets.children.length - 1; i > -1; i--) {
             this.enemyBullets.children[i].free();
         }
 

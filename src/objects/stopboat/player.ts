@@ -93,9 +93,9 @@ export default class Player extends Entity {
 
     // Array of blitz weapons we currently possess
     blitzWeapons = [
-        new Weapon({ // 2400 total
+        new Weapon({ // 1440 total
             speed: 1500,
-            damage: 20,
+            damage: 15,
             angularSpread: Math.PI * 4 / 5,
             linearSpread: 0,
             spreadIsRandom: false,
@@ -108,7 +108,7 @@ export default class Player extends Entity {
             blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(204, 5),
-            bounceCount: 10,
+            bounceCount: 8,
             positionLocked: true,
             rewardBlitz: false
         }),
@@ -118,7 +118,7 @@ export default class Player extends Entity {
             angularSpread: 0.02,
             linearSpread: 75,
             tilt: 0.1,
-            fireRate: 0.0035,
+            fireRate: 0.005,
             ammoType: 4,
             blitzSound: '/assets/stopboat/shootBlitz2.wav',
             src: "/assets/stopboat/bullet.png",
@@ -127,7 +127,7 @@ export default class Player extends Entity {
         }),
         new Weapon({ // 5000 total
             speed: 200,
-            damage: 12,
+            damage: 10,
             angularSpread: 0,
             linearSpread: 1500,
             fireRate: 0.1,
@@ -147,7 +147,7 @@ export default class Player extends Entity {
     blitzPosition = new Vector;
 
     ammo = [Infinity, 200, 1000, 0, 0, 0]
-    MAXAMMO = [Infinity, 500, 5000, 4, 1100, 1]
+    MAXAMMO = [Infinity, 500, 5000, 4, 900, 1]
 
     children = [new Sprite({
         src: "/assets/stopboat/player.svg",
@@ -204,7 +204,7 @@ export default class Player extends Entity {
      * @param delta 
      */
     private incrementTimers(delta: number) {
-        for (var i = 0; i < this.weapons.length; i++) {
+        for (let i = 0; i < this.weapons.length; i++) {
             let wpn = this.weapons[i];
 
             wpn.timer += delta;
@@ -234,7 +234,7 @@ export default class Player extends Entity {
      *  @param delta 
      */
     private checkCollision(delta: number) {
-        for (var i = 0; i < this.root.enemyBullets.children.length; i++) {
+        for (let i = 0; i < this.root.enemyBullets.children.length; i++) {
             let eb = this.root.enemyBullets.children[i];
 
             const nextX = eb.position.x + eb.direction.x * eb.speed * delta;
@@ -257,7 +257,7 @@ export default class Player extends Entity {
 
     /** Caps ammunition under the limit */
     private capAmmo() {
-        for (var i = 0; i < this.ammo.length; i++) {
+        for (let i = 0; i < this.ammo.length; i++) {
             this.ammo[i] = Math.min(this.ammo[i], this.MAXAMMO[i]);
         }
     }
@@ -268,9 +268,9 @@ export default class Player extends Entity {
     private tryShoot() {
 
         // Check if we are currently blitzing
-        var blitzing = false;
+        let blitzing = false;
 
-        for (var i = 0; i < this.blitzWeapons.length; i++) {
+        for (let i = 0; i < this.blitzWeapons.length; i++) {
             if (this.ammo[this.blitzWeapons[i].ammoType] > 0) {
                 blitzing = true;
             }
@@ -362,9 +362,9 @@ export default class Player extends Entity {
         // If we pressed the blitz key and the cooldown timer expired
         if (this.game.keyJustPressed('KeyX') && !this.blitzCooldownTimer) {
             // If we can afford to blitz
-            if (this.root.scoreMultiplier >= 2) {
-                if (this.invincibleTimer) this.root.scoreMultiplier -= 0.5;
-                else this.root.scoreMultiplier -= 1;
+            if (this.root.scoreMultiplier >= 3) {
+                if (this.invincibleTimer) this.root.scoreMultiplier -= 1.5;
+                else this.root.scoreMultiplier -= 2;
                 this.currentBlitzWeapon = this.currentWeapon; // Set the blitz weapon to our current weapon
                 this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] = this.MAXAMMO[this.blitzWeapons[this.currentBlitzWeapon].ammoType]
                 this.blitzPosition.x = this.position.x;
@@ -410,7 +410,7 @@ export default class Player extends Entity {
      * Determine movement direction
      */
     private keyboardMove() {
-        var move = 0;
+        let move = 0;
 
         move -= this.game.keys.KeyI ? 1 : 0;
         move += this.game.keys.KeyK ? 1 : 0;
@@ -436,9 +436,9 @@ export default class Player extends Entity {
      * @param position The position where the bullets should spawn at
      */
     private shoot(wpn: Weapon, position: Vector) {
-        for (var i = 0.5; i < wpn.shotCount; i++) {
-            var angle: number;
-            var variance: number;
+        for (let i = 0.5; i < wpn.shotCount; i++) {
+            let angle: number;
+            let variance: number;
 
             if (wpn.spreadIsRandom) {
                 angle = this.weaponSpread() * wpn.angularSpread + wpn.tilt * this.keyboardMove();

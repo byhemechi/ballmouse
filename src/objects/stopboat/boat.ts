@@ -3,6 +3,7 @@ import Sprite from "../../primitives/sprite";
 import { Vector } from "../../types";
 import Weapon from "./weapon";
 import Bullet from "./bullet";
+import Splash from "./splash";
 
 export default class Boat extends Entity {
 
@@ -25,23 +26,28 @@ export default class Boat extends Entity {
         spriteSize: new Vector(74,5)
     })
 
+    turretSprite = new Entity({
+        children: [new Sprite({
+            src: "/assets/stopboat/turret.png",
+            size: new Vector(90, 60),
+            position: new Vector(-90/2, -60/2)
+        })],
+        rotation: Math.PI
+    })
 
     children = [
         new Sprite({
             src: "/assets/stopboat/boat.png",
+            size: new Vector(64, 32),
             position: new Vector(-32, -16)
-        })
+        }),
+        this.turretSprite
     ]
 
     tick(delta) {
-
-        // Do collision before and after moving the boat
         this.collide(delta);
-
-        this.position.x += delta * this.speed * this.velocity.x;
-        this.position.y += delta * this.speed * this.velocity.y;
-
-        this.collide(delta);
+        
+        this.move(delta);
 
         this.bounceOffWall();
 
@@ -51,6 +57,11 @@ export default class Boat extends Entity {
 
         if (this.isDead()) this.kill()
 
+    }
+
+    private move(delta: number) {
+        this.position.x += delta * this.speed * this.velocity.x;
+        this.position.y += delta * this.speed * this.velocity.y;
     }
 
     /**
@@ -64,7 +75,7 @@ export default class Boat extends Entity {
 
         const lp = new Vector(this.position.x - this.velocity.x * this.speed * delta, this.position.y - this.velocity.y * this.speed * delta)
 
-        for (var i = 0; i < this.root.bullets.children.length; i++) {
+        for (let i = 0; i < this.root.bullets.children.length; i++) {
             const bullet = this.root.bullets.children[i];
 
             const bp = bullet.position;
@@ -74,7 +85,7 @@ export default class Boat extends Entity {
             const m1 = (lbp.y - bp.y) / (lbp.x - bp.x);
             const b1 = bp.y - m1 * bp.x;
 
-            var collided = false;
+            let collided = false;
 
             [
                 [this.position.x - this.size.x * -cos - this.size.y * sin, this.position.y - this.size.y * -cos + this.size.x * sin, this.position.x + this.size.x * -cos - this.size.y * sin, this.position.y - this.size.y * -cos - this.size.x * sin],
@@ -100,7 +111,7 @@ export default class Boat extends Entity {
                         this.health -= bullet.damage;
                         bullet.damage -= sub;
         
-                        bullet.giveBlitz = bullet.rewardBlitz;
+                        this.giveBlitz = bullet.rewardBlitz;
                     }
                     
                 }
@@ -146,6 +157,7 @@ export default class Boat extends Entity {
                           this.position.x - this.root.player.position.x);
 
             this.shoot(this.weapon.speed, this.weapon.damage, angle);
+            this.turretSprite.rotation = angle - Math.PI - this.rotation;
         }
     }
 
@@ -197,6 +209,18 @@ export default class Boat extends Entity {
         this.game.score += Math.round(10 * this.root.scoreMultiplier);
         this.root.giveLootToPlayer([0, 2, 0]);
         if (this.giveBlitz) this.root.increaseScoreMultiplier(0.03);
+
+        const splash = new Splash({
+            src: "/assets/stopboat/splash.gif",
+            size: new Vector(90, 75),
+        });
+
+        splash.timer = 0.3;
+        splash.position.x = this.position.x - splash.size.x / 2;
+        splash.position.y = this.position.y - splash.size.y / 2 - 10;
+
+        this.root.children.push(splash);
+
         this.free();
     }
 }
