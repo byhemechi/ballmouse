@@ -15,9 +15,6 @@ theme:
   favicon: /coolguy.png
   feature:
     tabs: true
-repo_url: 'https://gitlab.com/byhemechi/ballmouse'
-repo_name: byhemechi/ballmouse
-edit_uri: ""
 
 extra_javascript:
     - https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js

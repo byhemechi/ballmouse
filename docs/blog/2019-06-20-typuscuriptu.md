@@ -1,7 +1,8 @@
 subtitle: Using TypeScript to avoid the pains of JS
 
 # Javascript → TypeScript
-**Author: George Fischer**
+**Author: George Fischer**  
+**Date: 20 06 2019**
 
 ## Why are we doing this?
 ### JavaScript's Failings

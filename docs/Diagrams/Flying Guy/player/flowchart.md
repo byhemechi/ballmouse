@@ -1,12 +1,9 @@
 # Flowchart
 ## Player
-
-
-![playermainflow.svg](../playermainflow.svg)
+![MainFlow](MainFlow.svg)
 ## Flapmode
+![FlapmodeFlow](FlapmodeFlow.svg)
 
-
-![playerFlapmode.svg](playerFlapmode.svg)
 ## Coptermode
 
 

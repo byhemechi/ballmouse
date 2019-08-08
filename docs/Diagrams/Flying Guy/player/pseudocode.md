@@ -4,11 +4,10 @@ Main player loop
 ```pascal
 BEGIN PLAYER
   WHILE Player IS Alive
-    SET spaceJustPressed TO S͟P͟A͟C͟E͟J͟U͟S͟T͟P͟R͟E͟S͟S͟E͟D͟
     CASEWHERE state IS "flap":
-      F͟L͟A͟P͟M͟O͟D͟E͟
+      _FLAPMODE_
     state IS "copter":
-      C͟O͟P͟T͟E͟R͟M͟O͟D͟E͟
+      _COPTERMODE_
     END CASE
   END WHILE
 END PLAYER
@@ -18,7 +17,7 @@ Flap mode method
 ```pascal
 BEGIN FLAPMODE
   INCREASE velocity by flapGravity
-  IF spaceJustPressed
+  IF _SPACEJUSTPRESSED_
     SET velocity TO jumpForce
   END IF
   
@@ -34,7 +33,7 @@ Copter mode method
 ```pascal
 BEGIN COPTERMODE
   INCREASE velocity BY copterGravity
-  IF S͟P͟A͟C͟E͟P͟R͟E͟S͟S͟E͟D͟
+  IF _SPACEPRESSED_
     INCREASE velocity BY copterForce
   END IF
   
