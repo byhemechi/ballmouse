@@ -50,6 +50,34 @@ export default class Bullet extends Entity {
         // Move bullet
         this.position.x += this.direction.x * this.speed * delta;
         this.position.y += this.direction.y * this.speed * delta;
+
+        this.bounceOffWall();
+    }
+
+    private bounceOffWall() {
+        if (this.bounceCount) {
+            if (this.position.y > 576 && this.direction.y > 0) {
+                this.position.y = 576 * 2 - this.position.y;
+                this.direction.y = -this.direction.y;
+                this.bounceCount--;
+            }
+            else if (this.position.y < 0 && this.direction.y < 0) {
+                this.position.y = -this.position.y;
+                this.direction.y = -this.direction.y;
+                this.bounceCount--;
+            }
+            if (this.position.x > 1024 && this.direction.x > 0) {
+                this.position.x = 1024 * 2 - this.position.x;
+                this.direction.x = -this.direction.x;
+                this.bounceCount--;
+            }
+            else if (this.position.x < 111 && this.direction.x < 0) {
+                this.position.x = 111 * 2 - this.position.x;
+                this.direction.x = -this.direction.x;
+                this.bounceCount--;
+            }
+            this.rotation = Math.atan2(this.direction.y, this.direction.x);
+        }
     }
 
     /**
@@ -70,28 +98,11 @@ export default class Bullet extends Entity {
         if (this.damage <= 0 && this.parent) this.free();
 
         if (this.isOffscreen()) {
-            if (this.bounceCount) {
-                this.bounceCount--;
-                if (this.position.y > 576 && this.direction.y > 0) {
-                    this.position.y = 576 * 2 - this.position.y;
-                    this.direction.y = -this.direction.y;
-                } else if (this.position.y < 0 && this.direction.y < 0) {
-                    this.position.y = -this.position.y;
-                    this.direction.y = -this.direction.y;
-                }
-
-                if (this.position.x > 1024 && this.direction.x > 0) {
-                    this.position.x = 1024 * 2 - this.position.x;
-                    this.direction.x = -this.direction.x;
-                } else if (this.position.x < 0 && this.direction.x < 0) {
-                    this.position.x = -this.position.x;
-                    this.direction.x = -this.direction.x;
-                }
-
-                this.rotation = Math.atan2(this.direction.y, this.direction.x);
-            } else {
+            if (this.bounceCount <= 0) {
                 this.damage = 0;
             }
         }
     }
 }
+
+// 10 - 8 = 2, 10 + (10 - 8)

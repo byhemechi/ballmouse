@@ -49,7 +49,7 @@ export default class Player extends Entity {
     weapons = [
         new Weapon({ // 312.5 dps
             speed: 4000,
-            damage: 125,
+            damage: 100,
             angularSpread: 0.01,
             fireRate: 0.4,
             ammoType: 0,
@@ -68,16 +68,15 @@ export default class Player extends Entity {
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(102, 5)
         }),
-        new Weapon({ // 250 dps
+        new Weapon({ // 272.72 dps
             speed: 5000,
-            damage: 15,
-            angularSpread: 0.15,
-            linearSpread: 50,
-            fireRate: 0.1,
+            damage: 10,
+            angularSpread: 0.05,
+            linearSpread: 20,
+            fireRate: 1.1,
             ammoType: 2,
             spreadIsRandom: false,
-            chargeMax: 50,
-            chargeTime: 1.9,
+            shotCount: 30,
             shootSound: '/assets/stopboat/shoot1.wav',
             src: "/assets/stopboat/bullet.png",
             spriteSize: new Vector(102, 5)
@@ -146,14 +145,36 @@ export default class Player extends Entity {
 
     blitzPosition = new Vector;
 
-    ammo = [Infinity, 200, 1000, 0, 0, 0]
-    MAXAMMO = [Infinity, 500, 5000, 4, 900, 1]
+    ammo = [Infinity, 200, 50, 0, 0, 0]
+    MAXAMMO = [Infinity, 500, 100, 4, 900, 1]
 
-    children = [new Sprite({
-        src: "/assets/stopboat/player.svg",
-        size: new Vector(60, 64),
-        position: new Vector(-30, -32),
-    })];
+    children = [
+        new Sprite({
+            src: "/assets/stopboat/boot.png",
+            size: new Vector(32, 32),
+            position: new Vector(8, 20)
+        }),
+        new Sprite({
+            src: "/assets/stopboat/player.svg",
+            size: new Vector(60, 64),
+            position: new Vector(-30, -32),
+        }),
+        new Sprite({
+            src: "/assets/stopboat/boot.png",
+            size: new Vector(32, 32),
+            position: new Vector(-20, 25)
+        }),
+        new Sprite({
+            src: "/assets/stopboat/guns.png",
+            size: new Vector(96, 96),
+            position: new Vector(0, -30),
+            region: {
+                begin: new Vector(0, 0),
+                size: new Vector(250, 250)
+            },
+        })
+
+    ];
 
 
     tick(delta) {
@@ -184,8 +205,7 @@ export default class Player extends Entity {
 
     /** Clamp player position so they don't go off screen */
     private clampPosition() {
-        const border = 16;
-        this.position.y = Math.min(Math.max(this.position.y, 0 + border), this.game.el.height - border);
+        this.position.y = Math.min(Math.max(this.position.y, 16), this.game.el.height - 36);
     }
 
     /** Switch player weapons when they press J or L */
@@ -197,6 +217,7 @@ export default class Player extends Entity {
             this.currentWeapon += 1;
         }
         this.currentWeapon = (this.weapons.length + this.currentWeapon) % this.weapons.length;
+        this.children[3].region.begin.x = 250 * this.currentWeapon
     }
 
     /**
@@ -245,7 +266,7 @@ export default class Player extends Entity {
                 this.hurt(eb.damage);
                 eb.damage = 0;
             }
-            if (!eb.grazed && (nextX - this.position.x) ** 2 + (nextY - this.position.y) ** 2 < this.grazeSize ** 2) { 
+            if (!eb.grazed && (nextX - this.position.x) ** 2 + (nextY - this.position.y) ** 2 < this.grazeSize ** 2) {
                 eb.grazed = true;
                 this.game.score += Math.round(1 * this.root.scoreMultiplier);
                 playSound('graze');
@@ -311,7 +332,7 @@ export default class Player extends Entity {
             while (wpn.queue > 0 && this.ammo[wpn.ammoType] > 0) {
                 wpn.queue--;
                 wpn.canFire = false;
-                this.ammo[wpn.ammoType] -= wpn.shotCount;
+                this.ammo[wpn.ammoType]--;
 
                 if (wpn.shotCount > 0) wpn.playshoot();
 
@@ -344,15 +365,23 @@ export default class Player extends Entity {
 
         if (this.invincibleTimer > 0) {
             this.invincibleTimer -= delta;
-            this.children[0].visible = !this.children[0].visible
+            this.children.forEach(i => {
+                i.visible = !i.visible
+            })
+
 
         } else if (this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] > 0) {
-            this.children[0].visible = !this.children[0].visible
+
+            this.children.forEach(i => {
+                i.visible = !i.visible
+            })
         }
 
         if (this.invincibleTimer < 0) {
             this.invincibleTimer = 0;
-            this.children[0].visible = true;
+            this.children.forEach(i => {
+                i.visible = true
+            })
         }
 
     }
@@ -392,18 +421,19 @@ export default class Player extends Entity {
             while (bw.timer > bw.fireRate && this.ammo[bw.ammoType] > 0) {
                 bw.timer -= bw.fireRate;
                 this.ammo[bw.ammoType]--;
-                
+
                 const pos = bw.positionLocked ? this.blitzPosition : this.position;
                 this.shoot(bw, pos.multiply(1));
             }
 
+            
             // Start invincibility time
             if (this.ammo[bw.ammoType] <= 0) {
                 this.invincibleTimer = this.invincibleTime;
             }
         }
 
-        
+
     }
 
     /**
@@ -467,8 +497,8 @@ export default class Player extends Entity {
                 rewardBlitz: wpn.rewardBlitz
             });
 
-            bullet.position.x = position.x;
-            bullet.position.y = position.y + variance;
+            bullet.position.x = position.x + 64;
+            bullet.position.y = position.y + variance + 11;
             bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
             this.root.bullets.children.push(bullet);
         }
@@ -482,5 +512,19 @@ export default class Player extends Entity {
         const spreadAmount = Math.random() ** 2;
         const spread = spreadDirection * spreadAmount;
         return spread;
+    }
+    
+    /**
+     * Resets the player to default state
+     */
+    reset() {
+        this.health = this.maxHealth;
+        this.currentWeapon = 0;
+        this.invincibleTimer = 0;
+        this.children.forEach(i => {
+            i.visible = true
+        });
+        this.position = new Vector(64, 576 / 2);
+        this.ammo = [Infinity, 200, 50, 0, 0, 0]
     }
 }

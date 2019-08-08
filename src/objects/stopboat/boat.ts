@@ -51,6 +51,12 @@ export default class Boat extends Entity {
 
         this.bounceOffWall();
 
+        const na = this.weapon.angularSpread
+             + Math.atan2(this.position.y - this.root.player.position.y,
+                          this.position.x - this.root.player.position.x) - this.rotation;
+
+        this.turretSprite.rotation += (na - this.turretSprite.rotation) * delta * 5
+
         this.attemptShoot(delta);
 
         this.invade();
@@ -157,7 +163,6 @@ export default class Boat extends Entity {
                           this.position.x - this.root.player.position.x);
 
             this.shoot(this.weapon.speed, this.weapon.damage, angle);
-            this.turretSprite.rotation = angle - Math.PI - this.rotation;
         }
     }
 
@@ -207,7 +212,7 @@ export default class Boat extends Entity {
      */
     private kill() {
         this.game.score += Math.round(10 * this.root.scoreMultiplier);
-        this.root.giveLootToPlayer([0, 2, 0]);
+        this.root.giveLootToPlayer([0, 2, 0.1]);
         if (this.giveBlitz) this.root.increaseScoreMultiplier(0.03);
 
         const splash = new Splash({

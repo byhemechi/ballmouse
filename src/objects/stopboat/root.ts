@@ -6,6 +6,7 @@ import Sprite from "../../primitives/sprite";
 import Player from "./player"
 import Boat from "./boat";
 import UI from "./ui";
+import Label from "../../primitives/text";
 
 export default class Root extends Entity {
 
@@ -25,7 +26,24 @@ export default class Root extends Entity {
     enemyBullets = new Entity;
     boats = new Entity;
 
-    children = [this.bullets, this.player, this.enemyBullets, this.boats, this.ui];
+    gameOver = new Label({
+        value: "PRESS Z TO START",
+        font: "32px sans-serif",
+        position: new Vector(125, 260)
+    })
+
+    children = [
+        this.bullets, 
+        new Sprite({ 
+            src: "/assets/stopboat/decking.jpg", 
+            size: new Vector(576,576),
+            position: new Vector(-465, 0)
+        }), 
+        this.player, 
+        this.enemyBullets, 
+        this.boats, 
+        this.ui, 
+        this.gameOver];
 
     boatSpawnTimer = 0;
     timeUntilNextBoat = 1.25;
@@ -33,6 +51,10 @@ export default class Root extends Entity {
     nextWaveStart = 10;
     nextWaveEnd = 12.5;
     waveSpawnRate = 0.35;
+
+    // Pressing Z 0.5 second after death will not reset game
+    endGameTime = 0.5;
+    endGameTimer = 0;
 
     constructor(...args) {
         super(args);
@@ -63,14 +85,21 @@ export default class Root extends Entity {
                 this.endGame()
             }
         } else {
-            if (this.game.keyJustPressed('KeyZ')) this.reset();
+            // If Z is just pressed and endGameTimer is zero
+            if (this.game.keyJustPressed('KeyZ') && !this.endGameTimer) this.reset();
         }
+
+        // Decrease timer
+        if (this.endGameTimer) this.endGameTimer -= delta;
+        if (this.endGameTimer < 0) this.endGameTimer = 0
     }
 
     endGame() {
+        this.gameOver.visible = true
         this.gameStarted = false;
         this.music.pause();
         this.music.currentTime = 0;
+        this.endGameTimer = this.endGameTime
     }
 
     /**
@@ -91,16 +120,19 @@ export default class Root extends Entity {
         }
     }
 
+    /**
+     * Increases the difficulty of the game
+     */
     private increaseDifficulty() {
-        this.nextWaveStart -= 0.5 * 1.5;
-        this.nextWaveEnd -= 0.3 * 1.5;
-        this.boatSpawnTimer -= 0.05 * 1.5;
-        this.waveSpawnRate -= 0.03 * 1.5;
+        this.nextWaveStart -= 0.3;
+        this.nextWaveEnd -= 0.25;
+        this.timeUntilNextBoat -= 0.1;
+        this.waveSpawnRate -= 0.02;
 
-        this.nextWaveStart = Math.max(this.nextWaveStart, 4);
-        this.nextWaveEnd = Math.max(this.nextWaveStart, 10);
-        this.boatSpawnTimer = Math.max(this.boatSpawnTimer, 0.2);
-        this.waveSpawnRate = Math.max(this.waveSpawnRate, 0.1);
+        this.nextWaveStart = Math.max(this.nextWaveStart, 10);
+        this.nextWaveEnd = Math.max(this.nextWaveStart, 14);
+        this.timeUntilNextBoat = Math.max(this.timeUntilNextBoat, 0.5);
+        this.waveSpawnRate = Math.max(this.waveSpawnRate, 0.15);
     }
 
     private createBoat() {
@@ -128,15 +160,16 @@ export default class Root extends Entity {
     }
 
     reset() {
+        this.gameOver.visible = false
+        this.player.reset();
         this.gameStarted = true;
-        this.music.play()
-        this.scoreMultiplier = 5;
-        this.player.health = this.player.maxHealth;
+        this.music.play();
+        this.scoreMultiplier = 1;
         this.boatSpawnTimer = 0;
         this.timeUntilNextBoat = 1.25;
-        this.waveTimer = 0;
-        this.nextWaveStart = 10;
-        this.nextWaveEnd = 12.5;
+        this.waveTimer = 5;
+        this.nextWaveStart = 13;
+        this.nextWaveEnd = 17;
         this.waveSpawnRate = 0.35;
 
         for (let i = this.boats.children.length - 1; i > -1; i--) {
@@ -150,8 +183,6 @@ export default class Root extends Entity {
         for (let i = this.enemyBullets.children.length - 1; i > -1; i--) {
             this.enemyBullets.children[i].free();
         }
-
     }
-
 }
 

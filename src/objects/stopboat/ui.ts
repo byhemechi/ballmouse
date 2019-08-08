@@ -126,7 +126,7 @@ export default class UI extends Entity {
         let player = this.root.player;
         let pw = player.currentWeapon;
         // Set the text to how much ammo of that type we have left
-        this.currentWeaponText.value = player.ammo[player.weapons[pw].ammoType]
+        this.currentWeaponText.value = Math.floor(player.ammo[player.weapons[pw].ammoType]).toString();
         // Set the offset of the label based on player weapon
         this.currentWeaponText.position.x = 104 + pw * 136;
     }
