@@ -51,9 +51,6 @@ export default class Root extends Entity {
     distanceSinceLastCloud = 0;
     distanceToNextCloud = 0;
 
-    prevJump = false; // Space state on last frame
-    jumpJustPressed = false;
-
     shakeLength = 0.2;
     screenShakeTimer = 0;
 
@@ -74,11 +71,9 @@ export default class Root extends Entity {
     tick(delta) {
 
         // Input if jump pressed this frame
-        this.jumpJustPressed = this.isInitialJump();
-        this.player.jumpJustPressed = this.jumpJustPressed;
 
         // If we press jump and game has ended, reset the game
-        if (this.jumpJustPressed && !this.started && this.screenShakeTimer <= 0) this.reset();
+        if (this.game.keyJustPressed('Space') && !this.started && this.screenShakeTimer <= 0) this.reset();
 
         this.bgFgCounters(delta);
 
@@ -120,21 +115,6 @@ export default class Root extends Entity {
 
     bgFgCounters(delta) {
         this.distanceSinceLastCloud += (this.speed + 80) * delta;
-    }
-
-
-    /**
-     * Check if this is the first frame where jump is pressed
-     */
-    isInitialJump() {
-        var didJump
-        if ((this.game.keys.Space || this.game.keys.ArrowUp) && !this.prevJump) {
-            didJump = true;
-        } else {
-            didJump = false;
-        }
-        this.prevJump = this.game.keys.Space || this.game.keys.ArrowUp;
-        return didJump;
     }
 
     /**
@@ -284,15 +264,12 @@ export default class Root extends Entity {
             cloud.speedRatio = cloud.sizeRatio / 2;
 
             if (cloud.speedRatio > 1) {
-                cloud.children[0].visible = false;
-                cloud.children[1].visible = true;
-                cloud.children[1].size.x = 128 * cloud.sizeRatio;
-                cloud.children[1].size.y = 64 * cloud.sizeRatio;
+                cloud.alpha = 0.7;
+                cloud.children[0].size.x = 128 * cloud.sizeRatio;
+                cloud.children[0].size.y = 64 * cloud.sizeRatio;
 
                 this.fgObjects.children.push(cloud);
-            } else {    
-                cloud.children[0].visible = true;
-                cloud.children[1].visible = false;
+            } else {
                 cloud.children[0].size.x = 128 * cloud.sizeRatio;
                 cloud.children[0].size.y = 64 * cloud.sizeRatio;
                 

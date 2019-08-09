@@ -4,7 +4,7 @@
         "entry": "/dist/flap.bundle.js",
         "title": "Flappy Guy",
         "icon": "/assets/flap/flap.png",
-        "background": "skyblue"
+        "background": "linear-gradient(rgb(211, 228, 255), skyblue, skyblue)"
     },
     {
         "entry": "/dist/stopboat.bundle.js",
