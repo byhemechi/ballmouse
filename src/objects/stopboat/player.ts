@@ -1,3 +1,4 @@
+
 // Import classes
 import Entity from "../../primitives/entity";
 import Sprite from "../../primitives/sprite";
