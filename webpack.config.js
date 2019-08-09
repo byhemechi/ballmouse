@@ -9,7 +9,8 @@ module.exports = {
   entry: {
     flap: './src/flap.ts',
     stopboat: './src/stopboat.ts',
-    menu: "./src/menu/entry.ts"
+    menu: "./src/menu/entry.ts",
+    dino: "./src/dino.ts"
   },
   output: {
     filename: '[name].bundle.js',

@@ -20,8 +20,6 @@ export default class Player extends Entity {
 
     flapSound: ArrayBuffer;
 
-    jumpJustPressed: boolean = false;
-
     player = new Sprite({
         src: "/assets/flap/flap.png",
         size: new Vector(64, 64),
@@ -104,7 +102,7 @@ export default class Player extends Entity {
 
         this.velocity += 0.5 * this.gravity * delta;
 
-        if (this.jumpJustPressed) {
+        if (this.game.keyJustPressed('Space')) {
             this.velocity = -600;
             playSound("flap");
         }

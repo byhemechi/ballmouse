@@ -4,12 +4,18 @@
         "entry": "/dist/flap.bundle.js",
         "title": "Flappy Guy",
         "icon": "/assets/flap/flap.png",
-        "background": "skyblue"
+        "background": "linear-gradient(rgb(211, 228, 255), skyblue, skyblue)"
     },
     {
         "entry": "/dist/stopboat.bundle.js",
-        "title": "Stop the Soviets",
+        "title": "Stop the Boats: Blitz!",
         "icon": "/assets/stopboat/title.png",
-        "background": "#275a75"
+        "background": "#690000"
+    },
+    {
+        "entry": "/dist/dino.bundle.js",
+        "title": "GO OUP",
+        "icon": "/assets/flap/flap.png",
+        "background": "skyblue"
     }]
 }

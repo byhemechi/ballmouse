@@ -1,4 +1,4 @@
-# Doppler Effect
+<<<<<<< Updated upstream
 
 Sound go away, lower pitch;
 sound go toward, higher pitch;
@@ -31,3 +31,5 @@ f' &= 400 \frac{340ms^{-1} + 80kmh^{-1}}{340ms^{-1} + 100kmh^{-1}} \\
 f' &= 393.96
 \end{aligned}
 $$
+=======
+>>>>>>> Stashed changes
