@@ -1,6 +1,6 @@
 # Ballmouse
-<a href='https://splorge.space/game'><img alt="Play Game"  src="https://img.shields.io/badge/play-game-green?color=ff7043&amp;style=for-the-badge"></a>
-
+  <a href='https://splorge.space/game'><img alt="Play Game"  src="https://img.shields.io/badge/play-game-green?color=ff7043&amp;style=for-the-badge"></a>  
+<a href='https://splorge.space/manual'><img alt="How to Play"  src="https://img.shields.io/badge/How%20to-play-green?color=ff7043&amp;style=for-the-badge"></a>
 ## Overview
 Click "Play Game" to play game.
 
