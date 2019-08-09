@@ -16,10 +16,11 @@ pages:
   - rm -rf public/source
   - mv docs/ts public/source
   - mv dist public/dist
-  - mv assets public/assets
+  - mv assets/* public/assets
+  - mv src public/src
+  - mv menu.json public/menu.json
   artifacts:
     paths:
     - public
   only:
-  - master
-
+  - docs
