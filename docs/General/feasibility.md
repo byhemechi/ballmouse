@@ -10,7 +10,7 @@ We are creating the game in JavaScript/TypeScript and Canvas.  The engine is des
 However, an issue that we found was that the JavaScript was not very reliable on Internet Explorer as it was missing a couple of features present in other browsers.  This issue could be resolved by packaging the game as an Electron[^1] app.
 ## Requirements from the Devs
 ### Hardware 
-As stated [above](/General/feasability/#hardware), the hardware required for the engine is very low and will not be an issue.
+As stated [above](/General/feasibility/#hardware), the hardware required for the engine is very low and will not be an issue.
 ### Software
 Because of how simple our engine is, all of our APIs are open source and we are not at the mercy of any proprietary software.  Every single software used for developement was open source.  JavaScript + Canvas are both open source web standards; Visual Studio Code, the editor we used was open source; Git, our version controller was also open source; and even our OS, Linux was open source.
 ## Scheduling

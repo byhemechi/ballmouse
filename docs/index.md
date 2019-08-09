@@ -8,7 +8,7 @@ Click "Play Game" to play game.
 !!! note
     The game Dino Guy is not available due to an incident with Git.  Because of this, there is no remaining evidence of the game's existance outside of daily logs.  
 
-General documentation such as feasability is in [General](/General/feasibility/).  
+General documentation such as feasibility is in [General](/General/feasibility/).  
 Diagrams such as flowcharts, pseudocode, data-flow diagram, structure charts, etc are in [Diagrams](/Diagrams/). 
 Daily Blogs are in [Blogs](/blog/2019-05-14-planning/).
 
