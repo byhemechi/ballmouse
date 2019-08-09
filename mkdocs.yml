@@ -39,6 +39,7 @@ markdown_extensions:
   - admonition
   - pymdownx.arithmatex
   - pymdownx.critic
+  - pymdownx.keys
   - pymdownx.emoji:
       emoji_generator: !!python/name:pymdownx.emoji.to_svg
   - pymdownx.magiclink

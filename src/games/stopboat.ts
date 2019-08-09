@@ -10,13 +10,12 @@ export default class Shootup extends Game {
         super();
         this.el.width  = 1024;
         this.el.height = 576;
-        this.el.style.backgroundColor = "black";
+        this.el.style.backgroundColor = "#275a75";
     }
     render() {
         const ctx = this.ctx;
         super.render();
-        ctx.font = "32px sans-serif"
-        ctx.fillStyle = "#bada55";
-        ctx.fillText(this.score.toString(), 100, 100);
+        ctx.font = "24px Courier New";
+        ctx.fillText("Score: " + this.score.toString(), 700, 10);
     }
 }
