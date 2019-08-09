@@ -58,6 +58,30 @@ export default class Player extends Entity {
         super.tick(delta);
     }
 
+<<<<<<< Updated upstream
+=======
+    /** Switch player weapons when they press J or L */
+    private switchWeapons() {
+        if (this.game.keyJustPressed('KeyJ') || this.game.keyJustPressed('ArrowLeft')) {
+            this.currentWeapon -= 1;
+        }
+        if (this.game.keyJustPressed('KeyL') || this.game.keyJustPressed('ArrowRight')) {
+            this.currentWeapon += 1;
+        }
+        this.currentWeapon = (this.weapons.length + this.currentWeapon) % this.weapons.length;
+        this.children[3].region.begin.x = 250 * this.currentWeapon
+    }
+
+    /**
+     * Update timers for weapons and increment bullet queue
+     * @param delta 
+     */
+    private incrementTimers(delta: number) {
+        for (let i = 0; i < this.weapons.length; i++) {
+            let wpn = this.weapons[i];
+
+            wpn.timer += delta;
+>>>>>>> Stashed changes
 
 
     /**
@@ -114,6 +138,11 @@ export default class Player extends Entity {
                 i.free();
             }
 
+<<<<<<< Updated upstream
+=======
+        move -= this.game.keys.KeyI || this.game.keys.ArrowUp ? 1 : 0;
+        move += this.game.keys.KeyK || this.game.keys.ArrowDown ? 1 : 0;
+>>>>>>> Stashed changes
 
         })
     }
@@ -142,8 +171,14 @@ export default class Player extends Entity {
                 rotation: angle,
                 damage: this.weapons[this.currentWeapon].damage
             });
+<<<<<<< Updated upstream
             bullet.position.x = this.position.x;
             bullet.position.y = this.position.y;
+=======
+
+            bullet.position.x = position.x + 80;
+            bullet.position.y = position.y + variance + 11;
+>>>>>>> Stashed changes
             bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
             this.parent.bullets.children.push(bullet)
         }

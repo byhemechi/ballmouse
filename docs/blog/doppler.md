@@ -1,4 +1,3 @@
-# Doppler Effect
 
 Sound go away, lower pitch;
 sound go toward, higher pitch;
