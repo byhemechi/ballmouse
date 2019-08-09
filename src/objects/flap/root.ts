@@ -264,15 +264,12 @@ export default class Root extends Entity {
             cloud.speedRatio = cloud.sizeRatio / 2;
 
             if (cloud.speedRatio > 1) {
-                cloud.children[0].visible = false;
-                cloud.children[1].visible = true;
-                cloud.children[1].size.x = 128 * cloud.sizeRatio;
-                cloud.children[1].size.y = 64 * cloud.sizeRatio;
+                cloud.alpha = 0.7;
+                cloud.children[0].size.x = 128 * cloud.sizeRatio;
+                cloud.children[0].size.y = 64 * cloud.sizeRatio;
 
                 this.fgObjects.children.push(cloud);
-            } else {    
-                cloud.children[0].visible = true;
-                cloud.children[1].visible = false;
+            } else {
                 cloud.children[0].size.x = 128 * cloud.sizeRatio;
                 cloud.children[0].size.y = 64 * cloud.sizeRatio;
                 
