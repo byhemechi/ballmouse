@@ -1,13 +1,15 @@
 subtitle: Using TypeScript to avoid the pains of JS
 
 # Javascript → TypeScript
+**Author: George Fischer**  
+**Date: 20 06 2019**
 
 ## Why are we doing this?
 ### JavaScript's Failings
 Javascript has a _few_ issues; the most important one of which (in my opinion) is that it's dynamically typed.
 To show why this is an issue, here's a really simple calculator.
 
-```javascript
+  ```javascript
 /**
  * Really simple calculator
  * Seems pretty innocent, right?

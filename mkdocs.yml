@@ -3,25 +3,24 @@ site_description: The docs for a collection of Games
 site_author: George Fischer and Joon Suh
 site_url: https://splorge.space/
 
-copyright: 'If you ever feel that you need to use content from this site elsewhere you might have some problems other than copyright'
+copyright: 'somebody once told me the world is gonna roll me'
 
 theme:
   name: 'material'
   palette: 
-    primary: white
+    primary: deep orange
   logo:
     icon: 'gamepad'
 
   favicon: /coolguy.png
   feature:
     tabs: true
-repo_url: 'https://gitlab.com/byhemechi/ballmouse'
-repo_name: byhemechi/ballmouse
-edit_uri: ""
 
 extra_javascript:
     - https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js
-    - /hl.js
+    - javascripts/hl.js
+    - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+
 
 markdown_extensions:
   - toc:
@@ -38,3 +37,12 @@ markdown_extensions:
   - pymdownx.details
   - footnotes
   - admonition
+  - pymdownx.arithmatex
+  - pymdownx.critic
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tilde

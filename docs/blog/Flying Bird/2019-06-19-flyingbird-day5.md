@@ -1,4 +1,5 @@
-# Flying Guy Day 5
+subtitle: Forgot to blog day 3
+# Day 4: Better Gravity
 Today I realised that there was a major flaw with how I was handling velocities in this game.  This problem caused there to be framerate dependancies that would result in an unfair advantage to lower framerates.  
 
 ## The Problem

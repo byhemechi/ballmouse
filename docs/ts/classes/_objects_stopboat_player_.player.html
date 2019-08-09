@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Player | </title>
+	<title>Player | ballmouse</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title"></a>
+					<a href="../index.html" class="title">ballmouse</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -82,6 +82,10 @@
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-kind-class tsd-parent-kind-external-module">
+				<h3 class="tsd-before-signature">Indexable</h3>
+				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>x: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -103,8 +107,9 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_objects_stopboat_player_.player.html#position" class="tsd-kind-icon">position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#prevshoot" class="tsd-kind-icon">prev<wbr>Shoot</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_player_.player.html#root" class="tsd-kind-icon">root</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_objects_stopboat_player_.player.html#rotation" class="tsd-kind-icon">rotation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_player_.player.html#rotation" class="tsd-kind-icon">rotation</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#shootjustpressed" class="tsd-kind-icon">shoot<wbr>Just<wbr>Pressed</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#sizesquared" class="tsd-kind-icon">size<wbr>Squared</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#speed" class="tsd-kind-icon">speed</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_player_.player.html#uid" class="tsd-kind-icon">uid</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_player_.player.html#visible" class="tsd-kind-icon">visible</a></li>
@@ -114,6 +119,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#checkcollision" class="tsd-kind-icon">check<wbr>Collision</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#clampposition" class="tsd-kind-icon">clamp<wbr>Position</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_player_.player.html#free" class="tsd-kind-icon">free</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_objects_stopboat_player_.player.html#incrementtimers" class="tsd-kind-icon">increment<wbr>Timers</a></li>
@@ -142,7 +148,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:17</li>
+									<li>Defined in primitives/entity.ts:18</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -168,11 +174,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="children" class="tsd-anchor"></a>
 					<h3>children</h3>
-					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[new Sprite({src: &quot;/assets/stopboat/turret.png&quot;,size: new Vector(64, 128),position: new Vector(-32, -64),})]</span></div>
+					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[new Sprite({src: &quot;/assets/stopboat/player.svg&quot;,size: new Vector(64, 58),position: new Vector(-32, -32),})]</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#children">children</a></p>
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:32</li>
+							<li>Defined in objects/stopboat/player.ts:34</li>
 						</ul>
 					</aside>
 				</section>
@@ -182,7 +188,7 @@
 					<div class="tsd-signature tsd-kind-icon">current<wbr>Weapon<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:20</li>
+							<li>Defined in objects/stopboat/player.ts:21</li>
 						</ul>
 					</aside>
 				</section>
@@ -193,7 +199,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#game">game</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:14</li>
+							<li>Defined in primitives/entity.ts:15</li>
 						</ul>
 					</aside>
 				</section>
@@ -204,7 +210,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#name">name</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:13</li>
+							<li>Defined in primitives/entity.ts:14</li>
 						</ul>
 					</aside>
 				</section>
@@ -215,7 +221,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#parent">parent</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:15</li>
+							<li>Defined in primitives/entity.ts:16</li>
 						</ul>
 					</aside>
 				</section>
@@ -226,7 +232,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#position">position</a></p>
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:14</li>
+							<li>Defined in objects/stopboat/player.ts:17</li>
 						</ul>
 					</aside>
 				</section>
@@ -236,7 +242,7 @@
 					<div class="tsd-signature tsd-kind-icon">prev<wbr>Shoot<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:129</li>
+							<li>Defined in objects/stopboat/player.ts:162</li>
 						</ul>
 					</aside>
 				</section>
@@ -247,18 +253,18 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#root">root</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:17</li>
+							<li>Defined in primitives/entity.ts:18</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="rotation" class="tsd-anchor"></a>
 					<h3>rotation</h3>
-					<div class="tsd-signature tsd-kind-icon">rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;PI/2</span></div>
+					<div class="tsd-signature tsd-kind-icon">rotation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#rotation">rotation</a></p>
+						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#rotation">rotation</a></p>
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:16</li>
+							<li>Defined in primitives/entity.ts:11</li>
 						</ul>
 					</aside>
 				</section>
@@ -268,7 +274,17 @@
 					<div class="tsd-signature tsd-kind-icon">shoot<wbr>Just<wbr>Pressed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:18</li>
+							<li>Defined in objects/stopboat/player.ts:19</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="sizesquared" class="tsd-anchor"></a>
+					<h3>size<wbr>Squared</h3>
+					<div class="tsd-signature tsd-kind-icon">size<wbr>Squared<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;8 ** 2</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in objects/stopboat/player.ts:14</li>
 						</ul>
 					</aside>
 				</section>
@@ -278,7 +294,7 @@
 					<div class="tsd-signature tsd-kind-icon">speed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;420</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:15</li>
+							<li>Defined in objects/stopboat/player.ts:18</li>
 						</ul>
 					</aside>
 				</section>
@@ -289,7 +305,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#uid">uid</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:16</li>
+							<li>Defined in primitives/entity.ts:17</li>
 						</ul>
 					</aside>
 				</section>
@@ -300,23 +316,53 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:12</li>
+							<li>Defined in primitives/entity.ts:13</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="weapons" class="tsd-anchor"></a>
 					<h3>weapons</h3>
-					<div class="tsd-signature tsd-kind-icon">weapons<span class="tsd-signature-symbol">:</span> <a href="_objects_stopboat_weapon_.weapon.html" class="tsd-signature-type">Weapon</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[new Weapon({speed: 1000,spread: 0.1,firerate: 0.01,magsize: 30,reloadtime: 3})]</span></div>
+					<div class="tsd-signature tsd-kind-icon">weapons<span class="tsd-signature-symbol">:</span> <a href="_objects_stopboat_weapon_.weapon.html" class="tsd-signature-type">Weapon</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[new Weapon({speed: 3000,damage: 10,spread: 0.005,firerate: 0.1,magsize: 30,reloadtime: 3})]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/player.ts:22</li>
+							<li>Defined in objects/stopboat/player.ts:23</li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="checkcollision" class="tsd-anchor"></a>
+					<h3>check<wbr>Collision</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">check<wbr>Collision<span class="tsd-signature-symbol">(</span>delta<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in objects/stopboat/player.ts:101</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if we collided with an enemy bullet</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>delta: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="clampposition" class="tsd-anchor"></a>
 					<h3>clamp<wbr>Position</h3>
@@ -327,7 +373,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:71</li>
+									<li>Defined in objects/stopboat/player.ts:78</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -350,7 +396,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#free">free</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:52</li>
+									<li>Defined in primitives/entity.ts:53</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -367,7 +413,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:80</li>
+									<li>Defined in objects/stopboat/player.ts:87</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,7 +443,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:133</li>
+									<li>Defined in objects/stopboat/player.ts:166</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -419,7 +465,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:59</li>
+									<li>Defined in objects/stopboat/player.ts:66</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -442,7 +488,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#render">render</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:40</li>
+									<li>Defined in primitives/entity.ts:41</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -469,7 +515,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:94</li>
+									<li>Defined in objects/stopboat/player.ts:124</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -492,7 +538,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#tick">tick</a></p>
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:38</li>
+									<li>Defined in objects/stopboat/player.ts:41</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -516,7 +562,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:32</li>
+									<li>Defined in primitives/entity.ts:33</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -533,7 +579,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/player.ts:121</li>
+									<li>Defined in objects/stopboat/player.ts:154</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -569,6 +615,15 @@
 						<a href="../modules/_menu_entry_.html">"menu/entry"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_flap_cloud_.html">"objects/flap/cloud"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_flap_corpse_.html">"objects/flap/corpse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_flap_ground_.html">"objects/flap/ground"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_objects_flap_pipe_.html">"objects/flap/pipe"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -576,6 +631,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_objects_flap_root_.html">"objects/flap/root"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_stopboat_boat_.html">"objects/stopboat/boat"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_objects_stopboat_bullet_.html">"objects/stopboat/bullet"</a>
@@ -600,6 +658,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_primitives_text_.html">"primitives/text"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_sound_.html">"sound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_stopboat_.html">"stopboat"</a>
@@ -643,11 +704,14 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_stopboat_player_.player.html#root" class="tsd-kind-icon">root</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_stopboat_player_.player.html#rotation" class="tsd-kind-icon">rotation</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_stopboat_player_.player.html#shootjustpressed" class="tsd-kind-icon">shoot<wbr>Just<wbr>Pressed</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_objects_stopboat_player_.player.html#sizesquared" class="tsd-kind-icon">size<wbr>Squared</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_stopboat_player_.player.html#speed" class="tsd-kind-icon">speed</a>
@@ -660,6 +724,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_stopboat_player_.player.html#weapons" class="tsd-kind-icon">weapons</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_objects_stopboat_player_.player.html#checkcollision" class="tsd-kind-icon">check<wbr>Collision</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_objects_stopboat_player_.player.html#clampposition" class="tsd-kind-icon">clamp<wbr>Position</a>
