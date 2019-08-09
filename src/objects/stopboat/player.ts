@@ -139,6 +139,11 @@ export default class Player extends Entity {
             }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        move -= this.game.keys.KeyI || this.game.keys.ArrowUp ? 1 : 0;
+        move += this.game.keys.KeyK || this.game.keys.ArrowDown ? 1 : 0;
+>>>>>>> Stashed changes
 =======
         move -= this.game.keys.KeyI || this.game.keys.ArrowUp ? 1 : 0;
         move += this.game.keys.KeyK || this.game.keys.ArrowDown ? 1 : 0;
