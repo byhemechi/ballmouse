@@ -2,25 +2,24 @@ import Entity from "../../primitives/entity";
 import Rect from "../../primitives/rect";
 import { Vector } from "../../types";
 import Label from "../../primitives/text";
-import Sprite from "../../primitives/sprite";
 
 class WeaponBox extends Rect {
     size = new Vector(120, 42);
 
-    fill = '#000';
+    fill = '#00000000';
 
     thickness = 5;
-    borderFill = '#ddd';
+    borderFill = '#ddddddff';
     lineJoin = 'round'
 
     children = [
         new Rect({
             size: new Vector(110, 32),
-            fill: '#777',
-            position: new Vector(5, 5)
+            fill: '#777777ff',
+            position: new Vector(5,5)
         })
     ]
-
+    
 }
 
 export default class UI extends Entity {
@@ -28,8 +27,9 @@ export default class UI extends Entity {
     healthbarSize = 400;
     blitzbarSize = 400;
 
+    alpha = 1;
     aplhaChangeRate = 4;
-    minAlpha = 0.3;
+    minAlpha = 0.1;
     maxY = 275;
 
     healthbarTimeBeforeDefill = 0.5;
@@ -50,7 +50,7 @@ export default class UI extends Entity {
     })
 
     healthbarUnder = new Rect({
-        size: new Vector(this.healthbarSize + 8, 30 + 8),
+        size: new Vector(this.healthbarSize+8, 30+8),
         position: new Vector(36, 36),
         fill: '#000000'
     });
@@ -61,8 +61,7 @@ export default class UI extends Entity {
         children: [
             new WeaponBox,
             new WeaponBox({ position: new Vector(136, 0) }),
-            new WeaponBox({
-                position: new Vector(272, 0)
+            new WeaponBox({ position: new Vector(272, 0)
             }),
         ]
     });
@@ -73,7 +72,7 @@ export default class UI extends Entity {
         align: 'center',
         position: new Vector(0, 175),
     });
-
+    
     blitzMeter = new Rect({
         size: new Vector(this.blitzbarSize, 20),
         position: new Vector(40, 87.5),
@@ -89,40 +88,22 @@ export default class UI extends Entity {
         borderFill: '#052f42ff',
         lineJoin: 'round'
     });
-
+    
     blitzMeterLabel = new Label({
         value: '1x',
         font: '16px sans-serif',
-        position: new Vector(42, 90.5),
+        position: new Vector(42, 90.5), 
     })
 
-    children = [
-        this.healthbarUnder,
-        this.healthbarRed,
-        this.healthbar,
-        this.weapons,
-        this.currentWeaponText,
-        this.blitzMeterUnder,
-        this.blitzMeter,
-        this.blitzMeterLabel
-    ]
-
-    constructor(...args) {
-        super(args);
-        this.weapons.children[0].children.push(
-            new Sprite({
-                src: "/assets/stopboat/bulleticon1.png",
-                size: new Vector(9, 42),
-                rotation: 1,
-                position: new Vector(80, 4)
-        }));
-        this.weapons.children[1].children.push(
-            new Sprite({
-                src: "/assets/stopboat/bulleticon2.png",
-                size: new Vector(30, 29),
-                position: new Vector(50, 5)
-        }));
-    }
+    children = [this.healthbarUnder, 
+                this.healthbarRed, 
+                this.healthbar,
+                this.weapons,
+                this.currentWeaponText,
+                this.blitzMeterUnder,
+                this.blitzMeter,
+                this.blitzMeterLabel
+                ]
 
     tick(delta) {
         this.updateHealthbar(delta);
@@ -135,8 +116,8 @@ export default class UI extends Entity {
     }
 
     private updateBlitzUI(delta: number) {
-        this.blitzMeter.size.x = this.blitzbarSize *
-            (this.root.scoreMultiplier - 0.5) / (this.root.maxScoreMultiplier - 0.5);
+        this.blitzMeter.size.x = this.blitzbarSize * 
+                                (this.root.scoreMultiplier - 0.5) / (this.root.maxScoreMultiplier - 0.5);
         this.blitzMeterLabel.value = (Math.floor(this.root.scoreMultiplier * 10) / 10).toFixed(1) + '×'
     }
 
@@ -161,14 +142,35 @@ export default class UI extends Entity {
             this.alpha -= delta * this.aplhaChangeRate;
             if (this.alpha < this.minAlpha)
                 this.alpha = this.minAlpha;
+            this.updateAlpha();
         }
         else if (this.root.player.position.y >= this.maxY && this.alpha < 1) {
             this.alpha += delta * this.aplhaChangeRate;
             if (this.alpha > 1)
                 this.alpha = 1;
+            this.updateAlpha();
         }
     }
 
+    /**
+     * Updates the opacity of the UI elements
+     */
+    private updateAlpha() {
+        const alphaHex = Math.round(this.alpha * 255).toString(16);
+
+        [this.healthbarUnder, this.healthbar, this.healthbarRed].forEach(i => {
+            i.fill = i.fill.substr(0, 7) + alphaHex;
+        });
+
+        [this.blitzMeter, this.blitzMeterUnder].forEach(i => {
+            i.borderFill = i.borderFill.substr(0, 7) + alphaHex;
+        });
+        
+        this.weapons.children.forEach(i => {
+            i.borderFill = i.borderFill.substr(0, 7) + alphaHex;
+            i.children[0].fill = i.children[0].fill.substr(0, 7) + alphaHex; 
+        });
+    }
 
     /**
      * Updates the healthbar value to that of player health
