@@ -15,8 +15,7 @@ class Entity {
     game: any;
     parent: any;
     uid: string
-    root: any;
-    alpha: number = 1;
+    root: any
 
     /**
      * @param {Object} options Options for the Entity. These vary based on what Entity is being created, but generally will have position, rotation and children.
@@ -44,9 +43,7 @@ class Entity {
             if(i.visible) {
                 ctx.translate(Math.round(i.position.x), Math.round(i.position.y));
                 ctx.rotate(i.rotation);
-                ctx.globalAlpha *= i.alpha;
                 i.render(ctx);
-                ctx.globalAlpha /= i.alpha;
                 ctx.rotate(-i.rotation);
                 ctx.translate(-Math.round(i.position.x), -Math.round(i.position.y));
             }

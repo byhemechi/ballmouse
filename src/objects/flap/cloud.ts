@@ -13,6 +13,9 @@ export default class Cloud extends Entity {
     children = [
         new Sprite({
             src: "/assets/flap/cloud.png"
+        }),
+        new Sprite({
+            src: "/assets/flap/cloudtransparent.png"
         })
     ]
     
