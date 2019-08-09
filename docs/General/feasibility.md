@@ -3,7 +3,7 @@
 
 ## Requirements from the User
 ### Hardware
-Our game collection should run on any modern computer as it is not very heavy and *most* of us can write competent code.
+Our game collection should run on any modern computer as it is not very heavy and *most* of us can write competent code.  However, the user's keyboard may cause some issues with keyboard ghosting.
 ### Software
 We are creating the game in JavaScript/TypeScript and Canvas.  The engine is designed to run on a browser, which means that you need some kind of browser (or Electron[^1]) to play.  We figured that this was enough accessable as literally everyone has some form of web browser installed.
 
@@ -42,15 +42,4 @@ Playtesting            :active, 28-06-2019, 20d
 Polish                 :active, 18-07-2019, 8d
 Assets                 :done, 13-06-2019, 35d
 ```
-## Social and Ethical Issues
-It is important for us to consider the potential impacts of our software.  Without proper considerations and safety measures, it could cause unwanted harm to the user.
-
-One of the issues with games is that they are usually in the form of an executable.  This makes them much more vulnerable to being infected with malware and being spread alongside the game.  This could result in harmful malware spreading across different computers[^2].  
-
-To partially avoid this potential issue, we created the engine as a web app.  This moves the dangerous safety responsibilities to the web browser developers, whom are much more experienced and knowlegeable in protection.  In the case that it is infected with malware, it reduces the risk of the game spreading malware as if we notice that our game is being hijacked, we can shut the servers down and stop the malware from spreading any further.
-
-
-
-
 [^1]: Electron is a stripped down version of Chrome  
-[^2]: Assuming people play our game, which they will most definitely not
