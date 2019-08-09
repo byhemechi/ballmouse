@@ -208,17 +208,31 @@ export default class Player extends Entity {
         this.position.y = Math.min(Math.max(this.position.y, 16), this.game.el.height - 36);
     }
 
+<<<<<<< Updated upstream
+=======
     /** Switch player weapons when they press J or L */
     private switchWeapons() {
-        if (this.game.keyJustPressed('KeyJ')) {
+        if (this.game.keyJustPressed('KeyJ') || this.game.keyJustPressed('ArrowLeft')) {
             this.currentWeapon -= 1;
         }
-        if (this.game.keyJustPressed('KeyL')) {
+        if (this.game.keyJustPressed('KeyL') || this.game.keyJustPressed('ArrowRight')) {
             this.currentWeapon += 1;
         }
         this.currentWeapon = (this.weapons.length + this.currentWeapon) % this.weapons.length;
         this.children[3].region.begin.x = 250 * this.currentWeapon
     }
+
+    /**
+     * Update timers for weapons and increment bullet queue
+     * @param delta 
+     */
+    private incrementTimers(delta: number) {
+        for (let i = 0; i < this.weapons.length; i++) {
+            let wpn = this.weapons[i];
+
+            wpn.timer += delta;
+>>>>>>> Stashed changes
+
 
     /**
      * Update timers for weapons and increment bullet queue
@@ -409,12 +423,16 @@ export default class Player extends Entity {
         }
     }
 
-    /** 
-     * Activate blitz and also start invincibility timer when blitz finishes
-     * @param delta 
-     */
-    private doBlitz(delta: number) {
-        let bw = this.blitzWeapons[this.currentBlitzWeapon];
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        move -= this.game.keys.KeyI || this.game.keys.ArrowUp ? 1 : 0;
+        move += this.game.keys.KeyK || this.game.keys.ArrowDown ? 1 : 0;
+>>>>>>> Stashed changes
+=======
+        move -= this.game.keys.KeyI || this.game.keys.ArrowUp ? 1 : 0;
+        move += this.game.keys.KeyK || this.game.keys.ArrowDown ? 1 : 0;
+>>>>>>> Stashed changes
 
         if (this.ammo[bw.ammoType] > 0) {
             bw.timer += delta;
@@ -496,9 +514,14 @@ export default class Player extends Entity {
                 bounceCount: wpn.bounceCount,
                 rewardBlitz: wpn.rewardBlitz
             });
+<<<<<<< Updated upstream
+            bullet.position.x = this.position.x;
+            bullet.position.y = this.position.y;
+=======
 
-            bullet.position.x = position.x + 64;
+            bullet.position.x = position.x + 80;
             bullet.position.y = position.y + variance + 11;
+>>>>>>> Stashed changes
             bullet.direction = new Vector(Math.cos(angle), Math.sin(angle));
             this.root.bullets.children.push(bullet);
         }
