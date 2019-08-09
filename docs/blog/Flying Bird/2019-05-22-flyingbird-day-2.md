@@ -1,4 +1,4 @@
-# Flying Guy Day 2
+# Day 2: Collision Detection
 Today, we implimented collision detection.  
 
 The collision detection for the pipes were implimented using basic AABB collision.  We used Minkowski Difference because it is very cheap and simple.  I used [this tutorial](https://blog.hamaluik.ca/posts/simple-aabb-collision-using-minkowski-difference/) as a guide to create the collision logic.

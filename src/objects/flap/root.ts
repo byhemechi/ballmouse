@@ -75,7 +75,6 @@ export default class Root extends Entity {
 
         // Input if jump pressed this frame
         this.jumpJustPressed = this.isInitialJump();
-        this.player.jumpJustPressed = this.jumpJustPressed;
 
         // If we press jump and game has ended, reset the game
         if (this.jumpJustPressed && !this.started && this.screenShakeTimer <= 0) this.reset();
@@ -107,15 +106,20 @@ export default class Root extends Entity {
             this.text.visible = true;
         }
 
+        this.shakeScreen(delta);
+        
+    }
+
+
+    private shakeScreen(delta: any) {
         if (this.screenShakeTimer > 0) {
             this.screenShakeTimer -= delta;
-            this.shakeScreen(50, delta);
+            this.moveScreenRandomly(50);
             if (this.screenShakeTimer < 0) {
                 this.position.x = 0;
                 this.position.y = 0;
             }
         }
-        
     }
 
     bgFgCounters(delta) {
@@ -151,9 +155,7 @@ export default class Root extends Entity {
                 const maxY = this.player.position.y + this.player.size.y - i.position.y;
 
                 if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
-                    this.player.kill(this.speed / 2);
-                    this.speed = 0;
-                    this.started = false;
+                    this.endGame();
 
                     this.screenShakeTimer = this.shakeLength;
                 }
@@ -166,12 +168,15 @@ export default class Root extends Entity {
      */
     ceiling_groundCollision() {
         if (this.player.position.y < -30 || this.player.position.y > this.game.el.height - 30) {
-            this.player.kill(this.speed / 2);
-            this.speed = 0;
-            this.started = false;
-
+            this.endGame();
             this.screenShakeTimer = this.shakeLength;
         }
+    }
+
+    private endGame() {
+        this.player.kill(this.speed / 2);
+        this.speed = 0;
+        this.started = false;
     }
 
     /**
@@ -475,7 +480,7 @@ export default class Root extends Entity {
         }
     }
 
-    shakeScreen(intensity, delta) {
+    moveScreenRandomly(intensity) {
         this.position.x = (Math.random() - 0.5) * intensity;
         this.position.y = (Math.random() - 0.5) * intensity;
     }

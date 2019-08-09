@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Bullet | </title>
+	<title>Bullet | ballmouse</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title"></a>
+					<a href="../index.html" class="title">ballmouse</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -78,24 +78,6 @@
 						<dt>extends</dt>
 						<dd><p>Entity</p>
 						</dd>
-						<dt>param</dt>
-						<dd><p>Options for the Entity; See below</p>
-						</dd>
-						<dt>param</dt>
-						<dd><p>Size of bullet hitbox</p>
-						</dd>
-						<dt>param</dt>
-						<dd><p>Path or image of bullet</p>
-						</dd>
-						<dt>param</dt>
-						<dd><p>Size of image</p>
-						</dd>
-						<dt>param</dt>
-						<dd><p>Speed of the bullet</p>
-						</dd>
-						<dt>param</dt>
-						<dd><p>Angle that the bullet travels in radians clockwise</p>
-						</dd>
 					</dl>
 				</div>
 			</section>
@@ -112,6 +94,15 @@
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-kind-class tsd-parent-kind-external-module">
+				<h3 class="tsd-before-signature">Indexable</h3>
+				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>x: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></div>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Bullet Class</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -127,13 +118,14 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#angle" class="tsd-kind-icon">angle</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_objects_stopboat_bullet_.bullet.html#children" class="tsd-kind-icon">children</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#damage" class="tsd-kind-icon">damage</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#direction" class="tsd-kind-icon">direction</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#game" class="tsd-kind-icon">game</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#parent" class="tsd-kind-icon">parent</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#position" class="tsd-kind-icon">position</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#root" class="tsd-kind-icon">root</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#rotation" class="tsd-kind-icon">rotation</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#size" class="tsd-kind-icon">size</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#speed" class="tsd-kind-icon">speed</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#uid" class="tsd-kind-icon">uid</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#visible" class="tsd-kind-icon">visible</a></li>
@@ -142,6 +134,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#clear" class="tsd-kind-icon">clear</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#free" class="tsd-kind-icon">free</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_objects_stopboat_bullet_.bullet.html#isoffscreen" class="tsd-kind-icon">is<wbr>Offscreen</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_objects_stopboat_bullet_.bullet.html#render" class="tsd-kind-icon">render</a></li>
@@ -165,7 +158,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in objects/stopboat/bullet.ts:28</li>
+									<li>Defined in objects/stopboat/bullet.ts:29</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -187,18 +180,38 @@
 					<div class="tsd-signature tsd-kind-icon">angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/bullet.ts:28</li>
+							<li>Defined in objects/stopboat/bullet.ts:27</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="children" class="tsd-anchor"></a>
 					<h3>children</h3>
-					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="_primitives_rect_.rect.html" class="tsd-signature-type">Rect</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[new Rect({position: this.size.multiply(-0.5),size: this.size,fill: &#x27;#ffffff&#x27;})]</span></div>
+					<div class="tsd-signature tsd-kind-icon">children<span class="tsd-signature-symbol">:</span> <a href="_primitives_sprite_.sprite.html" class="tsd-signature-type">Sprite</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[new Sprite({src: &quot;/assets/stopboat/bullet.png&quot;,position: new Vector(-37 / 2, -5 / 2)})]</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#children">children</a></p>
 						<ul>
-							<li>Defined in objects/stopboat/bullet.ts:37</li>
+							<li>Defined in objects/stopboat/bullet.ts:38</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="damage" class="tsd-anchor"></a>
+					<h3>damage</h3>
+					<div class="tsd-signature tsd-kind-icon">damage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in objects/stopboat/bullet.ts:28</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="direction" class="tsd-anchor"></a>
+					<h3>direction</h3>
+					<div class="tsd-signature tsd-kind-icon">direction<span class="tsd-signature-symbol">:</span> <a href="_types_.vector.html" class="tsd-signature-type">Vector</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in objects/stopboat/bullet.ts:29</li>
 						</ul>
 					</aside>
 				</section>
@@ -209,7 +222,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#game">game</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:14</li>
+							<li>Defined in primitives/entity.ts:15</li>
 						</ul>
 					</aside>
 				</section>
@@ -220,7 +233,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#name">name</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:13</li>
+							<li>Defined in primitives/entity.ts:14</li>
 						</ul>
 					</aside>
 				</section>
@@ -231,7 +244,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#parent">parent</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:15</li>
+							<li>Defined in primitives/entity.ts:16</li>
 						</ul>
 					</aside>
 				</section>
@@ -242,7 +255,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#position">position</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:9</li>
+							<li>Defined in primitives/entity.ts:10</li>
 						</ul>
 					</aside>
 				</section>
@@ -253,7 +266,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#root">root</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:17</li>
+							<li>Defined in primitives/entity.ts:18</li>
 						</ul>
 					</aside>
 				</section>
@@ -264,17 +277,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#rotation">rotation</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:10</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="size" class="tsd-anchor"></a>
-					<h3>size</h3>
-					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <a href="_types_.vector.html" class="tsd-signature-type">Vector</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in objects/stopboat/bullet.ts:26</li>
+							<li>Defined in primitives/entity.ts:11</li>
 						</ul>
 					</aside>
 				</section>
@@ -284,7 +287,7 @@
 					<div class="tsd-signature tsd-kind-icon">speed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in objects/stopboat/bullet.ts:27</li>
+							<li>Defined in objects/stopboat/bullet.ts:26</li>
 						</ul>
 					</aside>
 				</section>
@@ -295,7 +298,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#uid">uid</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:16</li>
+							<li>Defined in primitives/entity.ts:17</li>
 						</ul>
 					</aside>
 				</section>
@@ -306,13 +309,30 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in primitives/entity.ts:12</li>
+							<li>Defined in primitives/entity.ts:13</li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="clear" class="tsd-anchor"></a>
+					<h3>clear</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in objects/stopboat/bullet.ts:64</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="free" class="tsd-anchor"></a>
 					<h3>free</h3>
@@ -324,7 +344,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#free">free</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:52</li>
+									<li>Defined in primitives/entity.ts:53</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -341,7 +361,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in objects/stopboat/bullet.ts:56</li>
+									<li>Defined in objects/stopboat/bullet.ts:55</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -364,7 +384,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#render">render</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:40</li>
+									<li>Defined in primitives/entity.ts:41</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -416,7 +436,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_primitives_entity_.entity.html">Entity</a>.<a href="_primitives_entity_.entity.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in primitives/entity.ts:32</li>
+									<li>Defined in primitives/entity.ts:33</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -447,6 +467,15 @@
 						<a href="../modules/_menu_entry_.html">"menu/entry"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_flap_cloud_.html">"objects/flap/cloud"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_flap_corpse_.html">"objects/flap/corpse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_flap_ground_.html">"objects/flap/ground"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_objects_flap_pipe_.html">"objects/flap/pipe"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -454,6 +483,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_objects_flap_root_.html">"objects/flap/root"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_objects_stopboat_boat_.html">"objects/stopboat/boat"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_objects_stopboat_bullet_.html">"objects/stopboat/bullet"</a>
@@ -480,6 +512,9 @@
 						<a href="../modules/_primitives_text_.html">"primitives/text"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_sound_.html">"sound"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_stopboat_.html">"stopboat"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -503,6 +538,12 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_objects_stopboat_bullet_.bullet.html#children" class="tsd-kind-icon">children</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_objects_stopboat_bullet_.bullet.html#damage" class="tsd-kind-icon">damage</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_objects_stopboat_bullet_.bullet.html#direction" class="tsd-kind-icon">direction</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_stopboat_bullet_.bullet.html#game" class="tsd-kind-icon">game</a>
 							</li>
@@ -522,9 +563,6 @@
 								<a href="_objects_stopboat_bullet_.bullet.html#rotation" class="tsd-kind-icon">rotation</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_objects_stopboat_bullet_.bullet.html#size" class="tsd-kind-icon">size</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_objects_stopboat_bullet_.bullet.html#speed" class="tsd-kind-icon">speed</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
@@ -532,6 +570,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_stopboat_bullet_.bullet.html#visible" class="tsd-kind-icon">visible</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_objects_stopboat_bullet_.bullet.html#clear" class="tsd-kind-icon">clear</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_objects_stopboat_bullet_.bullet.html#free" class="tsd-kind-icon">free</a>
@@ -552,36 +593,6 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#pi" class="tsd-kind-icon">PI</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#sqrt2" class="tsd-kind-icon">SQRT2</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#abs" class="tsd-kind-icon">abs</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#atan2" class="tsd-kind-icon">atan2</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#cos" class="tsd-kind-icon">cos</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#max" class="tsd-kind-icon">max</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#min" class="tsd-kind-icon">min</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#random" class="tsd-kind-icon">random</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#sin" class="tsd-kind-icon">sin</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_objects_stopboat_bullet_.html#tan" class="tsd-kind-icon">tan</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
