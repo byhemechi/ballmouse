@@ -155,13 +155,24 @@ export default class Player extends Entity {
     /**
      * Shoot bullets if we are able to 
      */
-    shoot() {
-        // If we just pressed shoot and we are ready to shoot, 
-        // set the timer to zero and flag that we can't fire  
-        if (this.shootJustPressed && this.weapons[this.currentWeapon].canFire) {
-            this.weapons[this.currentWeapon].canFire = false;
-            this.weapons[this.currentWeapon].timer = 0;
-            this.weapons[this.currentWeapon].queue = 1;
+    private keyboardMove() {
+        let move = 0;
+
+        move -= this.game.keys.KeyI || this.game.keys.ArrowUp ? 1 : 0;
+        move += this.game.keys.KeyK || this.game.keys.ArrowDown ? 1 : 0;
+
+        return move;
+    }
+
+    /**
+     * Logic for when we get hurt
+     * @param damage How much damage we took
+     */
+    private hurt(damage: number) {
+        if (this.ammo[this.blitzWeapons[this.currentBlitzWeapon].ammoType] <= 0 &&
+            this.invincibleTimer <= 0 && this.damage == 0) {
+            this.damage = damage;
+            playSound('hurt')
         }
         // If we can fire, create a bullet
         while (this.weapons[this.currentWeapon].queue) {
