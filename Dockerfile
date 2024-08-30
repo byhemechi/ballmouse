@@ -30,14 +30,15 @@ RUN yarn install --frozen-lockfile --production=false
 COPY --link . .
 
 # Build application
+ENV NODE_ENV=production
 RUN yarn run build
-
-# Remove development dependencies
-RUN yarn install --production=true
 
 
 # Final stage for app image
 FROM nginx:alpine
 
-# Copy built application
-COPY --from=build /app /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
+COPY --from=build /app/index.html .
+COPY --from=build /app/menu.* .
+COPY --from=build /app/dist dist
+COPY --from=build /app/assets assets

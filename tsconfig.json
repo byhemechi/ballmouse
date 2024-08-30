@@ -2,6 +2,7 @@
     "compilerOptions": {
         "sourceMap": true,
         "target": "ESNext",
-        "outDir": "dist"
+        "outDir": "dist",
+        "allowSyntheticDefaultImports": true
     }
 }

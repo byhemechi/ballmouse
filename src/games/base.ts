@@ -34,6 +34,8 @@ class Game {
     leaderboardGame: LeaderboardGame
     leaderboardPopup: LeaderboardPopup
 
+    dpr = devicePixelRatio
+
     root: Entity = new Entity({})
     /**
      * The main tick function, called every frame.
@@ -43,8 +45,8 @@ class Game {
     constructor(width: number, height: number) {
         this.width = width
         this.height = height
-        this.el.width = this.width * devicePixelRatio
-        this.el.height = this.height * devicePixelRatio
+        this.el.width = this.width * this.dpr
+        this.el.height = this.height * this.dpr
 
         this.el.style.width = width + 'px'
         this.el.style.height = height + 'px'
@@ -59,6 +61,12 @@ class Game {
         })
         document.addEventListener('keyup', e => {
             delete this.keys[e.code]
+        })
+
+        window.addEventListener('resize', () => {
+            this.dpr = devicePixelRatio
+            this.el.width = this.width * this.dpr
+            this.el.height = this.height * this.dpr
         })
     }
     tick(time) {
@@ -75,7 +83,7 @@ class Game {
     render() {
         const ctx = this.ctx
         ctx.resetTransform()
-        this.ctx.scale(devicePixelRatio, devicePixelRatio)
+        this.ctx.scale(this.dpr, this.dpr)
         ctx.clearRect(0, 0, this.el.width, this.el.height)
         this.root.render(ctx)
     }

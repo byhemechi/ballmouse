@@ -1,3 +1,4 @@
+import ms from 'ms'
 import Game from '../games/base'
 import { getLeaderboard } from '../leaderboard'
 
@@ -20,6 +21,22 @@ const css = (chunks: TemplateStringsArray, ...values: string[]) => {
 }
 
 const styles = css`
+    @property --property-name {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: #c0ffee;
+    }
+
+    @keyframes appear {
+        from {
+            opacity: 0;
+            transform: scale(0.75);
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
     body {
         background: #235169;
     }
@@ -27,6 +44,9 @@ const styles = css`
         overflow: hidden;
         border-radius: 0.75rem;
         border-width: 0px;
+        width: 100%;
+        flex-direction: column;
+        max-width: 56rem;
         padding: 0px;
         font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
             'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -36,6 +56,22 @@ const styles = css`
             0 8px 10px -6px var(--tw-shadow-color);
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
             var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+    @media all and (min-height: 40rem) {
+        dialog {
+            min-height: 32rem;
+        }
+    }
+    dialog:modal {
+        display: flex;
+        box-shadow: var(--tw-shadow), 0 0 0 100vmax rgba(0, 0, 0, 0.5);
+    }
+    dialog.delay:modal {
+        animation: appear 0.5s ease backwards;
+        animation-delay: 1s;
+    }
+    ::backdrop {
+        opacity: 0;
     }
     header {
         --tw-bg-opacity: 1;
@@ -47,12 +83,6 @@ const styles = css`
         line-height: 1.75rem;
         --tw-text-opacity: 1;
         color: rgb(255 255 255 / var(--tw-text-opacity));
-        --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-            0 4px 6px -4px rgb(0 0 0 / 0.1);
-        --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
-            0 4px 6px -4px var(--tw-shadow-color);
-        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-            var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     }
     dialog button {
         position: absolute;
@@ -63,6 +93,7 @@ const styles = css`
         width: 2rem;
         cursor: pointer;
         align-items: center;
+        transition: opacity 0.25s ease;
         justify-content: center;
         border-radius: 0.5rem;
         border-width: 0px;
@@ -77,6 +108,9 @@ const styles = css`
         background-color: rgb(255 255 255 / 0.1);
         opacity: 1;
     }
+    button:disabled {
+        opacity: 0.25 !important;
+    }
     table {
         border-collapse: collapse;
         width: 100%;
@@ -85,12 +119,23 @@ const styles = css`
     }
     th,
     td {
+        height: 3rem;
         white-space: nowrap;
-        padding: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
         border: solid 1px #e5e7eb;
     }
     th {
-        text-align: center;
+        height: 3rem !important;
+        --tw-border-opacity: 1 !important;
+        border-color: rgb(55 65 81 / var(--tw-border-opacity)) !important;
+        --tw-bg-opacity: 1;
+        background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+        text-align: left;
     }
 `
 
@@ -99,6 +144,7 @@ export default class LeaderboardPopup extends HTMLElement {
 
     game: Game
     popup: HTMLDialogElement
+    closeButton: HTMLButtonElement
 
     connectedCallback() {
         const shadow = this.attachShadow({ mode: 'open' })
@@ -108,7 +154,7 @@ export default class LeaderboardPopup extends HTMLElement {
 
         showButton.textContent = 'High scores'
         shadow.appendChild(showButton)
-        showButton.addEventListener('click', () => this.show())
+        showButton.addEventListener('click', () => this.show(false))
 
         this.popup = document.createElement('dialog')
         const popup = this.popup
@@ -122,6 +168,7 @@ export default class LeaderboardPopup extends HTMLElement {
         popup.prepend(popupBody)
 
         const closeButton = popup.querySelector('button')
+        this.closeButton = closeButton
 
         closeButton.tabIndex = 2
         closeButton.addEventListener('click', () => popup.close())
@@ -140,16 +187,22 @@ export default class LeaderboardPopup extends HTMLElement {
                 el.children[0].textContent = score.getRank().toLocaleString()
                 el.children[1].textContent = score.getName()
                 el.children[2].textContent = score.getScore().toLocaleString()
-                el.children[3].textContent = new Date(
-                    score.getTimestamp()
-                ).toLocaleString()
+                el.children[3].textContent =
+                    ms(Date.now() - score.getTimestamp()) + ' ago'
             }
 
             tbody.appendChild(row)
         }
     }
 
-    public async show() {
+    public async show(delay = true) {
+        this.game.acceptInput = false
+        this.closeButton.disabled = true
+        if (delay) this.popup.classList.add('delay')
+        this.popup.addEventListener('animationend', () => {
+            this.closeButton.disabled = false
+            this.popup.classList.remove('delay')
+        })
         this.popup.showModal()
 
         this.reloadScores()

@@ -204,7 +204,7 @@ export default class Player extends Entity {
             this.flapSprites.region.begin.x = 256
             this.spawnCorpse()
 
-            this.game.submitScore()
+            this.game.acceptInput = false
         }
     }
 

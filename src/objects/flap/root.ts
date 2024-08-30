@@ -1,64 +1,63 @@
 // Import classes
-import Entity from "../../primitives/entity";
-import Pipe from "./pipe";
-import Player from "./player";
-import Rect from "../../primitives/rect";
-import Cloud from "./cloud"
-import Ground from "./ground"
-import { Vector } from "../../types";
-import Label from "../../primitives/text";
-import { playSound } from "../../sound";
+import Entity from '../../primitives/entity'
+import Pipe from './pipe'
+import Player from './player'
+import Rect from '../../primitives/rect'
+import Cloud from './cloud'
+import Ground from './ground'
+import { Vector } from '../../types'
+import Label from '../../primitives/text'
+import { playSound } from '../../sound'
 
 export default class Root extends Entity {
+    player = new Player()
 
-    player = new Player;
+    pipeSet = new Entity()
 
-    pipeSet = new Entity;
+    ground = new Ground()
 
-    ground = new Ground;
-
-    corpses = new Entity;
+    corpses = new Entity()
 
     text = new Label({
-        value: "Press Space",
-        font: "32px sans-serif",
+        value: 'Press Space',
+        font: '32px sans-serif',
         position: new Vector(330, 200),
-        baseline: "middle",
-        align: "center"
-    });
+        baseline: 'middle',
+        align: 'center',
+    })
 
-    bgObjects = new Entity;
+    bgObjects = new Entity()
 
-    fgObjects = new Entity;
+    fgObjects = new Entity()
 
-    started = false;
+    started = false
 
-    maxSpeed: number = 600;
-    speed: number = 0;
+    maxSpeed: number = 600
+    speed: number = 0
 
-    stateCount: number = 2;
-    state: number;
+    stateCount: number = 2
+    state: number
 
-    distanceBetweenPipes = 450;
-    distanceBetweenPipes2 = 45; 
-    distanceBetweenPortal = 450 * 10;
+    distanceBetweenPipes = 450
+    distanceBetweenPipes2 = 45
+    distanceBetweenPortal = 450 * 10
 
-    distanceSincePoint: number;
-    distanceSincePipe: number;
-    distanceSinceStateChange: number;
+    distanceSincePoint: number
+    distanceSincePipe: number
+    distanceSinceStateChange: number
     distanceSincePortal: number
 
-    distanceSinceLastCloud = 0;
-    distanceToNextCloud = 0;
+    distanceSinceLastCloud = 0
+    distanceToNextCloud = 0
 
-    prevJump = false; // Space state on last frame
-    jumpJustPressed = false;
+    prevJump = false // Space state on last frame
+    jumpJustPressed = false
 
-    shakeLength = 0.2;
-    screenShakeTimer = 0;
+    shakeLength = 0.2
+    screenShakeTimer = 0
 
     constructor(...args) {
-        super(...args);
+        super(...args)
         this.children = [
             this.bgObjects,
             this.pipeSet,
@@ -66,79 +65,78 @@ export default class Root extends Entity {
             this.player,
             this.corpses,
             this.fgObjects,
-            this.text
+            this.text,
         ]
     }
 
     // Called every frame
     tick(delta) {
-
         // Input if jump pressed this frame
-        this.jumpJustPressed = this.isInitialJump();
+        this.jumpJustPressed = this.isInitialJump()
 
         // If we press jump and game has ended, reset the game
-        if (this.jumpJustPressed && !this.started && this.screenShakeTimer <= 0) this.reset();
+        if (this.jumpJustPressed && !this.started && this.screenShakeTimer <= 0)
+            this.reset()
 
-        this.bgFgCounters(delta);
+        this.bgFgCounters(delta)
 
-        this.addBgFgObjects();
-        
+        this.addBgFgObjects()
+
         // Do player and pipe movements before collision
-        super.tick(delta);
+        super.tick(delta)
 
         if (this.started) {
-            this.pipeCollision();
+            this.pipeCollision()
 
-            this.ceiling_groundCollision();
+            this.ceiling_groundCollision()
 
-            this.increaseSpeed(delta);
+            this.increaseSpeed(delta)
 
-            this.counters(delta);
+            this.counters(delta)
 
-            this.setState();
+            this.setState()
 
-            this.addPipes();
+            this.addPipes()
 
-            this.updateScore();
-
+            this.updateScore()
         } else {
             // Show gameover text
-            this.text.visible = true;
+            this.text.visible = true
         }
 
-        this.shakeScreen(delta);
-        
+        this.shakeScreen(delta)
     }
-
 
     private shakeScreen(delta: any) {
         if (this.screenShakeTimer > 0) {
-            this.screenShakeTimer -= delta;
-            this.moveScreenRandomly(50);
+            this.screenShakeTimer -= delta
+            this.moveScreenRandomly(50)
             if (this.screenShakeTimer < 0) {
-                this.position.x = 0;
-                this.position.y = 0;
+                this.position.x = 0
+                this.position.y = 0
             }
         }
     }
 
     bgFgCounters(delta) {
-        this.distanceSinceLastCloud += (this.speed + 80) * delta;
+        this.distanceSinceLastCloud += (this.speed + 80) * delta
     }
-
 
     /**
      * Check if this is the first frame where jump is pressed
      */
     isInitialJump() {
         var didJump
-        if ((this.game.keys.Space || this.game.keys.ArrowUp) && !this.prevJump) {
-            didJump = true;
+        if (
+            (this.game.keys.Space || this.game.keys.ArrowUp) &&
+            !this.prevJump
+        ) {
+            didJump = true
         } else {
-            didJump = false;
+            didJump = false
         }
-        this.prevJump = this.game.keys.Space || this.game.keys.ArrowUp;
-        return didJump;
+        this.prevJump = this.game.keys.Space || this.game.keys.ArrowUp
+        return didJump
     }
 
     /**
@@ -149,46 +147,52 @@ export default class Root extends Entity {
         this.pipeSet.children.forEach(i => {
             if (!i.isFree) {
                 // Minkowski Difference collision
-                const minX = this.player.position.x - (i.position.x + i.size.x);
-                const maxX = this.player.position.x + this.player.size.x - i.position.x;
-                const minY = this.player.position.y - (i.position.y + i.size.y);
-                const maxY = this.player.position.y + this.player.size.y - i.position.y;
+                const minX = this.player.position.x - (i.position.x + i.size.x)
+                const maxX =
+                    this.player.position.x + this.player.size.x - i.position.x
+                const minY = this.player.position.y - (i.position.y + i.size.y)
+                const maxY =
+                    this.player.position.y + this.player.size.y - i.position.y
 
                 if (minX < 0 && maxX > 0 && minY < 0 && maxY > 0) {
-                    this.endGame();
+                    this.endGame()
 
-                    this.screenShakeTimer = this.shakeLength;
+                    this.screenShakeTimer = this.shakeLength
                 }
             }
-        });
+        })
     }
 
     /**
      * Check if the player is colliding with the ceiling or ground
      */
     ceiling_groundCollision() {
-        if (this.player.position.y < -30 || this.player.position.y > this.game.height - 30) {
-            this.endGame();
-            this.screenShakeTimer = this.shakeLength;
+        if (
+            this.player.position.y < -30 ||
+            this.player.position.y > this.game.height - 30
+        ) {
+            this.endGame()
+            this.screenShakeTimer = this.shakeLength
         }
     }
 
     private endGame() {
-        this.player.kill(this.speed / 2);
-        this.speed = 0;
-        this.started = false;
+        this.player.kill(this.speed / 2)
+        this.speed = 0
+        this.started = false
+        this.game.submitScore()
     }
 
     /**
      * Increase speed as we progress further
-     * @param {number} delta 
+     * @param {number} delta
      */
     increaseSpeed(delta: number) {
         if (this.speed < this.maxSpeed && this.player.alive) {
-            this.speed += delta * 5;
+            this.speed += delta * 5
         }
         if (this.speed >= this.maxSpeed && this.player.alive) {
-            this.speed = this.maxSpeed;
+            this.speed = this.maxSpeed
         }
         /*
         if (this.speed < 0 && this.player.alive) {
@@ -198,19 +202,19 @@ export default class Root extends Entity {
             this.speed = 0;
         }
         */
-       
+
         //this.speed = this.maxSpeed * ((Math.sin(Date.now() / 100) + 1) / 2)
     }
 
     /**
      * Update distance counters
-     * @param {number} delta 
+     * @param {number} delta
      */
     counters(delta) {
-        this.distanceSincePipe += this.speed * delta;
-        this.distanceSincePoint += this.speed * delta;
-        this.distanceSincePortal += this.speed * delta;
-        this.distanceSinceStateChange += this.speed * delta;
+        this.distanceSincePipe += this.speed * delta
+        this.distanceSincePoint += this.speed * delta
+        this.distanceSincePortal += this.speed * delta
+        this.distanceSinceStateChange += this.speed * delta
     }
 
     /**
@@ -219,20 +223,23 @@ export default class Root extends Entity {
     setState() {
         // Change game state
         if (this.distanceSinceStateChange > this.distanceBetweenPortal) {
+            this.state = (this.state + 1) % this.stateCount
+            this.distanceSincePipe = 0
 
-            this.state = (this.state + 1) % this.stateCount;
-            this.distanceSincePipe = 0;
-
-            this.distanceSinceStateChange -= this.distanceBetweenPortal;
+            this.distanceSinceStateChange -= this.distanceBetweenPortal
         }
 
         // Change player state
         if (this.distanceSincePortal > this.distanceBetweenPortal) {
-            this.player.state = (this.player.state + 1) % this.stateCount;
+            this.player.state = (this.player.state + 1) % this.stateCount
             // Clamp player velocity when entering copter mode
-            if (this.state == 1) this.player.velocity = Math.min(Math.max(this.player.velocity, -200), 200);
+            if (this.state == 1)
+                this.player.velocity = Math.min(
+                    Math.max(this.player.velocity, -200),
+                    200
+                )
 
-            this.distanceSincePortal -= this.distanceBetweenPortal;
+            this.distanceSincePortal -= this.distanceBetweenPortal
         }
     }
 
@@ -242,109 +249,120 @@ export default class Root extends Entity {
     addPipes() {
         if (this.state == 0) {
             if (this.distanceSincePipe > this.distanceBetweenPipes) {
-                this.distanceSincePipe -= this.distanceBetweenPipes;
+                this.distanceSincePipe -= this.distanceBetweenPipes
 
                 // New pipe variables
-                var gap = 650;
-                var min = 160;
-                var range = 210;
-                var size = 64;
-                
-                const difficultyUp = this.speed / this.maxSpeed;
-                gap -= difficultyUp * 40;
-                min -= difficultyUp * 40;
-                range += difficultyUp * 40;
+                var gap = 650
+                var min = 160
+                var range = 210
+                var size = 64
+
+                const difficultyUp = this.speed / this.maxSpeed
+                gap -= difficultyUp * 40
+                min -= difficultyUp * 40
+                range += difficultyUp * 40
 
                 //const movingPipes = (Math.random() + 0.7 < difficultyUp) ? 100 : 0;
 
-                this.createPipe(gap, min, range, size, 0, this.distanceSincePipe, false, 0/*movingPipes*/);
-            };
+                this.createPipe(
+                    gap,
+                    min,
+                    range,
+                    size,
+                    0,
+                    this.distanceSincePipe,
+                    false,
+                    0 /*movingPipes*/
+                )
+            }
         } else if (this.state == 1) {
             if (this.distanceSincePipe > this.distanceBetweenPipes2) {
-                this.distanceSincePipe -= this.distanceBetweenPipes2;
+                this.distanceSincePipe -= this.distanceBetweenPipes2
 
                 // New pipe variables
-                var gap = 700;
-                var min = 205;
-                var range = 230;
-                var size = 32;
+                var gap = 700
+                var min = 205
+                var range = 230
+                var size = 32
 
-                const difficultyUp = this.speed / this.maxSpeed;
-                gap -= difficultyUp * 50;
-                min -= difficultyUp * 50;
-                range += difficultyUp * 50;
+                const difficultyUp = this.speed / this.maxSpeed
+                gap -= difficultyUp * 50
+                min -= difficultyUp * 50
+                range += difficultyUp * 50
 
-                this.createPipe(gap, min, range, size, 1, this.distanceSincePipe, true, 0);
+                this.createPipe(
+                    gap,
+                    min,
+                    range,
+                    size,
+                    1,
+                    this.distanceSincePipe,
+                    true,
+                    0
+                )
             }
         }
     }
 
     addBgFgObjects() {
         while (this.distanceSinceLastCloud > this.distanceToNextCloud) {
-            this.distanceSinceLastCloud -= this.distanceToNextCloud;
+            this.distanceSinceLastCloud -= this.distanceToNextCloud
 
-            const cloud = new Cloud;
+            const cloud = new Cloud()
 
-            cloud.sizeRatio = Math.random() * 3.3 + 0.2;
-            cloud.speedRatio = cloud.sizeRatio / 2;
+            cloud.sizeRatio = Math.random() * 3.3 + 0.2
+            cloud.speedRatio = cloud.sizeRatio / 2
 
             if (cloud.speedRatio > 1) {
-                cloud.children[0].visible = false;
-                cloud.children[1].visible = true;
-                cloud.children[1].size.x = 128 * cloud.sizeRatio;
-                cloud.children[1].size.y = 64 * cloud.sizeRatio;
+                cloud.children[0].visible = false
+                cloud.children[1].visible = true
+                cloud.children[1].size.x = 128 * cloud.sizeRatio
+                cloud.children[1].size.y = 64 * cloud.sizeRatio
 
-                this.fgObjects.children.push(cloud);
-            } else {    
-                cloud.children[0].visible = true;
-                cloud.children[1].visible = false;
-                cloud.children[0].size.x = 128 * cloud.sizeRatio;
-                cloud.children[0].size.y = 64 * cloud.sizeRatio;
-                
-              this.bgObjects.children.push(cloud);
+                this.fgObjects.children.push(cloud)
+            } else {
+                cloud.children[0].visible = true
+                cloud.children[1].visible = false
+                cloud.children[0].size.x = 128 * cloud.sizeRatio
+                cloud.children[0].size.y = 64 * cloud.sizeRatio
+
+                this.bgObjects.children.push(cloud)
             }
-            
 
-            this.distanceToNextCloud = Math.random() * 200 + 200;
-            
+            this.distanceToNextCloud = Math.random() * 200 + 200
         }
     }
-
 
     /**
      * Update the score counter to reflect the current game state
      */
     updateScore() {
         if (this.distanceSincePoint > this.distanceBetweenPipes) {
-            playSound("point")
-            this.game.score++;
-            this.distanceSincePoint -= this.distanceBetweenPipes;
+            playSound('point')
+            this.game.score++
+            this.distanceSincePoint -= this.distanceBetweenPipes
         }
     }
 
-
-
-    // Smooth random number generator 
-    slidingRandom = [0.5, 0.5, 0.5, 0.5, 0.5];
+    // Smooth random number generator
+    slidingRandom = [0.5, 0.5, 0.5, 0.5, 0.5]
 
     /**
      * Create a random value smoothed by previous outputs
      */
     newSlidingRandom() {
-        this.slidingRandom.push(Math.random()); // Add a new random number to slidingRandom
-        this.slidingRandom.shift(); // Remove the first value of slidingRandom
+        this.slidingRandom.push(Math.random()) // Add a new random number to slidingRandom
+        this.slidingRandom.shift() // Remove the first value of slidingRandom
 
-        var total = 0.0;
+        var total = 0.0
         for (var i = 0; i < this.slidingRandom.length; ++i) {
-            total += this.slidingRandom[i];
+            total += this.slidingRandom[i]
         }
 
         return total / this.slidingRandom.length // Return average of slidingRandom
 
         //return (((Math.sin((this.distanceSincePortal / 150)) + 1) / 2))
     }
-
-
 
     /**
      * Creates a new pipe
@@ -357,12 +375,20 @@ export default class Root extends Entity {
      * @param {bool} useSlidingRandom Should the position be smoothed
      * @param {number} move How much the pipes move in the y-axis
      */
-    createPipe(width, min, range, size, sprite, xOffset, useSlidingRandom, move) {
-
-        var bottomTop = true; // Flag for if we should create bottom or top pipe
-        var bottomPipeMoveDirection = 1; // Which way does bottom pipe go
-        var recycled = false; // Flag if we recycled pipes
-        var bottomPipePosition = 0; // Position of bottom pipe
+    createPipe(
+        width,
+        min,
+        range,
+        size,
+        sprite,
+        xOffset,
+        useSlidingRandom,
+        move
+    ) {
+        var bottomTop = true // Flag for if we should create bottom or top pipe
+        var bottomPipeMoveDirection = 1 // Which way does bottom pipe go
+        var recycled = false // Flag if we recycled pipes
+        var bottomPipePosition = 0 // Position of bottom pipe
         /*
         // Attempt to recycle pipes
         this.pipeSet.children.forEach(i => {
@@ -433,84 +459,83 @@ export default class Root extends Entity {
         // Create new pipes if no free pipes are available
         if (!recycled) {
             // Create new top and bottom pipes
-            var bottomPipe = new Pipe;
-            var topPipe = new Pipe;
+            var bottomPipe = new Pipe()
+            var topPipe = new Pipe()
 
             // Show appropriate pipe sprite
             if (sprite == 0) {
-                bottomPipe.children[0].visible = true;
-                bottomPipe.children[1].visible = false;
+                bottomPipe.children[0].visible = true
+                bottomPipe.children[1].visible = false
 
-                topPipe.children[0].visible = true;
-                topPipe.children[1].visible = false;
+                topPipe.children[0].visible = true
+                topPipe.children[1].visible = false
             } else if (sprite == 1) {
-                bottomPipe.children[0].visible = false;
-                bottomPipe.children[1].visible = true;
+                bottomPipe.children[0].visible = false
+                bottomPipe.children[1].visible = true
 
-                topPipe.children[0].visible = false;
-                topPipe.children[1].visible = true;
-
+                topPipe.children[0].visible = false
+                topPipe.children[1].visible = true
             }
 
             // Set hitbox size of pipes
-            bottomPipe.size.x = size;
-            topPipe.size.x = size;
+            bottomPipe.size.x = size
+            topPipe.size.x = size
 
             // Set position of pipes
 
-            if (useSlidingRandom) bottomPipe.position.y = min + this.newSlidingRandom() * range;
-            else bottomPipe.position.y = min + Math.random() * range;
+            if (useSlidingRandom)
+                bottomPipe.position.y = min + this.newSlidingRandom() * range
+            else bottomPipe.position.y = min + Math.random() * range
 
-            bottomPipe.position.x = 720 - xOffset;
-            topPipe.position.x = 720 - xOffset;
-            topPipe.position.y = bottomPipe.position.y - width;
+            bottomPipe.position.x = 720 - xOffset
+            topPipe.position.x = 720 - xOffset
+            topPipe.position.y = bottomPipe.position.y - width
 
             if (move) {
-                if (bottomPipe.position.y < 200 + ((width - 500) / 2)) {
-                    bottomPipe.speedY = move;
-                    topPipe.speedY = move;
+                if (bottomPipe.position.y < 200 + (width - 500) / 2) {
+                    bottomPipe.speedY = move
+                    topPipe.speedY = move
                 } else {
-                    bottomPipe.speedY = -move;
-                    topPipe.speedY = -move;
+                    bottomPipe.speedY = -move
+                    topPipe.speedY = -move
                 }
             }
 
             // Add pipes to pipe root
-            this.pipeSet.children.unshift(bottomPipe, topPipe);
+            this.pipeSet.children.unshift(bottomPipe, topPipe)
         }
     }
 
     moveScreenRandomly(intensity) {
-        this.position.x = (Math.random() - 0.5) * intensity;
-        this.position.y = (Math.random() - 0.5) * intensity;
+        this.position.x = (Math.random() - 0.5) * intensity
+        this.position.y = (Math.random() - 0.5) * intensity
     }
 
-
-    /** 
+    /**
      * Reset the game back to its default state
      */
     reset() {
-        this.text.visible = false; // Hide game over text
-        this.player.reset();
-        this.started = true;
-        this.speed = 300;
-        this.game.score = 0;
-        this.distanceSincePipe = this.distanceBetweenPipes; // Create a pipe as soon as we start the game
-        this.distanceSincePortal = -90 - this.distanceBetweenPipes; // Set to how far the player is from the left of the screen, minus distance from first pipe
-        this.distanceSincePoint = -90; // Set to how far the player is from the left of the screen, 
-        this.distanceSinceStateChange = 0;
-        this.state = 0;
+        this.text.visible = false // Hide game over text
+        this.player.reset()
+        this.started = true
+        this.speed = 300
+        this.game.score = 0
+        this.distanceSincePipe = this.distanceBetweenPipes // Create a pipe as soon as we start the game
+        this.distanceSincePortal = -90 - this.distanceBetweenPipes // Set to how far the player is from the left of the screen, minus distance from first pipe
+        this.distanceSincePoint = -90 // Set to how far the player is from the left of the screen,
+        this.distanceSinceStateChange = 0
+        this.state = 0
 
         // Disable all pipes
         this.pipeSet.children.forEach(i => {
-            i.isFree = true;
-            i.visible = false;
-            i.position.x = -101;
-        });
+            i.isFree = true
+            i.visible = false
+            i.position.x = -101
+        })
 
         // Clean the crime scene
         this.corpses.children.forEach(i => {
-            i.position.y = 600;
-        });
+            i.position.y = 600
+        })
     }
 }
