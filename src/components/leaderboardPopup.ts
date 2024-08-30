@@ -20,33 +20,77 @@ const css = (chunks: TemplateStringsArray, ...values: string[]) => {
 }
 
 const styles = css`
-    dialog {
-        border-radius: 1em;
-        border: 0;
-        padding: 32px;
-        width: max-content;
-        font-family: sans-serif;
-        position: relative;
+    body {
+        background: #235169;
     }
-
+    dialog {
+        overflow: hidden;
+        border-radius: 0.75rem;
+        border-width: 0px;
+        padding: 0px;
+        font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+            'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+            0 8px 10px -6px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color),
+            0 8px 10px -6px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+            var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+    header {
+        --tw-bg-opacity: 1;
+        background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+        padding: 0.75rem;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+        --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+            0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color),
+            0 4px 6px -4px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+            var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
     dialog button {
         position: absolute;
-        top: 1em;
-        right: 1em;
-        width: 2em;
-        height: 2em;
+        right: 0.625rem;
+        top: 0.625rem;
+        display: flex;
+        height: 2rem;
+        width: 2rem;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        border-width: 0px;
+        background-color: transparent;
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+        opacity: 0.75;
     }
-    dialog table {
-        width: 100%;
+    dialog button:hover {
+        background-color: rgb(255 255 255 / 0.1);
+        opacity: 1;
+    }
+    table {
         border-collapse: collapse;
+        width: 100%;
+        --tw-text-opacity: 1;
+        color: rgb(38 38 38 / var(--tw-text-opacity));
     }
-
-    dialog table th,
-    dialog table td {
-        border: solid 1px #eee;
-        padding: 0.5em;
-        text-align: left;
+    th,
+    td {
         white-space: nowrap;
+        padding: 1rem;
+        border: solid 1px #e5e7eb;
+    }
+    th {
+        text-align: center;
     }
 `
 
