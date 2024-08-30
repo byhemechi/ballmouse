@@ -130,7 +130,7 @@ export default class Boat extends Entity {
      * Bounces boats when they touch the edge of the screen
      */
     private bounceOffWall() {
-        if (this.position.y > this.game.el.height && this.velocity.y > 0
+        if (this.position.y > this.game.height && this.velocity.y > 0
          || this.position.y < 0 && this.velocity.y < 0) {
             this.velocity.y = -this.velocity.y;
             this.rotation = Math.PI + (Math.PI - this.rotation)

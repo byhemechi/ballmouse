@@ -1,29 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>go up</title>
-    <style>
-        body {
-            background: #eee;
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>go up</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont,
+                    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+                    'Helvetica Neue', sans-serif;
+            }
 
-        }
+            body {
+                background: #eee;
+                display: grid;
+                grid-template-rows: auto auto auto;
+                grid-template-columns: auto auto auto;
+            }
 
-        canvas {
-            background: #fff;
-            margin: 50px auto;
-            display: block;
-            box-shadow: 0 2px 5px #0003;
-            border-radius: 20px;
-        }
-    </style>
-    <link rel="stylesheet" href="/src/menu/menu.css">
-</head>
-<body>
-    <div id="menu"></div>
-    <div id="game"></div>
-    <script src="/dist/menu.bundle.js"></script>
-</body>
+            #game {
+                grid-row: 2;
+                margin: auto;
+                grid-column: 2;
+            }
+
+            canvas {
+                background: #fff;
+                display: block;
+                box-shadow: 0 2px 5px #0003;
+                border-radius: 20px;
+            }
+
+            #submit_score {
+                display: none;
+                gap: 0.5em;
+                margin-top: 0.5em;
+            }
+
+            #submit_score input {
+                flex: 1;
+            }
+
+            #submit_score button::after {
+                content: attr(data-score);
+            }
+
+            #instructions {
+                grid-row: 3;
+                grid-column: 2;
+            }
+
+            #instructions table {
+                width: max-content;
+                margin: 0 auto;
+                border-collapse: collapse;
+                overflow: hidden;
+                border-radius: 0.5rem;
+            }
+
+            #instructions td {
+                border: solid 1px #ccc;
+                padding: 0.5em;
+                border-radius: 0.5rem;
+            }
+
+            #instructions td:first-child {
+                text-align: right;
+            }
+            #instructions td:last-child {
+                min-width: 12rem;
+            }
+
+            kbd {
+                display: inline-block;
+                padding: 0.25rem 0.35rem;
+                text-align: center;
+                min-width: 0.8rem;
+                margin: 0 0.2rem;
+                border-radius: 0.2rem;
+                background: white;
+                box-shadow: 0 2px 5px #0005;
+            }
+        </style>
+        <link rel="stylesheet" href="/src/menu/menu.css" />
+    </head>
+    <body>
+        <div id="menu"></div>
+        <div id="leaderboard">
+            <game-leaderboard>
+                <form id="submit_score" slot="submit-form">
+                    <input
+                        type="text"
+                        name="name"
+                        minlength="4"
+                        placeholder="your name"
+                        required
+                        autofocus
+                        tabindex="0"
+                    />
+                    <button type="submit">Submit your score of&nbsp;</button>
+                </form>
+            </game-leaderboard>
+        </div>
+        <div id="game"></div>
+        <div id="instructions"></div>
+        <script src="/dist/menu.bundle.js"></script>
+        <template id="leaderboard-popup">
+            <h1>
+                Leaderboard
+            </h1>
+            <button>x</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Time set</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <slot name="submit-form"></slot>
+        </template>
+        <template id="score-row">
+            <tr>
+                <td data-role="rank" style="font-weight: bold;"></td>
+                <td data-role="name" style="width: 100%; "></td>
+                <td data-role="score"></td>
+                <td data-role="date"></td>
+            </tr>
+        </template>
+    </body>
 </html>

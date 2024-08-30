@@ -2,12 +2,15 @@
     width: 720px;
     min-height: 480px;
     background: #fff;
-    margin: 50px auto;
     box-sizing: border-box;
     padding: 100px 50px;
     text-align: center;
     border-radius: 20px;
     box-shadow: 0 2px 5px #0003;
+
+    grid-row: 2;
+    margin: auto;
+    grid-column: 2;
 }
 
 #menu h1 {
@@ -30,10 +33,17 @@
 }
 
 #menu button.back {
-    filter: hue-rotate(-190deg)
+    filter: hue-rotate(-190deg);
 }
 
 #menu button:active {
     transform: translateY(4px);
     box-shadow: 0 3px #008599;
+}
+
+#leaderboard {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    grid-column: 1 / span 3;
 }

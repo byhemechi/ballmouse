@@ -39,7 +39,7 @@ export default class Hand extends Entity {
 
         this.rotation += this.spin * delta;
 
-        if (this.position.y > this.game.el.height + 50) {
+        if (this.position.y > this.game.height + 50) {
             this.free();
         }
     }

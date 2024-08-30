@@ -1,6 +1,7 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "dist",
-  }
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "ESNext",
+        "outDir": "dist"
+    }
 }

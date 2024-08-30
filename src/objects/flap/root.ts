@@ -167,7 +167,7 @@ export default class Root extends Entity {
      * Check if the player is colliding with the ceiling or ground
      */
     ceiling_groundCollision() {
-        if (this.player.position.y < -30 || this.player.position.y > this.game.el.height - 30) {
+        if (this.player.position.y < -30 || this.player.position.y > this.game.height - 30) {
             this.endGame();
             this.screenShakeTimer = this.shakeLength;
         }
