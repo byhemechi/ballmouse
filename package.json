@@ -21,7 +21,7 @@
     "typedoc-plugin-markdown": "^2.0.4",
     "typescript": "^3.5.2",
     "webpack-cli": "^3.3.3",
-    "webpack-dev-server": "^3.7.1"
+    "webpack-dev-server": "^5.2.1"
   },
   "dependencies": {
     "google-protobuf": "^3.21.4",
